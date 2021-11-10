@@ -4,7 +4,7 @@ class Board{
     this.boardDiv;
   }
 
-  drawBoard(){
+  createBoard(){
     this.boardDiv = document.createElement("div");
     this.boardDiv.setAttribute("class", "board");
   
@@ -28,10 +28,6 @@ class Board{
   
     document.body.appendChild(this.boardDiv);
     console.log(this.board);
-  }
-
-  dupa(){
-    console.log(":A");
   }
 }
 
