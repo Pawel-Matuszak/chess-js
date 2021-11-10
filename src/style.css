@@ -1,0 +1,17 @@
+body{
+  background: rgb(156, 236, 205);
+}
+
+.board{
+  width: fit-content;
+  margin: auto;
+}
+
+.row{
+  display: flex;
+}
+
+.square{
+  width: 100px;
+  height: 100px;
+}
