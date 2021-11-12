@@ -33,7 +33,7 @@ class Board{
 
   //takes piece object sets it on the board
   setPiece({pieceDiv, type, posX, posY}){
-    this.board[posX][posY] = type
+    this.board[posY][posX] = type
     this.boardDiv.appendChild(pieceDiv);
   }
 }

@@ -1,33 +1,37 @@
 class Piece{
-  constructor(){
+  constructor(type, posX, posY, isWhite){
     this.pos = {
-      x: 0,
-      y: 0 
+      x: (posX>7) ? 7 : (posX<0) ? 0 : posX,
+      y: (posY>7) ? 7 : (posY<0) ? 0 : posY
     }
-    this.isWhite = true;
+    this.type=type
+    this.isWhite = isWhite;
     this.isAlive = true;
-    this.chessBoard = null;
+    this.pieceDiv;
   }
 
   //returns piece object with all its parameters
   //and sets style and visual position on the board
-  createPiece(type, posX, posY, isWhite){
-    const piece = document.createElement("div");
-    let className = (type) ? " "+type : "";
+  createPiece(){
+    this.pieceDiv = document.createElement("div");
+    let className = (this.type) ? " "+this.type : "";
 
     //preparing type to be compatible with FEN string
-    type = (isWhite) ? type.toUpperCase() : type;
+    this.type = (this.isWhite) ? this.type.toUpperCase() : this.type;
 
     //setting css position and image
-    piece.setAttribute("class", "piece" + className);
-    piece.style.left = posX*100 + "px";
-    piece.style.top = posY*100 + "px";
-    
-    piece.innerHTML = type;
+    this.pieceDiv.setAttribute("class", "piece" + className);
+    this.pieceDiv.style.left = this.pos.x*100 + "px";
+    this.pieceDiv.style.top = this.pos.y*100 + "px";
+
+    this.pieceDiv.innerHTML = this.type;
 
     return {
-      pieceDiv: piece,
-      type, posX, posY, isWhite
+      pieceDiv: this.pieceDiv,
+      type: this.type, 
+      posX: this.pos.x, 
+      posY: this.pos.y, 
+      isWhite: this.isWhite
     }
   }
 }
