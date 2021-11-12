@@ -1,10 +1,17 @@
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
 body{
   background: rgb(156, 236, 205);
 }
 
 .board{
+  position: relative;
   width: fit-content;
-  margin: auto;
+  margin: 20px auto;
 }
 
 .row{
@@ -14,4 +21,17 @@ body{
 .square{
   width: 100px;
   height: 100px;
+}
+
+.piece{
+  position: absolute;
+  top:0;
+  left:0;
+  width: 100px;
+  height: 100px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
 }
