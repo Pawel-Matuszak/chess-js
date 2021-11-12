@@ -17,7 +17,7 @@ class Piece{
     let className = (this.type) ? " "+this.type : "";
 
     //preparing type to be compatible with FEN string
-    this.type = (this.isWhite) ? this.type.toUpperCase() : this.type;
+    // this.type = (this.isWhite) ? this.type.toUpperCase() : this.type;
 
     this.pieceDiv.setAttribute("class", "piece" + className);
     this.pieceDiv.innerHTML = this.type;
@@ -57,12 +57,11 @@ class Piece{
     this.pieceDiv.addEventListener("mousedown", mousedown)
 
     board.board[this.pos.y][this.pos.x] = this;
-    board.drawBoard();
   }
 
   //changes position on the screen
   move(posX, posY, board){
-    board.board[this.pos.y][this.pos.x] = "";
+    board.board[this.pos.y][this.pos.x] = "-";
     this.pos = {
       x: (posX>7) ? 7 : (posX<0) ? 0 : posX,
       y: (posY>7) ? 7 : (posY<0) ? 0 : posY

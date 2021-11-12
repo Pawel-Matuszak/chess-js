@@ -1,3 +1,5 @@
+import Piece from "./piece";
+
 class Board{
   constructor(){
     this.board = [];
@@ -28,19 +30,41 @@ class Board{
     }
 
     document.body.appendChild(this.boardDiv);
-    console.log(this.board);
   }
 
   drawBoard(){
     this.board.forEach(arr=>{
       arr.forEach(e=>{
-        if(e){
+        if(e!=="-" && e){
           e.pieceDiv.style.left = e.pos.x*100 + "px";
           e.pieceDiv.style.top = e.pos.y*100 + "px";
           this.boardDiv.appendChild(e.pieceDiv);
         }
       })
     })
+    console.log(this.board);
+  }
+
+  readFEN(fenStr){
+    let fenArray = fenStr.split("/");
+    this.board = [];
+
+    for (let i = 0; i <= 7; i++) {
+      this.board.push([]);
+
+      for (let j = 0; j <= 7; j++) {
+        if(fenArray[i][0] > 0 && fenArray[i][0] < 9){
+          this.board[i].push("-");
+        }else{
+          let newPiece = new Piece(fenArray[i][j], j, i, (fenArray[i][j].toLowerCase()==fenArray[i][j]) ? false : true);
+          
+          newPiece.createPiece(this);
+          console.log(newPiece.pieceDiv);
+          this.board[i][j] = newPiece;
+        }
+      }
+    }
+    this.drawBoard();
   }
 }
 
