@@ -46,36 +46,8 @@ class Board{
   }
 
   readFEN(fenStr){
-    // let fenArray = fenStr.split("/");
-    // this.board = [];
-    // console.log(fenArray);
-
-    // for (let i = 0; i <= 7; i++) {
-    //   this.board.push([]);
-
-    //   for (let j = 0; j <= 7; j++) {
-    //     if(this.board[i].length>=8) break;
-    //     let fenChar = fenArray[i][j]
-
-    //     console.log(fenChar);
-    //     console.log(this.board);
-        
-    //     if(fenChar > 0 && fenChar < 9){
-    //       for (let a = 0; a < fenChar; a++) {
-    //         this.board[i].push("-");
-    //       }
-
-    //     }else{
-    //       let newPiece = new Piece(fenChar, j, i, (fenChar.toLowerCase()==fenChar) ? false : true);
-    //       newPiece.createPiece(this);
-    //       this.board[i].push(newPiece);
-    //     }
-    //   }
-    // }
-    // this.drawBoard();
     let fenArray = fenStr.split("/");
     this.board = [];
-    console.log(fenArray);
 
     //create empty board
     for (let i = 0; i <= 7; i++) {
@@ -102,6 +74,7 @@ class Board{
     })
 
     this.drawBoard();
+    console.log(this.board);
   }
 }
 

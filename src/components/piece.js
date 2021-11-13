@@ -1,16 +1,17 @@
 //https://commons.wikimedia.org/wiki/File:Chess_Pieces_Sprite.svg
 import rImg from "../images/r.png"
-import RImg from "../images/R (2).png"
+import RImg from "../images/wr.png"
 import bImg from "../images/b.png"
-import BImg from "../images/B (2).png"
+import BImg from "../images/wb.png"
 import nImg from "../images/n.png"
-import NImg from "../images/N (2).png"
+import NImg from "../images/wn.png"
 import qImg from "../images/q.png"
-import QImg from "../images/Q (2).png"
+import QImg from "../images/wq.png"
 import kImg from "../images/k.png"
-import KImg from "../images/K (2).png"
+import KImg from "../images/wk.png"
 import pImg from "../images/p.png"
-import PImg from "../images/P (2).png"
+import PImg from "../images/wp.png"
+import { unset } from "lodash"
 
 class Piece{
   constructor(type, posX, posY, isWhite){
@@ -23,6 +24,7 @@ class Piece{
     this.isAlive = true;
     this.pieceDiv;
     this.pieceImage;
+    this.legalMoves = [];
   }
 
   //return piece object with all its parameters
@@ -82,11 +84,13 @@ class Piece{
       // get the mouse cursor position at startup:
       pos3 = e.clientX;
       pos4 = e.clientY;
+      this.pieceDiv.style.zIndex = 999;
 
       //set piece position and remove listeners on mouse button up
       document.onmouseup = () => {
         document.onmouseup = null;
         document.onmousemove = null;
+        this.pieceDiv.style.zIndex = 10;
         this.move(
           Math.round((this.pieceDiv.offsetLeft - pos1)/100),
           Math.round((this.pieceDiv.offsetTop - pos2)/100),
@@ -111,6 +115,7 @@ class Piece{
     this.pieceDiv.addEventListener("mousedown", mousedown)
 
     board.board[this.pos.y][this.pos.x] = this;
+    board.drawBoard();
   }
 
   //changes position on the screen
@@ -122,7 +127,20 @@ class Piece{
     }
     board.board[this.pos.y][this.pos.x] = this;
     board.drawBoard();
-    console.log(board.board);
+  }
+
+  showLegalMoves(boardDiv){
+    for (const e of document.querySelectorAll(".point")) {
+      e.remove()
+    }
+    this.legalMoves.forEach(([x,y])=>{
+      const point = document.createElement("div");
+      point.setAttribute("class", "point")
+      boardDiv.appendChild(point);
+      
+      point.style.left = x*100+50-point.offsetWidth/2 + "px";
+      point.style.top = y*100+50-point.offsetHeight/2 + "px";
+    })
   }
   
 }

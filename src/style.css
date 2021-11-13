@@ -33,4 +33,13 @@ body{
   justify-content: center;
   align-items: center;
   font-size: 50px;
+  z-index: 10;
+}
+
+.point{
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: limegreen;
 }
