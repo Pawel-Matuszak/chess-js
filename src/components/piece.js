@@ -11,7 +11,6 @@ import kImg from "../images/k.png"
 import KImg from "../images/wk.png"
 import pImg from "../images/p.png"
 import PImg from "../images/wp.png"
-import { unset } from "lodash"
 
 class Piece{
   constructor(type, posX, posY, isWhite){
@@ -146,6 +145,10 @@ class Piece{
       point.style.left = x*100+50-point.offsetWidth/2 + "px";
       point.style.top = y*100+50-point.offsetHeight/2 + "px";
     })
+  }
+
+  die(){
+    this.isAlive = false;
   }
   
 }

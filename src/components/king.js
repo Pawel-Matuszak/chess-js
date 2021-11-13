@@ -14,11 +14,18 @@ class King extends Piece{
         board.drawBoard()
         return;
     }
+    
     //collisions
-    if(!(board.board[posY][posX]==="-") && board.board[posY][posX].isWhite){
-      // 
+    if(!(board.board[posY][posX]==="-") && board.board[posY][posX].isWhite == this.isWhite){
       board.drawBoard()
       return;
+    }
+
+    //capture
+    if(board.board[posY][posX]!=="-" && !(board.board[posY][posX].isWhite == this.isWhite)){
+      //and if it is not defended
+      board.board[posY][posX].die()
+      board.drawBoard();
     }
 
     //danger
@@ -33,7 +40,7 @@ class King extends Piece{
     
     board.drawBoard();
     this.getLegalMoves(board);
-    // console.log(board.board);
+    console.log(board.board);
   }
 
   getLegalMoves(board){

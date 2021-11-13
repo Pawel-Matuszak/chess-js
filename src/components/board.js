@@ -1,3 +1,4 @@
+import King from "./king";
 import Piece from "./piece";
 
 class Board{
@@ -40,9 +41,13 @@ class Board{
           e.pieceDiv.style.left = e.pos.x*100 + "px";
           e.pieceDiv.style.top = e.pos.y*100 + "px";
           this.boardDiv.appendChild(e.pieceDiv);
+          if(!e.isAlive){
+            e.pieceDiv.remove()
+          }
         }
       })
     })
+
   }
 
   readFEN(fenStr){
@@ -65,8 +70,14 @@ class Board{
             this.board[rowNum].push('-');
           }
         }else{
-          let newPiece = new Piece(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
-          newPiece.createPiece(this);
+          if(e.toLowerCase()=="k"){
+            let newPiece = new King(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
+            newPiece.createPiece(this);
+            
+          }else{
+            let newPiece = new Piece(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
+            newPiece.createPiece(this);
+          }
           // this.board[rowNum].push(newPiece);
         }
       })
