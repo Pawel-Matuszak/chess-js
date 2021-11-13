@@ -1,3 +1,4 @@
+//https://commons.wikimedia.org/wiki/File:Chess_Pieces_Sprite.svg
 import rImg from "../images/r.png"
 import RImg from "../images/R (2).png"
 import bImg from "../images/b.png"
@@ -121,6 +122,7 @@ class Piece{
     }
     board.board[this.pos.y][this.pos.x] = this;
     board.drawBoard();
+    console.log(board.board);
   }
   
 }

@@ -43,28 +43,64 @@ class Board{
         }
       })
     })
-    console.log(this.board);
   }
 
   readFEN(fenStr){
+    // let fenArray = fenStr.split("/");
+    // this.board = [];
+    // console.log(fenArray);
+
+    // for (let i = 0; i <= 7; i++) {
+    //   this.board.push([]);
+
+    //   for (let j = 0; j <= 7; j++) {
+    //     if(this.board[i].length>=8) break;
+    //     let fenChar = fenArray[i][j]
+
+    //     console.log(fenChar);
+    //     console.log(this.board);
+        
+    //     if(fenChar > 0 && fenChar < 9){
+    //       for (let a = 0; a < fenChar; a++) {
+    //         this.board[i].push("-");
+    //       }
+
+    //     }else{
+    //       let newPiece = new Piece(fenChar, j, i, (fenChar.toLowerCase()==fenChar) ? false : true);
+    //       newPiece.createPiece(this);
+    //       this.board[i].push(newPiece);
+    //     }
+    //   }
+    // }
+    // this.drawBoard();
     let fenArray = fenStr.split("/");
     this.board = [];
+    console.log(fenArray);
 
+    //create empty board
     for (let i = 0; i <= 7; i++) {
       this.board.push([]);
-
-      for (let j = 0; j <= 7; j++) {
-        if(fenArray[i][0] > 0 && fenArray[i][0] < 9){
-          this.board[i].push("-");
-        }else{
-          let newPiece = new Piece(fenArray[i][j], j, i, (fenArray[i][j].toLowerCase()==fenArray[i][j]) ? false : true);
-          
-          newPiece.createPiece(this);
-          console.log(newPiece.pieceDiv);
-          this.board[i][j] = newPiece;
-        }
-      }
     }
+
+    //fill board with pieces
+    let rowNum = 0;
+    fenArray.forEach(row=>{
+      [...row].forEach(e=>{
+        if(this.board[rowNum].length>8) return;
+
+        if(e>0 && e<9){
+          for (let i = 0; i < e; i++) {
+            this.board[rowNum].push('-');
+          }
+        }else{
+          let newPiece = new Piece(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
+          newPiece.createPiece(this);
+          // this.board[rowNum].push(newPiece);
+        }
+      })
+      rowNum++;
+    })
+
     this.drawBoard();
   }
 }

@@ -8,4 +8,4 @@ board.createBoard();
 // const wk = new Piece("K", 4, 7, true)
 // wk.createPiece(board);
 
-board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+board.readFEN("7k/k7/2k5/2k3B1/8/8/8/8")
