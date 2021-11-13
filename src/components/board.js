@@ -35,7 +35,8 @@ class Board{
   drawBoard(){
     this.board.forEach(arr=>{
       arr.forEach(e=>{
-        if(e!=="-" && e){
+        if(e.type==="r" || e.type==="R" || e.type==="n" || e.type==="N" || e.type==="b" || e.type==="B" 
+        || e.type==="k" || e.type==="K" || e.type==="k" || e.type==="q" || e.type==="Q" || e.type==="p" || e.type==="P"){
           e.pieceDiv.style.left = e.pos.x*100 + "px";
           e.pieceDiv.style.top = e.pos.y*100 + "px";
           this.boardDiv.appendChild(e.pieceDiv);

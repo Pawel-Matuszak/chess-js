@@ -1,3 +1,16 @@
+import rImg from "../images/r.png"
+import RImg from "../images/R (2).png"
+import bImg from "../images/b.png"
+import BImg from "../images/B (2).png"
+import nImg from "../images/n.png"
+import NImg from "../images/N (2).png"
+import qImg from "../images/q.png"
+import QImg from "../images/Q (2).png"
+import kImg from "../images/k.png"
+import KImg from "../images/K (2).png"
+import pImg from "../images/p.png"
+import PImg from "../images/P (2).png"
+
 class Piece{
   constructor(type, posX, posY, isWhite){
     this.pos = {
@@ -8,19 +21,59 @@ class Piece{
     this.isWhite = isWhite;
     this.isAlive = true;
     this.pieceDiv;
+    this.pieceImage;
   }
 
-  //returns piece object with all its parameters
-  //and sets style and visual position on the board
+  //return piece object with all its parameters
+  //and set style and visual position on the board
   createPiece(board){
     this.pieceDiv = document.createElement("div");
     let className = (this.type) ? " "+this.type : "";
 
-    //preparing type to be compatible with FEN string
-    // this.type = (this.isWhite) ? this.type.toUpperCase() : this.type;
-
     this.pieceDiv.setAttribute("class", "piece" + className);
-    this.pieceDiv.innerHTML = this.type;
+
+    //set image for the piece
+    switch (this.type) {
+      case "r":
+        this.pieceImage = rImg;
+        break;
+      case "R":
+        this.pieceImage = RImg;
+        break;
+      case "b":
+        this.pieceImage = bImg;
+        break;
+      case "B":
+        this.pieceImage = BImg;
+        break;
+      case "n":
+        this.pieceImage = nImg;
+        break;
+      case "N":
+        this.pieceImage = NImg;
+        break;
+      case "q":
+        this.pieceImage = qImg;
+        break;
+      case "Q":
+        this.pieceImage = QImg;
+        break;
+      case "k":
+        this.pieceImage = kImg;
+        break;
+      case "K":
+        this.pieceImage = KImg;
+        break;
+      case "p":
+        this.pieceImage = pImg;
+        break;
+      case "P":
+        this.pieceImage = PImg;
+        break;
+      default:
+        break;
+    }
+    this.pieceDiv.style.background = "url("+ this.pieceImage +")";
 
     //Make thie piece draggable
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
