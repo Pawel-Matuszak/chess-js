@@ -133,11 +133,16 @@ class Piece{
     for (const e of document.querySelectorAll(".point")) {
       e.remove()
     }
-    this.legalMoves.forEach(([x,y])=>{
+    this.legalMoves.forEach(([x,y, isPiece])=>{
       const point = document.createElement("div");
       point.setAttribute("class", "point")
       boardDiv.appendChild(point);
-      
+      if(isPiece){
+        point.style.width = 100 + "px"
+        point.style.height = 100 + "px"
+        point.style.border = "7px solid rgba(150, 150, 150, 0.5)"
+        point.style.background = "none"
+      };
       point.style.left = x*100+50-point.offsetWidth/2 + "px";
       point.style.top = y*100+50-point.offsetHeight/2 + "px";
     })

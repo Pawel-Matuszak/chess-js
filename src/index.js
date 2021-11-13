@@ -14,6 +14,9 @@ k.createPiece(board);
 const b = new Piece("B", 4, 5, true)
 b.createPiece(board);
 
+const bb = new Piece("b", 3, 3, false)
+bb.createPiece(board);
+
 k.getLegalMoves(board)
 
 // const wk = new Piece("K", 4, 7, true)

@@ -3,6 +3,7 @@ import Piece from "./piece";
 class King extends Piece{
   constructor(type, posX, posY, isWhite){
     super(type, posX, posY, isWhite);
+    this.wasMoved = false;
   }
 
   move(posX, posY, board){
@@ -14,7 +15,8 @@ class King extends Piece{
         return;
     }
     //collisions
-    if(!(board.board[posY][posX]==="-")){
+    if(!(board.board[posY][posX]==="-") && board.board[posY][posX].isWhite){
+      // 
       board.drawBoard()
       return;
     }
@@ -27,7 +29,8 @@ class King extends Piece{
       y: (posY>7) ? 7 : (posY<0) ? 0 : posY
     }
     board.board[this.pos.y][this.pos.x] = this;
-
+    this.wasMoved = true;
+    
     board.drawBoard();
     this.getLegalMoves(board);
     // console.log(board.board);
@@ -41,8 +44,9 @@ class King extends Piece{
         if((j<=this.pos.x+1 && j>=this.pos.x-1) &&
         (i>=this.pos.y-1 && i<=this.pos.y+1)){
           if(!(i==this.pos.y && j==this.pos.x)){
-            if(board.board[i][j]==="-"){
-              this.legalMoves.push([j,i]);
+            if(board.board[i][j]==="-" || !board.board[i][j].isWhite){
+              let isPiece = (board.board[i][j].isWhite==false) ? true : false;
+              this.legalMoves.push([j,i, isPiece]);
             }
           }
         }
