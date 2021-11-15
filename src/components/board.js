@@ -1,5 +1,6 @@
 import King from "./King";
 import Pawn from "./Pawn";
+import Knight from "./Knight"
 import Piece from "./Piece";
 
 class Board{
@@ -77,6 +78,10 @@ class Board{
             
           }else if(e.toLowerCase()=="p"){
             let newPiece = new Pawn(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
+            newPiece.createPiece(this);
+            
+          }else if(e.toLowerCase()=="n"){
+            let newPiece = new Knight(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
             newPiece.createPiece(this);
             
           }else{
