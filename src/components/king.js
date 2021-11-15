@@ -1,65 +1,53 @@
-import Piece from "./piece";
+import Piece from "./Piece";
 
 class King extends Piece{
   constructor(type, posX, posY, isWhite){
     super(type, posX, posY, isWhite);
-    this.wasMoved = false;
+    this.inCheck = false;
   }
-
-  move(posX, posY, board){
-    //move validation
-    //range
-    if(!((posX<=this.pos.x+1 && posX>=this.pos.x-1) &&
-      (posY>=this.pos.y-1 && posY<=this.pos.y+1))){
-        board.drawBoard()
-        return;
-    }
-    
-    //collisions
-    if(!(board.board[posY][posX]==="-") && board.board[posY][posX].isWhite == this.isWhite){
-      board.drawBoard()
-      return;
-    }
-
-    //capture
-    if(board.board[posY][posX]!=="-" && !(board.board[posY][posX].isWhite == this.isWhite)){
-      //and if it is not defended
-      board.board[posY][posX].die()
-      board.drawBoard();
-    }
 
     //danger
-
-    board.board[this.pos.y][this.pos.x] = "-";
-    this.pos = {
-      x: (posX>7) ? 7 : (posX<0) ? 0 : posX,
-      y: (posY>7) ? 7 : (posY<0) ? 0 : posY
-    }
-    board.board[this.pos.y][this.pos.x] = this;
-    this.wasMoved = true;
-    
-    board.drawBoard();
-    this.getLegalMoves(board);
-    console.log(board.board);
-  }
+    //save the squares attacked by enemy* pieces in the array**
+    //*white if king is black and black if white
+    //**like getLegalMoves
+    //////////////////////////////////////////////
+    //funciton calculateSquaresControlledByEnemy in Piece class returning array of [x,y] squares
+    //here we have to check if the square king is trying to go is one of the returned by calculateSquaresControlledByEnemy
+    //if true we return and draw board as it was;
+    //////////////////////////////////////////////
+    //king is forced to move if is in check
+    //this.inCheck
 
   getLegalMoves(board){
+    let legalMoves = []
     //save valid squares 
-    this.legalMoves = [];
+    //loop through the board
     for (let i = 0; i < board.board.length; i++) {
       for (let j = 0; j < board.board[i].length; j++) {
+        //find the squares that the king could move to
         if((j<=this.pos.x+1 && j>=this.pos.x-1) &&
         (i>=this.pos.y-1 && i<=this.pos.y+1)){
           if(!(i==this.pos.y && j==this.pos.x)){
-            if(board.board[i][j]==="-" || !board.board[i][j].isWhite){
-              let isPiece = (board.board[i][j].isWhite==false) ? true : false;
-              this.legalMoves.push([j,i, isPiece]);
+            //if the square is empty or if the piece on this square is opposite color
+            //add sqare to legal squares
+            if(board.board[i][j]==="-"){
+              legalMoves.push({
+                x: j, 
+                y: i, 
+                isEmpty: true
+              });
+            }else if(!board.board[i][j].isWhite==this.isWhite){
+              legalMoves.push({
+                x: j, 
+                y: i, 
+                isEmpty: false
+              });
             }
           }
         }
       }
     }
-    this.showLegalMoves(board.boardDiv);
+    return legalMoves;
   }
 }
 

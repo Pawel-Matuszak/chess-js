@@ -24,6 +24,7 @@ class Piece{
     this.pieceDiv;
     this.pieceImage;
     this.legalMoves = [];
+    this.wasMoved = false;
   }
 
   //return piece object with all its parameters
@@ -119,24 +120,51 @@ class Piece{
 
   //changes position on the screen
   move(posX, posY, board){
-    board.board[this.pos.y][this.pos.x] = "-";
-    this.pos = {
-      x: (posX>7) ? 7 : (posX<0) ? 0 : posX,
-      y: (posY>7) ? 7 : (posY<0) ? 0 : posY
+    this.legalMoves = this.getLegalMoves(board);
+
+    const makeMove = ()=>{
+      board.board[this.pos.y][this.pos.x] = "-";
+      this.pos = {
+        x: (posX>7) ? 7 : (posX<0) ? 0 : posX,
+        y: (posY>7) ? 7 : (posY<0) ? 0 : posY
+      }
+      board.board[this.pos.y][this.pos.x] = this;
+      this.wasMoved = true;
+      
+      board.drawBoard();
+      this.showLegalMoves(board);
     }
-    board.board[this.pos.y][this.pos.x] = this;
+
+    //check if a move is legal
+    this.legalMoves.forEach(({x,y,isEmpty}) => {
+      if(posX==x && posY==y){
+        //check if move is a capture
+        if(!isEmpty){
+          board.board[y][x].die();
+          board.drawBoard();
+        }
+        makeMove();
+      }
+    });
     board.drawBoard();
+
+    console.log(this.legalMoves);
   }
 
-  showLegalMoves(boardDiv){
+  showLegalMoves(board){
+    this.legalMoves = [];
+    this.legalMoves = this.getLegalMoves(board);
+
+    //remove all previous dots from the DOM
     for (const e of document.querySelectorAll(".point")) {
       e.remove()
     }
-    this.legalMoves.forEach(([x,y, isPiece])=>{
+
+    this.legalMoves.forEach(({x,y, isEmpty})=>{
       const point = document.createElement("div");
       point.setAttribute("class", "point")
-      boardDiv.appendChild(point);
-      if(isPiece){
+      board.boardDiv.prepend(point);
+      if(!isEmpty){
         point.style.width = 100 + "px"
         point.style.height = 100 + "px"
         point.style.border = "7px solid rgba(150, 150, 150, 0.5)"

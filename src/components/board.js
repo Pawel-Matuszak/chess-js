@@ -1,5 +1,6 @@
-import King from "./king";
-import Piece from "./piece";
+import King from "./King";
+import Pawn from "./Pawn";
+import Piece from "./Piece";
 
 class Board{
   constructor(){
@@ -72,6 +73,10 @@ class Board{
         }else{
           if(e.toLowerCase()=="k"){
             let newPiece = new King(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
+            newPiece.createPiece(this);
+            
+          }else if(e.toLowerCase()=="p"){
+            let newPiece = new Pawn(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
             newPiece.createPiece(this);
             
           }else{

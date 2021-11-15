@@ -1,6 +1,6 @@
-import Board from "./components/board.js"
-import King from "./components/king.js";
-import Piece from "./components/piece.js";
+import Board from "./components/Board.js"
+import King from "./components/King.js";
+import Piece from "./components/Piece.js";
 import "./style.css"
 
 const board = new Board();

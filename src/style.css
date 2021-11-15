@@ -40,7 +40,6 @@ body{
   position: absolute;
   width: 25px;
   height: 25px;
-  z-index: 11;
   border-radius: 50%;
   background:rgba(150, 150, 150, 0.5);
 }
