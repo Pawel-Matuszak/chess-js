@@ -5,7 +5,7 @@ import "./style.css"
 
 const board = new Board();
 board.createBoard();
-board.readFEN("8/8/8/8/8/8/8/8")
+// board.readFEN("8/8/8/3r4/8/8/8/8")
 board.readFEN("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R")
 
 // const k = new King("K", 4, 3, true)

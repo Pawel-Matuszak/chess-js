@@ -2,6 +2,9 @@ import King from "./King";
 import Pawn from "./Pawn";
 import Knight from "./Knight"
 import Piece from "./Piece";
+import Rook from "./Rook";
+import Queen from "./Queen"
+import Bishop from "./Bishop"
 
 class Board{
   constructor(){
@@ -84,11 +87,22 @@ class Board{
             let newPiece = new Knight(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
             newPiece.createPiece(this);
             
+          }else if(e.toLowerCase()=="r"){
+            let newPiece = new Rook(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
+            newPiece.createPiece(this);
+            
+          }else if(e.toLowerCase()=="b"){
+            let newPiece = new Bishop(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
+            newPiece.createPiece(this);
+            
+          }else if(e.toLowerCase()=="q"){
+            let newPiece = new Queen(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
+            newPiece.createPiece(this);
+            
           }else{
             let newPiece = new Piece(e, this.board[rowNum].length, rowNum, (e.toLowerCase()==e) ? false : true);
             newPiece.createPiece(this);
           }
-          // this.board[rowNum].push(newPiece);
         }
       })
       rowNum++;
