@@ -9,6 +9,14 @@ class GameController{
     }
     //check if check after making attempt to move*
     // *changing turn from one color to other
+    
+    //clear move hilights
+    window.addEventListener('click', function(e){   
+      console.log("a");
+      for (const e of document.querySelectorAll(".point")) {
+        e.remove()
+      }
+    });
   }
 
   makeMove(x,y, isEmpty, board, piece){
