@@ -85,6 +85,7 @@ class Piece{
       pos3 = e.clientX;
       pos4 = e.clientY;
       this.pieceDiv.style.zIndex = 999;
+      this.showLegalMoves(board)
 
       //set piece position and remove listeners on mouse button up
       document.onmouseup = () => {
@@ -122,7 +123,12 @@ class Piece{
   move(posX, posY, board){
     this.legalMoves = this.getLegalMoves(board);
 
-    const makeMove = ()=>{
+    const makeMove = (x,y, isEmpty, board)=>{
+      //check if move is a capture
+      if(!isEmpty){
+        board.board[y][x].die();
+        board.drawPieces();
+      }
       board.board[this.pos.y][this.pos.x] = "-";
       this.pos = {
         x: (posX>7) ? 7 : (posX<0) ? 0 : posX,
@@ -139,17 +145,10 @@ class Piece{
     this.legalMoves.forEach(({x,y,isEmpty, isAlly}) => {
       if(posX==x && posY==y){
         if(isAlly) return;
-        //check if move is a capture
-        if(!isEmpty){
-          board.board[y][x].die();
-          board.drawPieces();
-        }
-        makeMove();
+        makeMove(x,y, isEmpty, board);
       }
     });
     board.drawPieces();
-
-    console.log(this.legalMoves);
   }
 
   showLegalMoves(board){

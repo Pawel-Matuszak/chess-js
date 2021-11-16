@@ -1,4 +1,5 @@
 import Piece from "./Piece";
+import Queen from "./Queen";
 
 class Pawn extends Piece{
   constructor(type, posX, posY, isWhite){
@@ -11,7 +12,10 @@ class Pawn extends Piece{
 
     if((this.isWhite && this.pos.y==0) || (!this.isWhite && this.pos.y==7)){
       //new Piece(this.pos.x, this.pos.y ...)
-      console.log("Q");
+      let type = (this.isWhite) ? "Q" : "q";
+      let newPiece = new Queen(type, this.pos.x, this.pos.y, this.isWhite);
+      newPiece.createPiece(board);
+      this.pieceDiv.remove()
       return legalMoves;
     }
 

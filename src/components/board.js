@@ -122,13 +122,14 @@ class Board{
     let blackSquares = [];
 
     //loop through all the pieces and add their legal moves to array
-
     for (let i = 0; i < this.board.length; i++) {
       for (let j = 0; j < this.board[i].length; j++) {
         const piece = this.board[i][j];
         if(piece!=="-"){
-          let legalMoves = piece.getLegalMoves(this)
+          let legalMoves = piece.getLegalMoves(this);
           if(piece.type.toLowerCase()=="p"){
+            //to fix bug when moving forward is legal
+            //however that is not square controlled by the pawn
             legalMoves = legalMoves.filter(e=>e.x!==piece.pos.x);
           }
           if(piece.isWhite){
@@ -140,12 +141,18 @@ class Board{
       }
     }
 
+    //remove duplicates 
+    //just in case
+    whiteSquares = [...new Set(whiteSquares)]
+    blackSquares = [...new Set(blackSquares)]
+
     this.controlledSquares = {
       white: whiteSquares, 
       black: blackSquares
     };
 
-    this.showControlledSquares()
+    //disply squares that the pieces 'see' on the board 
+    // this.showControlledSquares(true)
   }
 
   showControlledSquares(isWhite){
@@ -154,7 +161,7 @@ class Board{
       e.remove()
     }
 
-    //display new
+    //display new for white or black
     if(isWhite){
       this.controlledSquares.white.forEach(({x,y, isEmpty, isAlly})=>{
         const point = document.createElement("div");

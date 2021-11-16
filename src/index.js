@@ -16,9 +16,9 @@ board.readFEN("rnbqkbnr/pp2pppp/3p4/2p5/2PPP3/5N2/PP3PPP/RNBQKB1R")
 
 //TODO
 
-//make check mechanic
-//color controlled squares array
-  //if piece is ally add it with isAlly
-
 //game loop
+//make check mechanic
+  //make a move if king is in check
+  //test if after a move king is still in check
+  
 //saving previous moves
