@@ -9,6 +9,7 @@ import Bishop from "./Bishop"
 class Board{
   constructor(){
     this.board = [];
+    this.controlledSquares = {white: [], black: []};
     this.boardDiv;
   }
 
@@ -38,7 +39,7 @@ class Board{
     document.body.appendChild(this.boardDiv);
   }
 
-  drawBoard(){
+  drawPieces(){
     this.board.forEach(arr=>{
       arr.forEach(e=>{
         if(e.type==="r" || e.type==="R" || e.type==="n" || e.type==="N" || e.type==="b" || e.type==="B" 
@@ -52,7 +53,9 @@ class Board{
         }
       })
     })
-
+    //get controlled squares
+    console.log(this.board);
+    this.getControlledSquares();
   }
 
   readFEN(fenStr){
@@ -108,8 +111,72 @@ class Board{
       rowNum++;
     })
 
-    this.drawBoard();
+    this.drawPieces();
     console.log(this.board);
+  }
+
+  getControlledSquares(){
+    //init
+    this.controlledSquares = {white: [], black: []};
+    let whiteSquares = [];
+    let blackSquares = [];
+
+    //loop through all the pieces and add their legal moves to array
+
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board[i].length; j++) {
+        const piece = this.board[i][j];
+        if(piece!=="-"){
+          let legalMoves = piece.getLegalMoves(this)
+          if(piece.type.toLowerCase()=="p"){
+            legalMoves = legalMoves.filter(e=>e.x!==piece.pos.x);
+          }
+          if(piece.isWhite){
+            whiteSquares.push(...legalMoves)
+          }else{
+            blackSquares.push(...legalMoves)
+          }
+        }
+      }
+    }
+
+    this.controlledSquares = {
+      white: whiteSquares, 
+      black: blackSquares
+    };
+
+    this.showControlledSquares()
+  }
+
+  showControlledSquares(isWhite){
+    //remove previous
+    for (const e of document.querySelectorAll(".hilight")) {
+      e.remove()
+    }
+
+    //display new
+    if(isWhite){
+      this.controlledSquares.white.forEach(({x,y, isEmpty, isAlly})=>{
+        const point = document.createElement("div");
+        point.setAttribute("class", "hilight")
+        this.boardDiv.prepend(point);
+        point.style.width = 100 + "px"
+        point.style.height = 100 + "px"
+        point.style.left = x*100+50-point.offsetWidth/2 + "px";
+        point.style.top = y*100+50-point.offsetHeight/2 + "px";
+      })
+    }else{
+      this.controlledSquares.black.forEach(({x,y, isEmpty, isAlly})=>{
+        const point = document.createElement("div");
+        point.setAttribute("class", "hilight")
+        this.boardDiv.prepend(point);
+        point.style.width = 100 + "px"
+        point.style.height = 100 + "px"
+        point.style.left = x*100+50-point.offsetWidth/2 + "px";
+        point.style.top = y*100+50-point.offsetHeight/2 + "px";
+      })
+    }
+    
   }
 }
 

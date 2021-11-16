@@ -34,13 +34,15 @@ class King extends Piece{
               legalMoves.push({
                 x: j, 
                 y: i, 
-                isEmpty: true
+                isEmpty: true,
+                isAlly: undefined
               });
-            }else if(!board.board[i][j].isWhite==this.isWhite){
+            }else{
               legalMoves.push({
                 x: j, 
                 y: i, 
-                isEmpty: false
+                isEmpty: false,
+                isAlly: (board.board[i][j].isWhite==this.isWhite) ? true : false
               });
             }
           }

@@ -115,7 +115,7 @@ class Piece{
     this.pieceDiv.addEventListener("mousedown", mousedown)
 
     board.board[this.pos.y][this.pos.x] = this;
-    board.drawBoard();
+    // board.drawPieces();
   }
 
   //changes position on the screen
@@ -131,22 +131,23 @@ class Piece{
       board.board[this.pos.y][this.pos.x] = this;
       this.wasMoved = true;
       
-      board.drawBoard();
+      board.drawPieces();
       this.showLegalMoves(board);
     }
 
     //check if a move is legal
-    this.legalMoves.forEach(({x,y,isEmpty}) => {
+    this.legalMoves.forEach(({x,y,isEmpty, isAlly}) => {
       if(posX==x && posY==y){
+        if(isAlly) return;
         //check if move is a capture
         if(!isEmpty){
           board.board[y][x].die();
-          board.drawBoard();
+          board.drawPieces();
         }
         makeMove();
       }
     });
-    board.drawBoard();
+    board.drawPieces();
 
     console.log(this.legalMoves);
   }
@@ -160,7 +161,8 @@ class Piece{
       e.remove()
     }
 
-    this.legalMoves.forEach(({x,y, isEmpty})=>{
+    this.legalMoves.forEach(({x,y, isEmpty, isAlly})=>{
+      if(isAlly) return;
       const point = document.createElement("div");
       point.setAttribute("class", "point")
       board.boardDiv.prepend(point);

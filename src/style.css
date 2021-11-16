@@ -43,3 +43,10 @@ body{
   border-radius: 50%;
   background:rgba(150, 150, 150, 0.5);
 }
+
+.hilight{
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: rgba(199, 11, 11, 0.5);
+}

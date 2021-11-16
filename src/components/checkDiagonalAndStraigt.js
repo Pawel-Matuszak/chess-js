@@ -4,15 +4,15 @@ const checkDiagonalAndStraigt = (i=0, j=0, board, legalMovesArray, posX, posY, i
   if(posY-(i)>7) return;
   if(posX-(j)<0) return;
   if(posX-(j)>7) return;
-  //when ally piece is in the way
-  if(board.board[posY-(i)][posX-(j)].isWhite===isWhite) return;
 
   //when enemy piece is in the way
-  if(board.board[posY-(i)][posX-(j)]!=="-" && board.board[posY-(i)][posX-(j)].isWhite!==isWhite){
+  if(board.board[posY-(i)][posX-(j)]!=="-"){
+    // if(!board.board[posY-(i)][posX-(j)]) return;
     legalMovesArray.push({
       x: posX-(j),
       y: posY-(i),
       isEmpty: false,
+      isAlly: (board.board[posY-(i)][posX-(j)].isWhite==isWhite) ? true : false
     })
     return;
   }else{

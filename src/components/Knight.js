@@ -29,19 +29,18 @@ class Knight extends Piece{
       legalMoves.push({x: this.pos.x-2, y: this.pos.y-1})
     }
 
-    //filter illegal moves and squares taken by ally pieces
+    //filter illegal moves
     legalMoves = legalMoves
     .filter(e=>{
       if(board.board[e.y, e.x]){
-        if(board.board[e.y][e.x]==="-" || board.board[e.y][e.x].isWhite!==this.isWhite){
-          return e;
-        }
+        return e;
       }
     })
     //check for enemy pieces
     .map(({x,y})=>{
       let isEmpty = (board.board[y][x]!=="-" && board.board[y][x].isWhite!==this.isWhite) ? false : true;
-      return {x,y, isEmpty}
+      let isAlly = (board.board[y][x].isWhite==this.isWhite) ? true : false;
+      return {x,y, isEmpty, isAlly}
     })
 
     return legalMoves;

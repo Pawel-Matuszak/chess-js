@@ -6,19 +6,19 @@ import "./style.css"
 const board = new Board();
 board.createBoard();
 // board.readFEN("8/8/8/3r4/8/8/8/8")
-board.readFEN("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R")
 
-// const k = new King("K", 4, 3, true)
-// k.createPiece(board);
+//opening
+// board.readFEN("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R")
 
-// const b = new Piece("B", 4, 5, true)
-// b.createPiece(board);
-
-// const bb = new Piece("b", 3, 3, false)
-// bb.createPiece(board);
-
-// k.getLegalMoves(board)
+//test queen checks
+board.readFEN("rnbqkbnr/pp2pppp/3p4/2p5/2PPP3/5N2/PP3PPP/RNBQKB1R")
 
 
-// const wk = new Piece("K", 4, 7, true)
-// wk.createPiece(board);/
+//TODO
+
+//make check mechanic
+//color controlled squares array
+  //if piece is ally add it with isAlly
+
+//game loop
+//saving previous moves
