@@ -7,10 +7,11 @@ import Queen from "./Queen"
 import Bishop from "./Bishop"
 
 class Board{
-  constructor(){
+  constructor(gameController){
     this.board = [];
     this.controlledSquares = {white: [], black: []};
     this.boardDiv;
+    this.gameController = gameController;
   }
 
   createBoard(){

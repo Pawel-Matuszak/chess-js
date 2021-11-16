@@ -66,29 +66,11 @@ class King extends Piece{
   move(posX, posY, board){
     this.legalMoves = this.getLegalMoves(board);
     
-    const makeMove = (x,y, isEmpty, board)=>{
-      // check if move is a capture
-      if(!isEmpty){
-        board.board[y][x].die();
-        board.drawPieces();
-      }
-      board.board[this.pos.y][this.pos.x] = "-";
-      this.pos = {
-        x: (posX>7) ? 7 : (posX<0) ? 0 : posX,
-        y: (posY>7) ? 7 : (posY<0) ? 0 : posY
-      }
-      board.board[this.pos.y][this.pos.x] = this;
-      this.wasMoved = true;
-      
-      board.drawPieces();
-      this.showLegalMoves(board);
-    }
-    
     //check if a move is legal
     this.legalMoves.forEach(({x,y,isEmpty, isAlly}) => {
       if(posX==x && posY==y){
         if(isAlly) return;
-        makeMove(x,y,isEmpty,board);
+        this.gameController.makeMove(x,y,isEmpty,board,this);
       }
     });
     board.drawPieces();

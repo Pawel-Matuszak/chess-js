@@ -1,9 +1,11 @@
 import Board from "./components/Board.js"
+import GameController from "./components/GameController.js";
 import King from "./components/King.js";
 import Piece from "./components/Piece.js";
 import "./style.css"
 
-const board = new Board();
+const gameController = new GameController();
+const board = new Board(gameController);
 board.createBoard();
 // board.readFEN("8/8/8/3r4/8/8/8/8")
 
