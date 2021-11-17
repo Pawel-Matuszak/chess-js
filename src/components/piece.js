@@ -130,7 +130,18 @@ class Piece{
     this.legalMoves.forEach(({x,y,isEmpty, isAlly}) => {
       if(posX==x && posY==y){
         if(isAlly) return;
-        this.gameController.makeMove(x,y, isEmpty, board, this);
+        //check if ckeck
+        // if(this.isWhite){
+        //   board.controlledSquares.black.forEach(({x: xC,y: yC})=>{
+        //     //qqq & www king x & y
+        //     this.gameController.inCheck.white = (qqqq==xC && wwww==yC) ? true : false;
+        //   })
+        // }else{
+        //   board.controlledSquares.white.forEach(({x: xC,y: yC})=>{
+        //     this.gameController.inCheck.black = (qqqq==xC && wwww==yC) ? true : false;
+        //   })
+        // }
+        this.gameController.moveValidation(x,y, isEmpty, board, this);
       }
     });
     board.drawPieces();
@@ -139,6 +150,10 @@ class Piece{
   showLegalMoves(board){
     this.legalMoves = [];
     this.legalMoves = this.getLegalMoves(board);
+
+    //optimisation joke
+    //but it is working
+    this.legalMoves = this.legalMoves.filter(e=>!this.gameController.seeIfCheck(e.x, e.y, e.isEmpty, board, this))
 
     //remove all previous dots from the DOM
     for (const e of document.querySelectorAll(".point")) {

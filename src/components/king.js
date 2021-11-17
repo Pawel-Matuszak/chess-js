@@ -3,7 +3,7 @@ import Piece from "./Piece";
 class King extends Piece{
   constructor(type, posX, posY, isWhite){
     super(type, posX, posY, isWhite);
-    this.inCheck = false;
+    // this.enemySquares = []
   }
 
     //danger
@@ -50,14 +50,14 @@ class King extends Piece{
       }
     }
     
-    let enemySquares = []
+    
     if(this.isWhite){
-      enemySquares = board.controlledSquares.black;
+      this.enemySquares = board.controlledSquares.black;
     }else{
-      enemySquares = board.controlledSquares.white;
+      this.enemySquares = board.controlledSquares.white;
     }
-    //calculate set difference
-    legalMoves = legalMoves.filter(({ x: x1, y: y1 }) => !enemySquares.some(({ x: x2, y: y2}) => (x2 === x1 && y2 === y1)));
+    //calculate set difference to make sure king cant run into check
+    legalMoves = legalMoves.filter(({ x: x1, y: y1 }) => !this.enemySquares.some(({ x: x2, y: y2}) => (x2 === x1 && y2 === y1)));
 
     return legalMoves;
   }
@@ -65,12 +65,23 @@ class King extends Piece{
   //changes position on the screen
   move(posX, posY, board){
     this.legalMoves = this.getLegalMoves(board);
-    
+
     //check if a move is legal
     this.legalMoves.forEach(({x,y,isEmpty, isAlly}) => {
       if(posX==x && posY==y){
         if(isAlly) return;
-        this.gameController.makeMove(x,y,isEmpty,board,this);
+        // this.enemySquares.forEach(({x,y}) => {
+        //   if(x===this.pos.x && y===this.pos.y){
+        //     //king is in check
+        //     console.log(this.gameController);
+        //     if(this.isWhite){
+        //       this.gameController.inCheck.white = true;
+        //     }else{
+        //       this.gameController.inCheck.black = true;
+        //     }
+        //   }
+        // })
+        this.gameController.moveValidation(x,y,isEmpty,board,this);
       }
     });
     board.drawPieces();

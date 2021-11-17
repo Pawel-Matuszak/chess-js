@@ -55,8 +55,10 @@ class Board{
       })
     })
     //get controlled squares
-    console.log(this.board);
+    // console.log(this.board);
     this.getControlledSquares();
+    // this.showControlledSquares(true)
+
   }
 
   readFEN(fenStr){
