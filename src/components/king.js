@@ -4,6 +4,9 @@ class King extends Piece{
   constructor(type, posX, posY, isWhite){
     super(type, posX, posY, isWhite);
     // this.enemySquares = []
+    this.castle = false;
+    this.castleLong = false;
+    this.rooks = [];
   }
 
     //danger
@@ -50,41 +53,109 @@ class King extends Piece{
       }
     }
     
-    
     if(this.isWhite){
       this.enemySquares = board.controlledSquares.black;
     }else{
       this.enemySquares = board.controlledSquares.white;
     }
     //calculate set difference to make sure king cant run into check
-    legalMoves = legalMoves.filter(({ x: x1, y: y1 }) => !this.enemySquares.some(({ x: x2, y: y2}) => (x2 === x1 && y2 === y1)));
+    // legalMoves = legalMoves.filter(({ x: x1, y: y1 }) => !this.enemySquares.some(({ x: x2, y: y2}) => (x2 === x1 && y2 === y1)));
 
+    this.castleValidation(board);
+    
+    if(this.castle){
+      //add castling to valid moves
+      legalMoves.push({
+        x: this.pos.x+2,
+        y: this.pos.y,
+        isEmpty: true,
+        castle: {long: false, rook: this.rooks[1]},
+      })
+    }
+    if(this.castleLong){
+      legalMoves.push({
+        x: this.pos.x-2,
+        y: this.pos.y,
+        isEmpty: true,
+        castle: {long: true, rook: this.rooks[0]},
+      })
+    }
+    
     return legalMoves;
+  }
+  
+  castleValidation(board){
+    this.castle = true;
+    this.castleLong = true;
+
+    if(this.wasMoved){
+      this.castle = false;
+      this.castleLong = false;
+      return;
+    }
+
+    //when pieces are in the way
+    if(board.board[this.pos.y][this.pos.x+1]!=="-" ||
+      board.board[this.pos.y][this.pos.x+2]!=="-"){
+        this.castle = false;
+    }
+    if(board.board[this.pos.y][this.pos.x-1]!=="-" ||
+      board.board[this.pos.y][this.pos.x-2]!=="-" ||
+      board.board[this.pos.y][this.pos.x-3]!=="-"){
+        this.castleLong = false;
+    }
+    if(!this.castleLong && !this.castle) return;
+
+    //when one of the rooks was moved
+    if(this.gameController){
+      if(this.isWhite){
+        this.rooks = this.gameController.findRooks(board).white
+      }else{
+        this.rooks = this.gameController.findRooks(board).black
+      }
+      if(this.rooks[0].wasMoved){
+        this.castleLong = false;
+      }
+      if(this.rooks[1].wasMoved){
+        this.castle = false;
+      }
+    }
+    if(!this.castleLong && !this.castle) return;
+
+    //if the squares are not controlled by enemy
+    this.enemySquares.forEach(({x,y})=>{
+      if(y==this.pos.y && (
+        x==this.pos.x+1 ||
+        x==this.pos.x+2
+      )){
+          this.castle = false;
+      }
+      if(y==this.pos.y && (
+        x==this.pos.x-1 ||
+        x==this.pos.x-2 ||
+        x==this.pos.x-3
+      )){
+          this.castleLong = false;
+      }
+    })
   }
 
   //changes position on the screen
   move(posX, posY, board){
     this.legalMoves = this.getLegalMoves(board);
-
+    
     //check if a move is legal
-    this.legalMoves.forEach(({x,y,isEmpty, isAlly}) => {
+    this.legalMoves.forEach(({x,y,isEmpty, isAlly, castle}) => {
       if(posX==x && posY==y){
         if(isAlly) return;
-        // this.enemySquares.forEach(({x,y}) => {
-        //   if(x===this.pos.x && y===this.pos.y){
-        //     //king is in check
-        //     console.log(this.gameController);
-        //     if(this.isWhite){
-        //       this.gameController.inCheck.white = true;
-        //     }else{
-        //       this.gameController.inCheck.black = true;
-        //     }
-        //   }
-        // })
-        this.gameController.moveValidation(x,y,isEmpty,board,this);
+        console.log(castle);
+        this.gameController.moveValidation(x,y,isEmpty,board,this,castle);
       }
     });
     board.drawPieces();
+
+    console.log(this.castle + " " + this.castleLong);
+
   }
 }
 

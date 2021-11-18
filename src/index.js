@@ -1,7 +1,5 @@
 import Board from "./components/Board.js"
 import GameController from "./components/GameController.js";
-import King from "./components/King.js";
-import Piece from "./components/Piece.js";
 import "./style.css"
 
 const gameController = new GameController();
@@ -18,9 +16,7 @@ board.readFEN("rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R")
 
 //TODO
 
+//if the king is in check and cant move its mate
+//if the king is not in check and nothing can move its stealmate
 //game loop
-//make check mechanic
-  //make a move if king is in check
-  //test if after a move king is still in check
-  
 //saving previous moves

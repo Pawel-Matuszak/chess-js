@@ -56,7 +56,7 @@ class Board{
     })
     //get controlled squares
     // console.log(this.board);
-    this.getControlledSquares();
+    // this.getControlledSquares();
     // this.showControlledSquares(true)
 
   }

@@ -48,17 +48,45 @@ class GameController{
     }
   }
 
-  moveValidation(x,y, isEmpty, board, piece){
+  findRooks(board){
+    let rooks = {white: [], black:[]}
+    for (let i = 0; i < board.board.length; i++) {
+      for (let j = 0; j < board.board[i].length; j++) {
+        if(board.board[j][i].type==="r"){
+          rooks.black.push(board.board[j][i]);
+        }else if(board.board[j][i].type==="R"){
+          rooks.white.push(board.board[j][i]);
+        }
+      }
+    }
+    return rooks;
+  }
+
+  moveValidation(x,y, isEmpty, board, piece, castle){
+    if(castle){
+      if(!castle.long){
+        this.makeMove(piece.pos.x+1, piece.pos.y, true, board, castle.rook);
+        board.drawPieces();
+
+      }else{
+        this.makeMove(piece.pos.x-1, piece.pos.y, true, board, castle.rook);
+        board.drawPieces();
+      }
+      console.log(castle.rook);
+      
+    }
+
+
     if(this.seeIfCheck(x,y, isEmpty, board, piece)) return;
     
-    // check if move is a capture
     this.makeMove(x,y, isEmpty, board, piece);
     board.drawPieces();
     piece.showLegalMoves(board);
   }
-
+  
   makeMove(x,y, isEmpty, board, piece){
     if(!isEmpty){
+      // check if move is a capture
       board.board[y][x].die();
       board.drawPieces();
     }
@@ -69,6 +97,8 @@ class GameController{
     }
     board.board[piece.pos.y][piece.pos.x] = piece;
     piece.wasMoved = true;
+    console.log(board);
+
   }
 
   seeIfCheck(x,y, isEmpty, board, piece){

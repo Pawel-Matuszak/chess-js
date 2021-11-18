@@ -13,7 +13,7 @@ import pImg from "../images/p.png"
 import PImg from "../images/wp.png"
 
 class Piece{
-  constructor(type, posX, posY, isWhite){
+  constructor(type, posX, posY, isWhite, gameController=null){
     this.pos = {
       x: (posX>7) ? 7 : (posX<0) ? 0 : posX,
       y: (posY>7) ? 7 : (posY<0) ? 0 : posY
@@ -25,7 +25,7 @@ class Piece{
     this.pieceImage;
     this.legalMoves = [];
     this.wasMoved = false;
-    this.gameController = null;
+    this.gameController = gameController;
   }
 
   //return piece object with all its parameters
@@ -124,23 +124,13 @@ class Piece{
 
   //changes position on the screen
   move(posX, posY, board){
+    board.getControlledSquares();
     this.legalMoves = this.getLegalMoves(board);
 
     //check if a move is legal
     this.legalMoves.forEach(({x,y,isEmpty, isAlly}) => {
       if(posX==x && posY==y){
         if(isAlly) return;
-        //check if ckeck
-        // if(this.isWhite){
-        //   board.controlledSquares.black.forEach(({x: xC,y: yC})=>{
-        //     //qqq & www king x & y
-        //     this.gameController.inCheck.white = (qqqq==xC && wwww==yC) ? true : false;
-        //   })
-        // }else{
-        //   board.controlledSquares.white.forEach(({x: xC,y: yC})=>{
-        //     this.gameController.inCheck.black = (qqqq==xC && wwww==yC) ? true : false;
-        //   })
-        // }
         this.gameController.moveValidation(x,y, isEmpty, board, this);
       }
     });
@@ -148,6 +138,8 @@ class Piece{
   }
 
   showLegalMoves(board){
+    board.getControlledSquares();
+
     this.legalMoves = [];
     this.legalMoves = this.getLegalMoves(board);
 
