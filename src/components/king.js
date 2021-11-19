@@ -125,7 +125,6 @@ class King extends Piece{
           }
         }
       })
-      console.log(this.castleLong + " " + this.castle);
     }
     if(!this.castleLong && !this.castle) return;
 

@@ -25,8 +25,9 @@ class GameController{
       stalemate: 3
     }
     this.currentGameStatus = "";
-    this.whiteTurn = true;
-    
+    this.whiteToMove = true;
+    this.halfmoveCount = 0;
+    this.moveCount = 0;
   }
   
   init(){
@@ -67,20 +68,20 @@ class GameController{
   }
 
   moveValidation(x,y, isEmpty, board, piece, castle){
-    if(this.currentGameStatus !== this.gameStatus.active) return;
-    if(!((this.whiteTurn && piece.isWhite) || (!this.whiteTurn && !piece.isWhite))) return;
+    // if(this.currentGameStatus !== this.gameStatus.active) return;
+    if(!((this.whiteToMove&& piece.isWhite) || (!this.whiteToMove&& !piece.isWhite))) return;
     //castling
     if(castle){
       if(!castle.long){
         this.makeMove(piece.pos.x+1, piece.pos.y, true, board, castle.rook);
         board.drawPieces();
-        this.whiteTurn = !this.whiteTurn;
+        this.whiteToMove = !this.whiteToMove;
         piece.wasMoved = true;
 
       }else{
         this.makeMove(piece.pos.x-1, piece.pos.y, true, board, castle.rook);
         board.drawPieces();
-        this.whiteTurn = !this.whiteTurn;
+        this.whiteToMove = !this.whiteToMove;
         piece.wasMoved = true;
       }
     }
@@ -96,13 +97,25 @@ class GameController{
       //bug png
       board.getControlledSquares();
 
+      console.log(this.king.black.getLegalMoves(board).filter(e=>{
+        if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, piece) || (!e.isEmpty && e.isAlly)){
+              return false;
+        }
+        return true
+      }));
+
       if(this.inCheck.white){
         if(this.king.white.getLegalMoves(board).filter(e=>!this.seeIfCheck(e.x, e.y, e.isEmpty, board, piece) && e.isEmpty).length<=0){
           console.log("BLACK WON");
           this.currentGameStatus = this.gameStatus.black_won;
         }
       }else{
-        if(this.king.black.getLegalMoves(board).filter(e=>!this.seeIfCheck(e.x, e.y, e.isEmpty, board, piece) && e.isEmpty).length<=0){
+        if(this.king.black.getLegalMoves(board).filter(e=>{
+          if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, piece) || (!e.isEmpty && e.isAlly)){
+                return false;
+          }
+          return true;
+        }).length<=0){
           console.log("WHITE WON");
           this.currentGameStatus = this.gameStatus.white_won;
         }
@@ -112,11 +125,20 @@ class GameController{
   }
   
   makeMove(x,y, isEmpty, board, piece){
+    this.halfmoveCount++;
+    
     if(!isEmpty){
       // check if move is a capture
+      this.halfmoveCount=0;
       board.board[y][x].die();
       board.drawPieces();
     }
+
+    if(piece.type.toLowerCase()=='p'){
+      this.halfmoveCount=0;
+    }
+
+    let prevY = piece.pos.y;
     board.board[piece.pos.y][piece.pos.x] = "-";
     piece.pos = {
       x: (x>7) ? 7 : (x<0) ? 0 : x,
@@ -124,11 +146,33 @@ class GameController{
     }
     board.board[piece.pos.y][piece.pos.x] = piece;
     piece.wasMoved = true;
-
-    this.whiteTurn = !this.whiteTurn;
+    
+    // if(this.whiteToMove){
+    //   this.moveCount++
+    // }
+    
+    this.whiteToMove = !this.whiteToMove;
     for (const e of document.querySelectorAll(".point")) {
       e.remove()
     }
+
+    if(piece.isWhite){
+      if(piece.type.toLowerCase()=='p' && prevY==piece.pos.y+2){
+        board.enPassantTargetSquare = {
+          x: piece.pos.x,
+          y: piece.pos.y+1
+        }
+      }
+    }else{
+      if(piece.type.toLowerCase()=='p' && prevY==piece.pos.y-2){
+        board.enPassantTargetSquare = {
+          x: piece.pos.x,
+          y: piece.pos.y-1
+        }
+      }
+    }
+
+    
   }
 
   seeIfCheck(x,y, isEmpty, board, piece){

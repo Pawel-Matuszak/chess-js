@@ -12,6 +12,7 @@ class Board{
     this.controlledSquares = {white: [], black: []};
     this.boardDiv;
     this.gameController = gameController;
+    this.enPassantTargetSquare = {}
   }
 
   createBoard(){
@@ -54,11 +55,19 @@ class Board{
         }
       })
     })
+    this.getControlledSquares();
   }
 
   readFEN(fenStr){
-    let fenArray = fenStr.split("/");
     this.board = [];
+
+    let fenArray = fenStr.split("/");
+    let fenArrayLast = fenArray[7].split(" ").slice(0,1);
+    let fenInfo = fenArray[7].split(" ").slice(1);
+    fenArray.pop();
+    fenArray.push(...fenArrayLast);
+    
+    console.log(fenInfo);
 
     //create empty board
     for (let i = 0; i <= 7; i++) {
@@ -110,6 +119,52 @@ class Board{
     })
 
     this.drawPieces();
+
+    // save fen info
+    this.gameController.whiteToMove = (fenInfo[0]=='w') ? true : false;
+    
+    //castlingInfo
+    let fenCastle = fenInfo[1].split('');
+    let rooks = this.gameController.findRooks(this);
+    rooks.white.forEach(e=>e.wasMoved=true)
+    rooks.black.forEach(e=>e.wasMoved=true)
+
+    fenCastle.forEach(e=>{
+      switch (e) {
+        case "K":
+          if(rooks.white[1]){
+            rooks.white[1].wasMoved = false;
+          }
+          break;
+        case "Q":
+          if(rooks.white[0]){
+            rooks.white[0].wasMoved = false;
+          }
+          break;
+        case "k":
+          if(rooks.black[1]){
+            rooks.black[1].wasMoved = false;
+          }
+          break;
+        case "q":
+          if(rooks.black[0]){
+            rooks.black[0].wasMoved = false;
+          }
+          break;
+        default:
+          break;
+      }
+    })
+
+    //en passant square
+    this.gameController.enPassantTargetSquare = fenInfo[2];
+
+    //halfmove clock
+    this.gameController.halfmoveCount = fenInfo[3];
+
+    //fullmove counter
+    this.gameController.moveCount = fenInfo[4];
+
     // console.log(this.board);
   }
 
