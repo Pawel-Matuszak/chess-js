@@ -18,22 +18,26 @@ class GameController{
       white: undefined,
       black: undefined
     }
-    //TODO
-    //define when king is in check
-      //if one of the controlled squares (of white) has the same coordinates as the king (black)
-      //then black is in check
-      //* need to find a king in this.boardRef
-      //* or use king class
+    this.gameStatus = {
+      active: 0,
+      black_won: 1,
+      white_won: 2,
+      stalemate: 3
+    }
+    this.currentGameStatus = "";
+    this.whiteTurn = true;
     
-    // *changing turn from one color to other
-    
+  }
+  
+  init(){
     //clear move hilights
     window.addEventListener('click', function(e){   
-      console.log("a");
       for (const e of document.querySelectorAll(".point")) {
         e.remove()
       }
     });
+
+    this.currentGameStatus = this.gameStatus.active;
   }
 
   findKings(board){
@@ -63,17 +67,22 @@ class GameController{
   }
 
   moveValidation(x,y, isEmpty, board, piece, castle){
+    if(this.currentGameStatus !== this.gameStatus.active) return;
+    if(!((this.whiteTurn && piece.isWhite) || (!this.whiteTurn && !piece.isWhite))) return;
+    //castling
     if(castle){
       if(!castle.long){
         this.makeMove(piece.pos.x+1, piece.pos.y, true, board, castle.rook);
         board.drawPieces();
+        this.whiteTurn = !this.whiteTurn;
+        piece.wasMoved = true;
 
       }else{
         this.makeMove(piece.pos.x-1, piece.pos.y, true, board, castle.rook);
         board.drawPieces();
+        this.whiteTurn = !this.whiteTurn;
+        piece.wasMoved = true;
       }
-      console.log(castle.rook);
-      
     }
 
 
@@ -81,7 +90,25 @@ class GameController{
     
     this.makeMove(x,y, isEmpty, board, piece);
     board.drawPieces();
-    piece.showLegalMoves(board);
+
+    //see if checkmate
+    if(this.inCheck.white || this.inCheck.black){
+      //bug png
+      board.getControlledSquares();
+
+      if(this.inCheck.white){
+        if(this.king.white.getLegalMoves(board).filter(e=>!this.seeIfCheck(e.x, e.y, e.isEmpty, board, piece) && e.isEmpty).length<=0){
+          console.log("BLACK WON");
+          this.currentGameStatus = this.gameStatus.black_won;
+        }
+      }else{
+        if(this.king.black.getLegalMoves(board).filter(e=>!this.seeIfCheck(e.x, e.y, e.isEmpty, board, piece) && e.isEmpty).length<=0){
+          console.log("WHITE WON");
+          this.currentGameStatus = this.gameStatus.white_won;
+        }
+      }
+    }
+    // piece.showLegalMoves(board);
   }
   
   makeMove(x,y, isEmpty, board, piece){
@@ -97,8 +124,11 @@ class GameController{
     }
     board.board[piece.pos.y][piece.pos.x] = piece;
     piece.wasMoved = true;
-    console.log(board);
 
+    this.whiteTurn = !this.whiteTurn;
+    for (const e of document.querySelectorAll(".point")) {
+      e.remove()
+    }
   }
 
   seeIfCheck(x,y, isEmpty, board, piece){
@@ -173,7 +203,6 @@ class GameController{
       y: (y>7) ? 7 : (y<0) ? 0 : y
     }
     this.temp.board[this.tempPiece.pos.y][this.tempPiece.pos.x] = this.tempPiece;
-
     this.temp.getControlledSquares();
     this.inCheck.white = false;
     this.inCheck.black = false;
@@ -196,6 +225,7 @@ class GameController{
       board.drawPieces();
       return true;
     }
+    return false;
   }
   
 }

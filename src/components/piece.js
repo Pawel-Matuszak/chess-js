@@ -88,7 +88,11 @@ class Piece{
       pos3 = e.clientX;
       pos4 = e.clientY;
       this.pieceDiv.style.zIndex = 999;
-      this.showLegalMoves(board)
+
+      //show moves to player that currenty has a turn
+      if((this.gameController.whiteTurn && this.isWhite) || (!this.gameController.whiteTurn && !this.isWhite)){
+        this.showLegalMoves(board)
+      }
 
       //set piece position and remove listeners on mouse button up
       document.onmouseup = () => {
@@ -100,6 +104,7 @@ class Piece{
           Math.round((this.pieceDiv.offsetTop - pos2)/100),
           board
         )
+        
       };
       
       document.onmousemove = (e)=>{
@@ -135,6 +140,7 @@ class Piece{
       }
     });
     board.drawPieces();
+    // board.showControlledSquares(true);
   }
 
   showLegalMoves(board){

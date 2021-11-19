@@ -59,7 +59,9 @@ class King extends Piece{
       this.enemySquares = board.controlledSquares.white;
     }
     //calculate set difference to make sure king cant run into check
-    // legalMoves = legalMoves.filter(({ x: x1, y: y1 }) => !this.enemySquares.some(({ x: x2, y: y2}) => (x2 === x1 && y2 === y1)));
+    legalMoves = legalMoves.filter(({ x: x1, y: y1 }) => !this.enemySquares.some(({ x: x2, y: y2}) => (x2 === x1 && y2 === y1)));
+    // console.log(legalMoves);
+    // board.showControlledSquares(true);
 
     this.castleValidation(board);
     
@@ -113,12 +115,17 @@ class King extends Piece{
       }else{
         this.rooks = this.gameController.findRooks(board).black
       }
-      if(this.rooks[0].wasMoved){
-        this.castleLong = false;
-      }
-      if(this.rooks[1].wasMoved){
-        this.castle = false;
-      }
+      this.rooks.forEach(rook=>{
+        if(rook.wasMoved){
+          if(rook.pos.x>this.pos.x){
+            this.castle = false;
+          }
+          if(rook.pos.x<this.pos.x){
+            this.castleLong = false;
+          }
+        }
+      })
+      console.log(this.castleLong + " " + this.castle);
     }
     if(!this.castleLong && !this.castle) return;
 
@@ -138,6 +145,7 @@ class King extends Piece{
           this.castleLong = false;
       }
     })
+    
   }
 
   //changes position on the screen
@@ -148,14 +156,11 @@ class King extends Piece{
     this.legalMoves.forEach(({x,y,isEmpty, isAlly, castle}) => {
       if(posX==x && posY==y){
         if(isAlly) return;
-        console.log(castle);
         this.gameController.moveValidation(x,y,isEmpty,board,this,castle);
       }
     });
     board.drawPieces();
-
-    console.log(this.castle + " " + this.castleLong);
-
+    // console.log(this.castle + " " + this.castleLong);
   }
 }
 

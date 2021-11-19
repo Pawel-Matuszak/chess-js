@@ -7,7 +7,16 @@ const checkDiagonalAndStraigt = (i=0, j=0, board, legalMovesArray, posX, posY, i
 
   //when enemy piece is in the way
   if(board.board[posY-(i)][posX-(j)]!=="-"){
-    // if(!board.board[posY-(i)][posX-(j)]) return;
+    if(board.board[posY-(i)][posX-(j)].type.toLowerCase()=='k'){
+      let offsetX = (j==0) ? 0 : (j>0) ? 1 : -1;
+      let offsetY = (i==0) ? 0 : (i>0) ? 1 : -1;
+      legalMovesArray.push({
+        x: posX-(j+(offsetX)),
+        y: posY-(i+(offsetY)),
+        isEmpty: true,
+        isAlly: true
+      })
+    }
     legalMovesArray.push({
       x: posX-(j),
       y: posY-(i),

@@ -15,7 +15,9 @@ class Pawn extends Piece{
       let type = (this.isWhite) ? "Q" : "q";
       let newPiece = new Queen(type, this.pos.x, this.pos.y, this.isWhite);
       newPiece.createPiece(board);
-      this.pieceDiv.remove()
+      if(this.pieceDiv){
+        this.pieceDiv.remove()
+      }
       return legalMoves;
     }
 
