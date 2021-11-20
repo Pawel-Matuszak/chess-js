@@ -11,6 +11,7 @@ class Pawn extends Piece{
     let legalMoves = [];
     let offset = (this.isWhite) ? 1 : -1;
 
+    //piece promotion
     if((this.isWhite && this.pos.y==0) || (!this.isWhite && this.pos.y==7)){
       //new Piece(this.pos.x, this.pos.y ...)
       let type = (this.isWhite) ? "Q" : "q";
@@ -25,6 +26,23 @@ class Pawn extends Piece{
     //captures
     let square = board.board[this.pos.y-offset][this.pos.x-1]
     if(square){
+      //if en passant is avaliable
+      if(board.gameController.enPassantTargetSquare && board.gameController.enPassantTargetSquare!=="-"){
+        //if this piece can capture en passant
+        let target = board.board[board.gameController.enPassantTargetSquare.y+offset][board.gameController.enPassantTargetSquare.x];
+        if(target!=="-" && target.isWhite!==this.isWhite){
+          if(board.gameController.enPassantTargetSquare.x === this.pos.x-1 && board.gameController.enPassantTargetSquare.y === this.pos.y-offset){
+            legalMoves.push({
+              x: this.pos.x-1, 
+              y: this.pos.y-offset, 
+              isEmpty: true,
+              isAlly: false,
+              enPassant: true
+            })
+          }
+        }
+      }
+      //else
       if(square!=="-"){
         legalMoves.push({
           x: this.pos.x-1, 
@@ -43,6 +61,21 @@ class Pawn extends Piece{
     }
     square = board.board[this.pos.y-offset][this.pos.x+1]
     if(square){
+      if(board.gameController.enPassantTargetSquare && board.gameController.enPassantTargetSquare!=="-"){
+        //if this piece can capture en passant
+        let target = board.board[board.gameController.enPassantTargetSquare.y+offset][board.gameController.enPassantTargetSquare.x];
+        if(target!=="-" && target.isWhite!==this.isWhite){
+          if(board.gameController.enPassantTargetSquare.x === this.pos.x+1 && board.gameController.enPassantTargetSquare.y === this.pos.y-offset){
+            legalMoves.push({
+              x: this.pos.x+1, 
+              y: this.pos.y-offset, 
+              isEmpty: true,
+              isAlly: false,
+              enPassant: true
+            })
+          }
+        }
+      }
       if(square!=="-"){
         legalMoves.push({
           x: this.pos.x+1, 

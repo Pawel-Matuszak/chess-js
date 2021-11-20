@@ -12,7 +12,6 @@ class Board{
     this.controlledSquares = {white: [], black: []};
     this.boardDiv;
     this.gameController = gameController;
-    this.enPassantTargetSquare = {}
   }
 
   createBoard(){
@@ -78,8 +77,6 @@ class Board{
     fenArray.pop();
     fenArray.push(...fenArrayLast);
     
-    console.log(fenInfo);
-
     //create empty board
     for (let i = 0; i <= 7; i++) {
       this.board.push([]);
@@ -131,7 +128,6 @@ class Board{
 
     this.drawPieces();
 
-    return;
     // save fen info
     this.gameController.whiteToMove = (fenInfo[0]=='w') ? true : false;
     
@@ -169,7 +165,11 @@ class Board{
     })
 
     //en passant square
-    this.gameController.enPassantTargetSquare = fenInfo[2];
+    let letterToNum = ["a", "b", "c", "d" ,"e" ,"f", "g", "h"]
+    this.gameController.enPassantTargetSquare = {
+      x: letterToNum.indexOf(fenInfo[2][0]),
+      y: parseInt(fenInfo[2][1])+1
+    };
 
     //halfmove clock
     this.gameController.halfmoveCount = fenInfo[3];

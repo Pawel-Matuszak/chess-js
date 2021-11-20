@@ -28,6 +28,7 @@ class GameController{
       white_won: 2,
       draw: 3
     }
+    this.enPassantTargetSquare = undefined
     this.allPiecesValue = {};
     this.currentGameStatus = "";
     this.whiteToMove = true;
@@ -138,7 +139,6 @@ class GameController{
     }else{
       // see if stealmate
       this.allLegalMoves = board.getAllLegalMoves()
-      console.log(this.allLegalMoves);
       if((this.allLegalMoves.white.length<=0 && this.whiteToMove) || (this.allLegalMoves.black.length<=0 && !this.whiteToMove)){
         this.currentGameStatus = this.gameStatus.draw;
         this.endGameHandler(board, '', "stealmate")
@@ -162,6 +162,16 @@ class GameController{
       board.board[y][x].die();
       board.drawPieces();
     }
+    //if move is a en passant
+    if(this.enPassantTargetSquare){
+      if(piece.type.toLowerCase()=="p" && x==this.enPassantTargetSquare.x && y==this.enPassantTargetSquare.y){
+        let offset = (piece.isWhite) ? 1 : -1;
+
+        this.halfmoveCount=0;
+        board.board[y+offset][x].die();
+        board.drawPieces();
+      }
+    }
 
     if(piece.type.toLowerCase()=='p'){
       this.halfmoveCount=0;
@@ -181,21 +191,22 @@ class GameController{
     }
     
     this.whiteToMove = !this.whiteToMove;
-    console.log("A");
     for (const e of document.querySelectorAll(".point")) {
       e.remove()
     }
 
+    //handle en passant
+    this.enPassantTargetSquare = undefined;
     if(piece.isWhite){
       if(piece.type.toLowerCase()=='p' && prevY==piece.pos.y+2){
-        board.enPassantTargetSquare = {
+        this.enPassantTargetSquare = {
           x: piece.pos.x,
           y: piece.pos.y+1
         }
       }
     }else{
       if(piece.type.toLowerCase()=='p' && prevY==piece.pos.y-2){
-        board.enPassantTargetSquare = {
+        this.enPassantTargetSquare = {
           x: piece.pos.x,
           y: piece.pos.y-1
         }

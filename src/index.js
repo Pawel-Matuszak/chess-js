@@ -7,7 +7,8 @@ gameController.init();
 const board = new Board(gameController);
 board.createBoard();
 // board.readFEN("7k/3r4/8/8/8/8/8/R3K2R")
-board.readFEN("8/R2r3k/8/8/8/8/8/4K1R1")
+// board.readFEN("8/R2r3k/8/8/8/8/8/4K1R1")
+board.readFEN("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1")
 
 //opening
 // board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
