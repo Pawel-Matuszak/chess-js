@@ -14,6 +14,10 @@ class GameController{
       white: false,
       black: false,
     }
+    this.inCheckTemp = { 
+      white: false,
+      black: false,
+    }
     this.king = {
       white: undefined,
       black: undefined
@@ -88,40 +92,72 @@ class GameController{
 
 
     if(this.seeIfCheck(x,y, isEmpty, board, piece)) return;
-    
     this.makeMove(x,y, isEmpty, board, piece);
+
     board.drawPieces();
+
+    this.findKings(board);
+    board.getControlledSquares();
+    this.inCheck.white = false;
+    this.inCheck.black = false;
+    board.controlledSquares.black.forEach(({x: sX, y: sY}) => {
+      if(sX==this.king.white.pos.x && sY==this.king.white.pos.y){
+        this.inCheck.white = true;
+      }
+    });
+    board.controlledSquares.white.forEach(({x: sX, y: sY}) => {
+      if(sX==this.king.black.pos.x && sY==this.king.black.pos.y){
+        this.inCheck.black = true;
+      }
+    });
 
     //see if checkmate
     if(this.inCheck.white || this.inCheck.black){
       //bug png
-      board.getControlledSquares();
 
-      console.log(this.king.black.getLegalMoves(board).filter(e=>{
-        if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, piece) || (!e.isEmpty && e.isAlly)){
+      console.log((this.king.white.getLegalMoves(board).filter(e=>{
+        if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, this.king.white)){
               return false;
         }
-        return true
-      }));
+        return true;
+      })));
 
+      
       if(this.inCheck.white){
-        if(this.king.white.getLegalMoves(board).filter(e=>!this.seeIfCheck(e.x, e.y, e.isEmpty, board, piece) && e.isEmpty).length<=0){
+        if(this.king.white.getLegalMoves(board).filter(e=>{
+          if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, this.king.white) || (e.isEmpty==false && e.isAlly)){
+                return false;
+          }
+          return true;
+        }).length<=0){
           console.log("BLACK WON");
           this.currentGameStatus = this.gameStatus.black_won;
+          // this.endGameHandler(board, 'b', "checkmate")
         }
-      }else{
+      }else if(this.inCheck.black){
         if(this.king.black.getLegalMoves(board).filter(e=>{
-          if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, piece) || (!e.isEmpty && e.isAlly)){
+          if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, this.king.black) || (e.isEmpty==false && e.isAlly)){
                 return false;
           }
           return true;
         }).length<=0){
           console.log("WHITE WON");
           this.currentGameStatus = this.gameStatus.white_won;
+          // this.endGameHandler(board, 'w', "checkmate")
         }
       }
     }
+
+    // see if stealmate
+    // board.getControlledSquares();
+    // this.allLegalMoves = board.getAllLegalMoves()
+    // if(this.allLegalMoves.white.length<=0 && this.allLegalMoves.black.length<=0){
+    //   console.log("stealmate");
+    // }
+
     // piece.showLegalMoves(board);
+   
+
   }
   
   makeMove(x,y, isEmpty, board, piece){
@@ -147,9 +183,9 @@ class GameController{
     board.board[piece.pos.y][piece.pos.x] = piece;
     piece.wasMoved = true;
     
-    // if(this.whiteToMove){
-    //   this.moveCount++
-    // }
+    if(this.whiteToMove){
+      this.moveCount++
+    }
     
     this.whiteToMove = !this.whiteToMove;
     for (const e of document.querySelectorAll(".point")) {
@@ -178,6 +214,7 @@ class GameController{
   seeIfCheck(x,y, isEmpty, board, piece){
     //pls don't look its probably not even working
     this.findKings(board);
+    board.getControlledSquares();
     this.inCheck.white = false;
     this.inCheck.black = false;
     board.controlledSquares.black.forEach(({x: sX, y: sY}) => {
@@ -248,23 +285,23 @@ class GameController{
     }
     this.temp.board[this.tempPiece.pos.y][this.tempPiece.pos.x] = this.tempPiece;
     this.temp.getControlledSquares();
-    this.inCheck.white = false;
-    this.inCheck.black = false;
+    this.inCheckTemp.white = false;
+    this.inCheckTemp.black = false;
     
     this.findKings(this.temp);
     this.temp.controlledSquares.black.forEach(({x: sX, y: sY}) => {
       if(sX==this.king.white.pos.x && sY==this.king.white.pos.y){
-        this.inCheck.white = true;
+        this.inCheckTemp.white = true;
       }
     });
     this.temp.controlledSquares.white.forEach(({x: sX, y: sY}) => {
       if(sX==this.king.black.pos.x && sY==this.king.black.pos.y){
-        this.inCheck.black = true;
+        this.inCheckTemp.black = true;
       }
     });
     // this.temp.showControlledSquares()
 
-    if((this.inCheck.white && piece.isWhite) || (this.inCheck.black && !piece.isWhite)){
+    if((this.inCheckTemp.white && piece.isWhite) || (this.inCheckTemp.black && !piece.isWhite)){
     //when king is still in check
       board.drawPieces();
       return true;
@@ -272,6 +309,24 @@ class GameController{
     return false;
   }
   
+  //dispaly end game message
+  endGameHandler(board, color, type){
+    if(color=='w'){
+      board.gameMessage.style.display="block";
+      board.title.innerHTML = "WHITE WON";
+      board.subtitle.innerHTML = "by "+type;
+
+    }else if(color=='b'){
+      board.gameMessage.style.display="block";
+      board.title.innerHTML = "BLACK WON";
+      board.subtitle.innerHTML = "by "+type;
+
+    }else{
+      board.gameMessage.style.display="block";
+      board.title.innerHTML = "DRAW";
+      board.subtitle.innerHTML = type;
+    }
+  }
 }
 
 export default GameController

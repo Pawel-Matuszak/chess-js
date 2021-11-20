@@ -18,7 +18,18 @@ class Board{
   createBoard(){
     this.boardDiv = document.createElement("div");
     this.boardDiv.setAttribute("class", "board");
-  
+
+    //used at the end of the game for displaying who won
+    this.gameMessage = document.createElement("div");
+    this.gameMessage.setAttribute("class", "gameMessage");
+    this.title = document.createElement("div");
+    this.title.setAttribute("class", "gameMsgTitle");
+    this.subtitle = document.createElement("div");
+    this.subtitle.setAttribute("class", "gameMsgSubtitle");
+    
+    this.gameMessage.append(this.title, this.subtitle)
+    this.boardDiv.appendChild(this.gameMessage)
+    
     //draw board in html
     for (let i = 0; i <= 7; i++) {
       const row = document.createElement("div");
@@ -120,6 +131,7 @@ class Board{
 
     this.drawPieces();
 
+    return;
     // save fen info
     this.gameController.whiteToMove = (fenInfo[0]=='w') ? true : false;
     
@@ -237,6 +249,29 @@ class Board{
       })
     }
     
+  }
+
+  getAllLegalMoves(){
+    let white = [];
+    let black = [];
+
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board[i].length; j++) {
+        const piece = this.board[i][j];
+        if(piece!=="-"){
+          let legalMoves = piece.getLegalMoves(this);
+          if(piece.type.toLowerCase()=="p"){
+            legalMoves = legalMoves.filter(e=>e.x==piece.pos.x);
+          }
+          if(piece.isWhite){
+            white.push(...legalMoves)
+          }else{
+            black.push(...legalMoves)
+          }
+        }
+      }
+    }
+    return {white, black}
   }
 }
 
