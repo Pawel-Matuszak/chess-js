@@ -4,6 +4,7 @@ import checkDiagonalAndStraigt from "./checkDiagonalAndStraigt";
 class Queen extends Piece{
   constructor(type, posX, posY, isWhite){
     super(type, posX, posY, isWhite);
+    this.value = 9;
   }
 
   getLegalMoves(board){

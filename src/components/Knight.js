@@ -3,6 +3,7 @@ import Piece from "./Piece";
 class Knight extends Piece{
   constructor(type, posX, posY, isWhite){
     super(type, posX, posY, isWhite);
+    this.value = 3;
   }
 
   getLegalMoves(board){

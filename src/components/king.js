@@ -7,6 +7,7 @@ class King extends Piece{
     this.castle = false;
     this.castleLong = false;
     this.rooks = [];
+    this.value = 0;
   }
 
     //danger

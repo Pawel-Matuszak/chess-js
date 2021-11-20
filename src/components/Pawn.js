@@ -4,6 +4,7 @@ import Queen from "./Queen";
 class Pawn extends Piece{
   constructor(type, posX, posY, isWhite){
     super(type, posX, posY, isWhite);
+    this.value = 1;
   }
 
   getLegalMoves(board){

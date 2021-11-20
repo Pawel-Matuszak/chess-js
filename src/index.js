@@ -19,7 +19,5 @@ board.readFEN("8/R2r3k/8/8/8/8/8/4K1R1")
 
 //TODO
 
-//if the king is in check and cant move its mate
-//if the king is not in check and nothing can move its stealmate
-//game loop
+//draw by insufficient material
 //saving previous moves

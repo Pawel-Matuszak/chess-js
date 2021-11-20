@@ -273,6 +273,39 @@ class Board{
     }
     return {white, black}
   }
+
+  getAllPieces(){
+    let allPieces = {
+      white: [],
+      black: []
+    }
+
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board[i].length; j++) {
+        const piece = this.board[i][j];
+        if(piece!=="-"){
+          if(piece.isWhite){
+            allPieces.white.push(piece);
+          }else{
+            allPieces.black.push(piece);
+          }
+        }
+      }
+    }
+    return allPieces;
+  }
+
+  sumAllPiecesValue(){
+    let values = {
+      white: 0,
+      black: 0
+    }
+    let allPieces = this.getAllPieces();
+    allPieces.white.forEach(p=>values.white += p.value)
+    allPieces.black.forEach(p=>values.black += p.value)
+
+    return values;
+  }
 }
 
 export default Board;

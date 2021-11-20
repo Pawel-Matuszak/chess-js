@@ -26,6 +26,7 @@ class Piece{
     this.legalMoves = [];
     this.wasMoved = false;
     this.gameController = gameController;
+    this.value = 0;
   }
 
   //return piece object with all its parameters
@@ -90,7 +91,7 @@ class Piece{
       this.pieceDiv.style.zIndex = 999;
 
       //show moves to player that currenty has a turn
-      if((this.gameController.whiteToMove && this.isWhite) || (!this.gameController.whiteToMove && !this.isWhite)){
+      if((this.gameController.whiteToMove && this.isWhite) || (this.gameController.whiteToMove==false && this.isWhite==false)){
         this.showLegalMoves(board)
       }
 

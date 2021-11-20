@@ -4,6 +4,7 @@ import checkDiagonalAndStraigt from "./checkDiagonalAndStraigt";
 class Rook extends Piece{
   constructor(type, posX, posY, isWhite){
     super(type, posX, posY, isWhite);
+    this.value = 5;
   }
 
   getLegalMoves(board){

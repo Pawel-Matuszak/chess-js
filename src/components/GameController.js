@@ -26,8 +26,9 @@ class GameController{
       active: 0,
       black_won: 1,
       white_won: 2,
-      stalemate: 3
+      draw: 3
     }
+    this.allPiecesValue = {};
     this.currentGameStatus = "";
     this.whiteToMove = true;
     this.halfmoveCount = 0;
@@ -111,18 +112,8 @@ class GameController{
       }
     });
 
-    //see if checkmate
+    //see if checkmate or stealmate
     if(this.inCheck.white || this.inCheck.black){
-      //bug png
-
-      console.log((this.king.white.getLegalMoves(board).filter(e=>{
-        if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, this.king.white)){
-              return false;
-        }
-        return true;
-      })));
-
-      
       if(this.inCheck.white){
         if(this.king.white.getLegalMoves(board).filter(e=>{
           if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, this.king.white) || (e.isEmpty==false && e.isAlly)){
@@ -130,9 +121,8 @@ class GameController{
           }
           return true;
         }).length<=0){
-          console.log("BLACK WON");
           this.currentGameStatus = this.gameStatus.black_won;
-          // this.endGameHandler(board, 'b', "checkmate")
+          this.endGameHandler(board, 'b', "checkmate")
         }
       }else if(this.inCheck.black){
         if(this.king.black.getLegalMoves(board).filter(e=>{
@@ -141,23 +131,26 @@ class GameController{
           }
           return true;
         }).length<=0){
-          console.log("WHITE WON");
           this.currentGameStatus = this.gameStatus.white_won;
-          // this.endGameHandler(board, 'w', "checkmate")
+          this.endGameHandler(board, 'w', "checkmate")
         }
+      }
+    }else{
+      // see if stealmate
+      this.allLegalMoves = board.getAllLegalMoves()
+      console.log(this.allLegalMoves);
+      if((this.allLegalMoves.white.length<=0 && this.whiteToMove) || (this.allLegalMoves.black.length<=0 && !this.whiteToMove)){
+        this.currentGameStatus = this.gameStatus.draw;
+        this.endGameHandler(board, '', "stealmate")
       }
     }
 
-    // see if stealmate
-    // board.getControlledSquares();
-    // this.allLegalMoves = board.getAllLegalMoves()
-    // if(this.allLegalMoves.white.length<=0 && this.allLegalMoves.black.length<=0){
-    //   console.log("stealmate");
-    // }
-
-    // piece.showLegalMoves(board);
-   
-
+    //see if draw by insufficient material
+    this.allPiecesValue = board.sumAllPiecesValue();
+    if(this.allPiecesValue.white<=3 && this.allPiecesValue.black<=3){
+      this.currentGameStatus = this.gameStatus.draw;
+      this.endGameHandler(board, '', "insufficient material")
+    }
   }
   
   makeMove(x,y, isEmpty, board, piece){
@@ -188,6 +181,7 @@ class GameController{
     }
     
     this.whiteToMove = !this.whiteToMove;
+    console.log("A");
     for (const e of document.querySelectorAll(".point")) {
       e.remove()
     }
@@ -207,8 +201,6 @@ class GameController{
         }
       }
     }
-
-    
   }
 
   seeIfCheck(x,y, isEmpty, board, piece){
@@ -324,7 +316,7 @@ class GameController{
     }else{
       board.gameMessage.style.display="block";
       board.title.innerHTML = "DRAW";
-      board.subtitle.innerHTML = type;
+      board.subtitle.innerHTML = "by "+type;
     }
   }
 }
