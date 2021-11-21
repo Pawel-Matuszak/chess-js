@@ -150,8 +150,6 @@ class Piece{
     this.legalMoves = [];
     this.legalMoves = this.getLegalMoves(board);
 
-    //optimisation joke
-    //but it is working
     this.legalMoves = this.legalMoves.filter(e=>!this.gameController.seeIfCheck(e.x, e.y, e.isEmpty, board, this))
 
     //remove all previous dots from the DOM

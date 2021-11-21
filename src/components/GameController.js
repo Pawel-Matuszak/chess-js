@@ -74,7 +74,7 @@ class GameController{
   }
 
   moveValidation(x,y, isEmpty, board, piece, castle){
-    // if(this.currentGameStatus !== this.gameStatus.active) return;
+    if(this.currentGameStatus !== this.gameStatus.active) return;
     if(!((this.whiteToMove&& piece.isWhite) || (!this.whiteToMove&& !piece.isWhite))) return;
     //castling
     if(castle){
@@ -95,7 +95,6 @@ class GameController{
 
     if(this.seeIfCheck(x,y, isEmpty, board, piece)) return;
     this.makeMove(x,y, isEmpty, board, piece);
-
     board.drawPieces();
 
     this.findKings(board);
@@ -113,7 +112,7 @@ class GameController{
       }
     });
 
-    //see if checkmate or stealmate
+    //checkmate or stealmate
     if(this.inCheck.white || this.inCheck.black){
       if(this.inCheck.white){
         if(this.king.white.getLegalMoves(board).filter(e=>{
@@ -145,7 +144,7 @@ class GameController{
       }
     }
 
-    //see if draw by insufficient material
+    //draw by insufficient material
     this.allPiecesValue = board.sumAllPiecesValue();
     if(this.allPiecesValue.white<=3 && this.allPiecesValue.black<=3){
       this.currentGameStatus = this.gameStatus.draw;
@@ -169,7 +168,10 @@ class GameController{
 
         this.halfmoveCount=0;
         board.board[y+offset][x].die();
+        board.board[y+offset][x].pieceDiv.remove();
+        board.board[y+offset][x] = "-"
         board.drawPieces();
+        console.log(board.board);
       }
     }
 
@@ -214,8 +216,8 @@ class GameController{
     }
   }
 
+  //return true if piece would be in check after moving to x,y
   seeIfCheck(x,y, isEmpty, board, piece){
-    //pls don't look its probably not even working
     this.findKings(board);
     board.getControlledSquares();
     this.inCheck.white = false;
@@ -251,8 +253,7 @@ class GameController{
       this.tempPiece = new Piece(piece.type, piece.pos.x, piece.pos.y, piece.isWhite);
     }
 
-    //create this.temp board
-    //dont know why I have to do this
+    //create temporary board
     for (let i = 0; i < board.board.length; i++) {
       for (let j = 0; j < board.board[i].length; j++) {
         if(board.board[i][j]=="-"){
@@ -277,7 +278,7 @@ class GameController{
       }
     }
 
-    //change piece pos on a this.temp board
+    //change piece pos on a temp board
     if(!isEmpty){
       this.temp.board[y][x].die();
     }
@@ -305,7 +306,7 @@ class GameController{
     // this.temp.showControlledSquares()
 
     if((this.inCheckTemp.white && piece.isWhite) || (this.inCheckTemp.black && !piece.isWhite)){
-    //when king is still in check
+      //when king would be in check
       board.drawPieces();
       return true;
     }
