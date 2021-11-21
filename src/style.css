@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500&display=swap');
 
 *{
   box-sizing: border-box;
@@ -7,6 +8,7 @@
 
 body{
   background: rgb(92, 146, 130);
+  font-family: 'Libre Franklin', sans-serif;
 }
 
 .board{
@@ -57,10 +59,33 @@ body{
   top: 50%;
   left:50%;
   transform: translate(-50%, -50%);
-  width: 320px;
-  height: 380px;
+  width: 300px;
+  height: 200px;
   z-index: 999;
-  background: rgb(237, 242, 243);
+  background: rgba(212, 233, 238, 0.95);
   box-shadow: 1px 0px 5px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
+  font-size: 2rem;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;  
+  gap: 2px;
+}
+.gameMsgTitle{
+  font-weight: 500;
+}
+
+.gameMsgSubtitle{
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
+.exit-modal{
+  position: absolute;
+  top:15px;
+  right: 25px;
+}
+
+.exit-modal:hover{
+  cursor: pointer;
 }

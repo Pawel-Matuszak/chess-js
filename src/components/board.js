@@ -25,8 +25,15 @@ class Board{
     this.title.setAttribute("class", "gameMsgTitle");
     this.subtitle = document.createElement("div");
     this.subtitle.setAttribute("class", "gameMsgSubtitle");
+    //exit btn
+    this.times = document.createElement("div");
+    this.times.setAttribute("class", "exit-modal");
+    this.times.innerHTML = "<i class='fas fa-times'></i>"
+    this.times.onclick = ()=>{
+      this.gameMessage.style.display = "none";
+    }
     
-    this.gameMessage.append(this.title, this.subtitle)
+    this.gameMessage.append(this.times, this.title, this.subtitle)
     this.boardDiv.appendChild(this.gameMessage)
     
     //draw board in html

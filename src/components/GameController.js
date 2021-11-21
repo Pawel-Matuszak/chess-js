@@ -114,23 +114,32 @@ class GameController{
 
     //checkmate or stealmate
     if(this.inCheck.white || this.inCheck.black){
+      let allLegalSquares = []
       if(this.inCheck.white){
-        if(this.king.white.getLegalMoves(board).filter(e=>{
-          if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, this.king.white) || (e.isEmpty==false && e.isAlly)){
-                return false;
-          }
-          return true;
-        }).length<=0){
+        board.getAllPieces().white.forEach(p => {
+          let legalM = p.getLegalMoves(board);
+          allLegalSquares.push(...legalM.filter(({x,y,isEmpty, isAlly})=>{
+            return (this.seeIfCheck(x,y, isEmpty, board, p) || (isEmpty==false && isAlly==true)) ? false : true
+          }))
+        });
+
+        //if is in check and has no legal moves its checkmate
+        if(allLegalSquares.length<=0){
           this.currentGameStatus = this.gameStatus.black_won;
           this.endGameHandler(board, 'b', "checkmate")
         }
+
+
       }else if(this.inCheck.black){
-        if(this.king.black.getLegalMoves(board).filter(e=>{
-          if(this.seeIfCheck(e.x, e.y, e.isEmpty, board, this.king.black) || (e.isEmpty==false && e.isAlly)){
-                return false;
-          }
-          return true;
-        }).length<=0){
+        board.getAllPieces().black.forEach(p => {
+          let legalM = p.getLegalMoves(board);
+          allLegalSquares.push(...legalM.filter(({x,y,isEmpty, isAlly})=>{
+            return (this.seeIfCheck(x,y, isEmpty, board, p) || (isEmpty==false && isAlly==true)) ? false : true
+          }))
+        });
+
+        //if is in check and has no legal moves its checkmate
+        if(allLegalSquares.length<=0){
           this.currentGameStatus = this.gameStatus.white_won;
           this.endGameHandler(board, 'w', "checkmate")
         }
@@ -316,17 +325,17 @@ class GameController{
   //dispaly end game message
   endGameHandler(board, color, type){
     if(color=='w'){
-      board.gameMessage.style.display="block";
+      board.gameMessage.style.display="flex";
       board.title.innerHTML = "WHITE WON";
       board.subtitle.innerHTML = "by "+type;
 
     }else if(color=='b'){
-      board.gameMessage.style.display="block";
+      board.gameMessage.style.display="flex";
       board.title.innerHTML = "BLACK WON";
       board.subtitle.innerHTML = "by "+type;
 
     }else{
-      board.gameMessage.style.display="block";
+      board.gameMessage.style.display="flex";
       board.title.innerHTML = "DRAW";
       board.subtitle.innerHTML = "by "+type;
     }

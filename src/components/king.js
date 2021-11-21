@@ -91,6 +91,12 @@ class King extends Piece{
     this.castle = true;
     this.castleLong = true;
 
+    if((board.gameController.inCheck.white && this.isWhite) || (board.gameController.inCheck.black && !this.isWhite)){
+      this.castle = false;
+      this.castleLong = false;
+      return;
+    }
+
     if(this.wasMoved){
       this.castle = false;
       this.castleLong = false;
