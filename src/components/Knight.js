@@ -39,7 +39,7 @@ class Knight extends Piece{
     })
     //check for enemy pieces
     .map(({x,y})=>{
-      let isEmpty = (board.board[y][x]!=="-" && board.board[y][x].isWhite!==this.isWhite) ? false : true;
+      let isEmpty = (board.board[y][x]!=="-") ? false : true;
       let isAlly = (board.board[y][x].isWhite==this.isWhite) ? true : false;
       return {x,y, isEmpty, isAlly}
     })

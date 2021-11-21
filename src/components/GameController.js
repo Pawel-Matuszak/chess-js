@@ -34,6 +34,7 @@ class GameController{
     this.whiteToMove = true;
     this.halfmoveCount = 0;
     this.moveCount = 0;
+    this.moveHistory = {};
   }
   
   init(){
@@ -118,6 +119,7 @@ class GameController{
       if(this.inCheck.white){
         board.getAllPieces().white.forEach(p => {
           let legalM = p.getLegalMoves(board);
+          if(p.type.toLowerCase()=="p") legalM = legalM.filter(e=>e.x==p.pos.x);
           allLegalSquares.push(...legalM.filter(({x,y,isEmpty, isAlly})=>{
             return (this.seeIfCheck(x,y, isEmpty, board, p) || (isEmpty==false && isAlly==true)) ? false : true
           }))
@@ -129,15 +131,17 @@ class GameController{
           this.endGameHandler(board, 'b', "checkmate")
         }
 
-
       }else if(this.inCheck.black){
         board.getAllPieces().black.forEach(p => {
           let legalM = p.getLegalMoves(board);
+          if(p.type.toLowerCase()=="p") legalM = legalM.filter(e=>e.x==p.pos.x);
           allLegalSquares.push(...legalM.filter(({x,y,isEmpty, isAlly})=>{
+            if(x==6 && y==2) console.log(p)
             return (this.seeIfCheck(x,y, isEmpty, board, p) || (isEmpty==false && isAlly==true)) ? false : true
           }))
         });
-
+        console.log(allLegalSquares);
+        console.log(board);
         //if is in check and has no legal moves its checkmate
         if(allLegalSquares.length<=0){
           this.currentGameStatus = this.gameStatus.white_won;

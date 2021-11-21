@@ -12,7 +12,14 @@ board.createBoard();
 
 //opening
 // board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
-board.readFEN("rnbqkbnr/pppppppp/8/8/2B5/8/PPPPPQPP/RNBQKBNR b KQkq e3 0 1")
+// board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq e3 0 1")
+board.readFEN("3qkb1r/ppppp2p/8/8/8/4P3/8/RNBQKBNR w KQkq e3 0 1")
+
+
+//real legal moves that can be made
+// let all = board.getAllPieces();
+// console.log(all.black[1].getLegalMoves(board).filter(({x,y,isEmpty,isAlly})=>!(isEmpty==false && isAlly==true)));
+// all.black[1].move(2, 2, board)
 
 //test queen checks
 // board.readFEN("rnbqkbnr/pp2pppp/3p4/2p5/2PPP3/5N2/PP3PPP/RNBQKB1R")
