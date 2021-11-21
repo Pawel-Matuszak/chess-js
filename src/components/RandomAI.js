@@ -11,7 +11,6 @@ class MoveGenerator{
       let randomPiece = Math.floor(Math.random() * (all.white.length));
       let movesArr = all.white[randomPiece].getLegalMoves(board).filter(({x,y,isEmpty,isAlly})=>!(isEmpty==false && isAlly==true))
       if(all.white[randomPiece].type.toLowerCase()=="p"){
-        console.log(movesArr);
         movesArr = movesArr.filter(e=>e.x==all.white[randomPiece].pos.x || (e.isEmpty==false && e.isAlly==false));
       }
       if(movesArr.length<=0){

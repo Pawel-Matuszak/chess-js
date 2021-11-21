@@ -33,7 +33,7 @@ class GameController{
     this.whiteToMove = true;
     this.halfmoveCount = 0;
     this.moveCount = 0;
-    this.moveHistory = {};
+    this.moveHistory = [];
   }
   
   init(){
@@ -165,7 +165,6 @@ class GameController{
       this.currentGameStatus = this.gameStatus.draw;
       this.endGameHandler(board, '', "fifty-move rule")
     }
-    console.log(this.halfmoveCount);
     
     return true;
 
@@ -190,7 +189,6 @@ class GameController{
         board.board[y+offset][x].pieceDiv.remove();
         board.board[y+offset][x] = "-"
         board.drawPieces();
-        console.log(board.board);
       }
     }
 
@@ -198,6 +196,7 @@ class GameController{
       this.halfmoveCount=0;
     }
 
+    let prevX = piece.pos.x;
     let prevY = piece.pos.y;
     board.board[piece.pos.y][piece.pos.x] = "-";
     piece.pos = {
@@ -233,6 +232,34 @@ class GameController{
         }
       }
     }
+
+    //hilight move 
+    for (const e of document.querySelectorAll(".move-hilight")) {
+      e.remove()
+    }
+
+    const hilightAfter = document.createElement("div");
+    const hilightBefore = document.createElement("div");
+    hilightAfter.setAttribute("class", "move-hilight")
+    hilightBefore.setAttribute("class", "move-hilight")
+    
+    hilightAfter.style.left = prevX*100 + "px";
+    hilightAfter.style.top = prevY*100 + "px";
+    hilightBefore.style.left = x*100 + "px";
+    hilightBefore.style.top = y*100 + "px";
+    board.boardDiv.prepend(hilightAfter, hilightBefore);
+
+    //save move
+    this.moveHistory.push({
+      x: x,
+      y: y,
+      piece: piece,
+      isCapture: !isEmpty,
+      isWhite: piece.isWhite,
+      // board: board.getFEN()
+    })
+
+    console.log(this.moveHistory);
   }
 
   //return true if piece would be in check after moving to x,y

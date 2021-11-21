@@ -2,6 +2,8 @@
 
 *{
   box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
@@ -51,6 +53,15 @@ body{
   width: 100px;
   height: 100px;
   background: rgba(199, 11, 11, 0.5);
+}
+
+.move-hilight{
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: 1px solid rgb(72, 107, 160, 0.5);
+  background: rgba(65, 130, 168, 0.247);
+  border-radius: 2px;
 }
 
 .gameMessage{
