@@ -12,8 +12,8 @@ board.createBoard();
 
 //opening
 // board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
-// board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq e3 0 1")
-board.readFEN("3qkb1r/ppppp2p/8/8/8/4P3/8/RNBQKBNR w KQkq e3 0 1")
+board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+// board.readFEN("3qkb1r/ppppp2p/8/8/8/4P3/8/RNBQKBNR w KQkq e3 0 1")
 
 
 //real legal moves that can be made

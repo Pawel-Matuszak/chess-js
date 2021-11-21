@@ -172,11 +172,13 @@ class Board{
     })
 
     //en passant square
-    let letterToNum = ["a", "b", "c", "d" ,"e" ,"f", "g", "h"]
-    this.gameController.enPassantTargetSquare = {
-      x: letterToNum.indexOf(fenInfo[2][0]),
-      y: parseInt(fenInfo[2][1])+1
-    };
+    if(fenInfo[2]!=="-"){
+      let letterToNum = ["a", "b", "c", "d" ,"e" ,"f", "g", "h"]
+      this.gameController.enPassantTargetSquare = {
+        x: letterToNum.indexOf(fenInfo[2][0]),
+        y: parseInt(fenInfo[2][1])+1
+      };
+    }
 
     //halfmove clock
     this.gameController.halfmoveCount = fenInfo[3];
