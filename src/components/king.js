@@ -156,16 +156,18 @@ class King extends Piece{
 
   //changes position on the screen
   move(posX, posY, board){
+    let moveWasMade = false;
     this.legalMoves = this.getLegalMoves(board);
     
     //check if a move is legal
     this.legalMoves.forEach(({x,y,isEmpty, isAlly, castle}) => {
       if(posX==x && posY==y){
         if(isAlly) return;
-        this.gameController.moveValidation(x,y,isEmpty,board,this,castle);
+        moveWasMade = this.gameController.moveValidation(x,y,isEmpty,board,this,castle);
       }
     });
     board.drawPieces();
+    return moveWasMade
     // console.log(this.castle + " " + this.castleLong);
   }
 }

@@ -13,3 +13,30 @@
   <!-- restart game -->
 </body>
 </html>
+
+<!--Uncaught TypeError: Cannot read properties of undefined (reading 'getControlledSquares')
+    at Rook.move (Piece.js:150)
+    at MoveGenerator.pickRandomMove (RandomAI.js:12)
+    at MoveGenerator.pickRandomMove (RandomAI.js:17)
+    at MoveGenerator.playRandomMove (RandomAI.js:46)
+    at eval (index.js:30)
+move @ Piece.js:150
+pickRandomMove @ RandomAI.js:12
+pickRandomMove @ RandomAI.js:17
+playRandomMove @ RandomAI.js:46
+eval @ index.js:30
+setInterval (async)
+eval @ index.js:29
+setInterval (async)
+eval @ index.js:27
+./src/index.js @ main.js:551
+__webpack_require__ @ main.js:712
+(anonymous) @ main.js:1780
+(anonymous) @ main.js:1782
+King.js:34 Uncaught TypeError: Cannot read properties of undefined (reading 'board')
+    at King.getLegalMoves (King.js:34)
+    at King.move (King.js:165)
+    at MoveGenerator.pickRandomMove (RandomAI.js:12)
+    at MoveGenerator.pickRandomMove (RandomAI.js:17)
+    at MoveGenerator.playRandomMove (RandomAI.js:46)
+    at eval (index.js:30)->

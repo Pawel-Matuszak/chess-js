@@ -105,7 +105,6 @@ class Piece{
           Math.round((this.pieceDiv.offsetTop - pos2)/100),
           board
         )
-        
       };
       
       document.onmousemove = (e)=>{
@@ -129,7 +128,9 @@ class Piece{
   }
 
   //changes position on the screen
+  //return false if move was not made
   move(posX, posY, board){
+    let moveWasMade = false;
     board.getControlledSquares();
     this.legalMoves = this.getLegalMoves(board);
 
@@ -137,10 +138,11 @@ class Piece{
     this.legalMoves.forEach(({x,y,isEmpty, isAlly}) => {
       if(posX==x && posY==y){
         if(isAlly) return;
-        this.gameController.moveValidation(x,y, isEmpty, board, this);
+        moveWasMade = this.gameController.moveValidation(x,y, isEmpty, board, this);
       }
     });
     board.drawPieces();
+    return moveWasMade;
     // board.showControlledSquares(true);
   }
 

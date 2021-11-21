@@ -8,8 +8,7 @@ import Queen from "./Queen";
 import Rook from "./Rook";
 
 class GameController{
-  constructor(board){
-    this.boardRef = board;
+  constructor(){
     this.inCheck = {
       white: false,
       black: false,
@@ -75,8 +74,8 @@ class GameController{
   }
 
   moveValidation(x,y, isEmpty, board, piece, castle){
-    if(this.currentGameStatus !== this.gameStatus.active) return;
-    if(!((this.whiteToMove&& piece.isWhite) || (!this.whiteToMove&& !piece.isWhite))) return;
+    if(this.currentGameStatus !== this.gameStatus.active) return false;
+    if(!((this.whiteToMove&& piece.isWhite) || (!this.whiteToMove&& !piece.isWhite))) return false;
     //castling
     if(castle){
       if(!castle.long){
@@ -84,17 +83,18 @@ class GameController{
         board.drawPieces();
         this.whiteToMove = !this.whiteToMove;
         piece.wasMoved = true;
-
+        return true;
       }else{
         this.makeMove(piece.pos.x-1, piece.pos.y, true, board, castle.rook);
         board.drawPieces();
         this.whiteToMove = !this.whiteToMove;
         piece.wasMoved = true;
+        return true;
       }
     }
 
 
-    if(this.seeIfCheck(x,y, isEmpty, board, piece)) return;
+    if(this.seeIfCheck(x,y, isEmpty, board, piece)) return false;
     this.makeMove(x,y, isEmpty, board, piece);
     board.drawPieces();
 
@@ -134,7 +134,7 @@ class GameController{
       }else if(this.inCheck.black){
         board.getAllPieces().black.forEach(p => {
           let legalM = p.getLegalMoves(board);
-          if(p.type.toLowerCase()=="p") legalM = legalM.filter(e=>e.x==p.pos.x);
+          if(p.type.toLowerCase()=="p") legalM = legalM.filter(e=>(e.x==p.pos.x || !(e.isEmpty && e.isAlly)));
           allLegalSquares.push(...legalM.filter(({x,y,isEmpty, isAlly})=>{
             return (this.seeIfCheck(x,y, isEmpty, board, p) || (isEmpty==false && isAlly==true)) ? false : true
           }))
@@ -160,6 +160,15 @@ class GameController{
       this.currentGameStatus = this.gameStatus.draw;
       this.endGameHandler(board, '', "insufficient material")
     }
+    //50 move rule
+    if(this.halfmoveCount>=100){
+      this.currentGameStatus = this.gameStatus.draw;
+      this.endGameHandler(board, '', "fifty-move rule")
+    }
+    console.log(this.halfmoveCount);
+    
+    return true;
+
   }
   
   makeMove(x,y, isEmpty, board, piece){
@@ -228,20 +237,20 @@ class GameController{
 
   //return true if piece would be in check after moving to x,y
   seeIfCheck(x,y, isEmpty, board, piece){
-    this.findKings(board);
-    board.getControlledSquares();
-    this.inCheck.white = false;
-    this.inCheck.black = false;
-    board.controlledSquares.black.forEach(({x: sX, y: sY}) => {
-      if(sX==this.king.white.pos.x && sY==this.king.white.pos.y){
-        this.inCheck.white = true;
-      }
-    });
-    board.controlledSquares.white.forEach(({x: sX, y: sY}) => {
-      if(sX==this.king.black.pos.x && sY==this.king.black.pos.y){
-        this.inCheck.black = true;
-      }
-    });
+    // this.findKings(board);
+    // board.getControlledSquares();
+    // this.inCheck.white = false;
+    // this.inCheck.black = false;
+    // board.controlledSquares.black.forEach(({x: sX, y: sY}) => {
+    //   if(sX==this.king.white.pos.x && sY==this.king.white.pos.y){
+    //     this.inCheck.white = true;
+    //   }
+    // });
+    // board.controlledSquares.white.forEach(({x: sX, y: sY}) => {
+    //   if(sX==this.king.black.pos.x && sY==this.king.black.pos.y){
+    //     this.inCheck.black = true;
+    //   }
+    // });
 
     this.temp = new Board(this)
     this.temp.board = [[],[],[],[],[],[],[],[]]
