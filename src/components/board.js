@@ -75,6 +75,14 @@ class Board{
     this.getControlledSquares();
   }
 
+  removePieces(){
+    this.board.forEach(arr=>{
+      arr.forEach(e=>{
+        if(e!=="-") e.pieceDiv.remove();
+      })
+    })
+  }
+
   readFEN(fenStr){
     this.board = [];
 
@@ -135,6 +143,7 @@ class Board{
 
     this.drawPieces();
 
+    if(fenInfo.length<=0) return;
     // save fen info
     this.gameController.whiteToMove = (fenInfo[0]=='w') ? true : false;
     
@@ -188,6 +197,87 @@ class Board{
 
     // console.log(this.board);
   }
+
+  getFEN(){
+    let fenString = "";
+    let counter = 0;
+
+    for (let i = 0; i < this.board.length; i++) {
+      for (let j = 0; j < this.board[i].length; j++) {
+        if(this.board[i][j]!=="-"){
+          if(counter>0){
+            fenString += counter;
+            counter = 0;
+          }
+          fenString += this.board[i][j].type;
+        }else{
+          counter++
+        }
+      }
+      if(counter>0){
+        fenString += counter;
+        counter = 0;
+      }
+      if(i!==this.board.length-1)
+        fenString += "/";
+    }   
+
+    fenString += " "; 
+    fenString += (this.whiteToMove) ? "w": "b"; 
+    fenString += " "; 
+   
+    let castlingInfo = "";
+    this.rooks = this.gameController.findRooks(this)
+    
+    //add to fen if castling is available
+    if(!this.gameController.king.white.wasMoved){
+      this.rooks.white.forEach(rook=>{
+        if(!rook.wasMoved){
+          if(rook.pos.x==7 && rook.pos.y==7){
+            castlingInfo += "K";
+          }
+          if(rook.pos.x==0 && rook.pos.y==7){
+            castlingInfo += "Q";
+          }
+        }
+      })
+    }
+    if(!this.gameController.king.black.wasMoved){
+      this.rooks.black.forEach(rook=>{
+        if(!rook.wasMoved){
+          if(rook.pos.x==7 && rook.pos.y==0){
+            castlingInfo += "k";
+          }
+          if(rook.pos.x==0 && rook.pos.y==0){
+            castlingInfo += "q";
+          }
+        }
+      })
+    }
+
+    if(castlingInfo==""){
+      fenString += "- "; 
+    }else{
+      fenString += castlingInfo;
+      fenString += " "; 
+    }
+
+    let enpassant = this.gameController.enPassantTargetSquare
+    if(enpassant){
+      let a = ["a", "b", "c", "d" ,"e" ,"f", "g", "h"]
+      fenString += a[enpassant.x] + (8-parseInt(enpassant.y)); 
+      fenString += " "; 
+    }else{
+      fenString += "- "; 
+    }
+
+    fenString += this.gameController.halfmoveCount;
+    fenString += " ";
+    fenString += this.gameController.moveCount;
+
+    return fenString;
+  }
+  
 
   getControlledSquares(){
     //init

@@ -34,18 +34,21 @@ class GameController{
     this.whiteToMove = true;
     this.halfmoveCount = 0;
     this.moveCount = 0;
-    this.moveHistory = [];
+    this.movesHistory = [];
+    this.board = null;
   }
   
-  init(){
+  init(fenStr, board){
     //clear move hilights
     window.addEventListener('click', function(e){   
       for (const e of document.querySelectorAll(".point")) {
         e.remove()
       }
     });
-
+    this.board = board;
     this.currentGameStatus = this.gameStatus.active;
+
+    this.board.readFEN(fenStr)
   }
 
   findKings(board){
@@ -72,6 +75,20 @@ class GameController{
       }
     }
     return rooks;
+  }
+
+  findPawns(board){
+    let pawns = []
+    for (let i = 0; i < board.board.length; i++) {
+      for (let j = 0; j < board.board[i].length; j++) {
+        if(board.board[j][i]!=="-"){
+          if(board.board[j][i].type.toLowerCase()==="p"){
+            pawns.push(board.board[j][i]);
+          }
+        }
+      }
+    }
+    return pawns;
   }
 
   //return true if piece can be moved to x,y
@@ -143,11 +160,14 @@ class GameController{
     }
 
     //draw by insufficient material
-    this.allPiecesValue = board.sumAllPiecesValue();
-    if(this.allPiecesValue.white<=3 && this.allPiecesValue.black<=3){
-      this.currentGameStatus = this.gameStatus.draw;
-      this.endGameHandler(board, '', "insufficient material")
+    if(this.findPawns(board).length<=0){
+      this.allPiecesValue = board.sumAllPiecesValue();
+      if(this.allPiecesValue.white<=3 && this.allPiecesValue.black<=3){
+        this.currentGameStatus = this.gameStatus.draw;
+        this.endGameHandler(board, '', "insufficient material")
+      }
     }
+
     //50 move rule
     if(this.halfmoveCount>=100){
       this.currentGameStatus = this.gameStatus.draw;
@@ -238,18 +258,21 @@ class GameController{
     board.boardDiv.prepend(hilightAfter, hilightBefore);
 
     //save move
-    this.moveHistory.push({
-      x: x,
-      y: y,
-      piece: piece,
-      isCapture: !isEmpty,
-      isWhite: piece.isWhite,
-      // board: board.getFEN()
+    this.movesHistory.push({
+      board: board.getFEN()
     })
 
-    if(this.userInterface.showCs){
+    this.userInterface.updateMoves(this.movesHistory)
+
+    if(this.userInterface.showCsW || this.userInterface.showCsB){
       board.getControlledSquares();
-      board.showControlledSquares(this.userInterface.csWhite);
+      console.log(this.userInterface.showCsW + " " + this.userInterface.showCsB)
+      if(this.userInterface.showCsW){
+        board.showControlledSquares(true);
+      }
+      if(this.userInterface.showCsB){
+        board.showControlledSquares(false);
+      }
     }
   }
 

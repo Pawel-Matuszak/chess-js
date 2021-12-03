@@ -6,18 +6,17 @@ import "./style.css"
 
 const userInterface = new UserInterface()
 const gameController = new GameController(userInterface);
-gameController.init();
 const board = new Board(gameController);
 board.createBoard();
-userInterface.init(board);
+userInterface.init(board, gameController);
 // board.readFEN("7k/3r4/8/8/8/8/8/R3K2R")
 // board.readFEN("8/R2r3k/2p5/1P1P4/8/8/8/4K1R1 w KQkq - 0 1")
 // board.readFEN("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1")
+gameController.init("3qkb1r/pppppppp/8/8/8/4P3/P7/RNBQKBNR w KQkq e3 0 1", board);
 
 //opening
 // board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
 // board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-board.readFEN("3qkb1r/pppppppp/8/8/8/4P3/8/RNBQKBNR w KQkq e3 0 1")
 
 const moveGeneratorW = new MoveGenerator(true, gameController)
 const moveGeneratorB = new MoveGenerator(false, gameController)
@@ -35,10 +34,13 @@ function play(){
   
 }
 
-play()
+// play()
 
 
 //TODO
 
-//saving previous moves
-//forward backward btn
+//pawn.js 39: t][board.gameController.enPassantTargetSquare.x]
+
+//user interface visuals
+//draw by repetition
+

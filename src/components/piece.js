@@ -132,6 +132,12 @@ class Piece{
   //return false if move was not made
   move(posX, posY, board){
     let moveWasMade = false;
+    
+    if(this.gameController.userInterface.histPos!==0) {
+      board.drawPieces()
+      return moveWasMade;
+    }
+
     board.getControlledSquares();
     this.allMoves = this.getLegalMoves(board);
 

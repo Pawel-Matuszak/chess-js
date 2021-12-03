@@ -100,3 +100,8 @@ body{
 .exit-modal:hover{
   cursor: pointer;
 }
+
+.moves-list{
+  background: rgba(0, 0, 0, 0.486);
+  color: #fff
+}

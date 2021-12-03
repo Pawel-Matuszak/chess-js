@@ -84,7 +84,7 @@ class King extends Piece{
     
     return legalMoves;
   }
-  
+
   castleValidation(board){
     this.castle = true;
     this.castleLong = true;
@@ -155,6 +155,12 @@ class King extends Piece{
   //changes position on the screen
   move(posX, posY, board){
     let moveWasMade = false;
+    
+    if(this.gameController.userInterface.histPos!==0) {
+      board.drawPieces()
+      return moveWasMade;
+    }
+
     this.legalMoves = this.getLegalMoves(board);
     
     //check if a move is legal
