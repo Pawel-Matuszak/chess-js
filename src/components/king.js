@@ -59,10 +59,8 @@ class King extends Piece{
     }else{
       this.enemySquares = board.controlledSquares.white;
     }
-    //calculate set difference to make sure king cant run into check
+    //calculate set difference to make sure king cannot run into check
     legalMoves = legalMoves.filter(({ x: x1, y: y1 }) => !this.enemySquares.some(({ x: x2, y: y2}) => (x2 === x1 && y2 === y1)));
-    // console.log(legalMoves);
-    // board.showControlledSquares(true);
 
     this.castleValidation(board);
     

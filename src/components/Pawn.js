@@ -7,8 +7,9 @@ class Pawn extends Piece{
     this.value = 1;
   }
 
+  //return all moves
   getLegalMoves(board){
-    let legalMoves = [];
+    let allMoves = [];
     let offset = (this.isWhite) ? 1 : -1;
 
     //piece promotion
@@ -20,7 +21,7 @@ class Pawn extends Piece{
       if(this.pieceDiv){
         this.pieceDiv.remove()
       }
-      return legalMoves;
+      return allMoves;
     }
 
     //captures
@@ -32,7 +33,7 @@ class Pawn extends Piece{
         let target = board.board[board.gameController.enPassantTargetSquare.y+offset][board.gameController.enPassantTargetSquare.x];
         if(target!=="-" && target.isWhite!==this.isWhite){
           if(board.gameController.enPassantTargetSquare.x === this.pos.x-1 && board.gameController.enPassantTargetSquare.y === this.pos.y-offset){
-            legalMoves.push({
+            allMoves.push({
               x: this.pos.x-1, 
               y: this.pos.y-offset, 
               isEmpty: true,
@@ -44,14 +45,14 @@ class Pawn extends Piece{
       }
       //else
       if(square!=="-"){
-        legalMoves.push({
+        allMoves.push({
           x: this.pos.x-1, 
           y: this.pos.y-offset, 
           isEmpty: false,
           isAlly: (square.isWhite==this.isWhite) ? true : false
         })
       }else{
-        legalMoves.push({
+        allMoves.push({
           x: this.pos.x-1, 
           y: this.pos.y-offset, 
           isEmpty: true,
@@ -66,7 +67,7 @@ class Pawn extends Piece{
         let target = board.board[board.gameController.enPassantTargetSquare.y+offset][board.gameController.enPassantTargetSquare.x];
         if(target!=="-" && target.isWhite!==this.isWhite){
           if(board.gameController.enPassantTargetSquare.x === this.pos.x+1 && board.gameController.enPassantTargetSquare.y === this.pos.y-offset){
-            legalMoves.push({
+            allMoves.push({
               x: this.pos.x+1, 
               y: this.pos.y-offset, 
               isEmpty: true,
@@ -77,14 +78,14 @@ class Pawn extends Piece{
         }
       }
       if(square!=="-"){
-        legalMoves.push({
+        allMoves.push({
           x: this.pos.x+1, 
           y: this.pos.y-offset, 
           isEmpty: false,
           isAlly: (square.isWhite==this.isWhite) ? true : false
         })
       }else{
-        legalMoves.push({
+        allMoves.push({
           x: this.pos.x+1, 
           y: this.pos.y-offset, 
           isEmpty: true,
@@ -100,7 +101,7 @@ class Pawn extends Piece{
     //forward movement
     if(board.board[this.pos.y-offset][this.pos.x]=="-"){
       
-      legalMoves.push({
+      allMoves.push({
         x: this.pos.x, 
         y: this.pos.y-offset, 
         isEmpty: true
@@ -113,7 +114,7 @@ class Pawn extends Piece{
       //and if that square is empty
       if(board.board[this.pos.y-offset]){
         if(board.board[this.pos.y-offset][this.pos.x]=="-" && !this.wasMoved){
-          legalMoves.push({
+          allMoves.push({
             x: this.pos.x, 
             y: this.pos.y-offset, 
             isEmpty: true
@@ -122,11 +123,8 @@ class Pawn extends Piece{
 
       }
     }
-    
 
-
-
-    return legalMoves;
+    return allMoves;
   }
 }
 

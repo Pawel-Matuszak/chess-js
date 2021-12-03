@@ -229,11 +229,15 @@ class Board{
     // this.showControlledSquares(true)
   }
 
-  showControlledSquares(isWhite){
+  removeControlledSquares(){
     //remove previous
     for (const e of document.querySelectorAll(".hilight")) {
       e.remove()
     }
+  }
+
+  showControlledSquares(isWhite){
+    this.removeControlledSquares();
 
     //display new for white or black
     if(isWhite){
@@ -269,17 +273,29 @@ class Board{
         const piece = this.board[i][j];
         if(piece!=="-"){
           let legalMoves = piece.getLegalMoves(this);
-          if(piece.type.toLowerCase()=="p"){
-            legalMoves = legalMoves.filter(e=>e.x==piece.pos.x);
-          }
+          if(piece.type.toLowerCase()=="p") legalMoves = legalMoves.filter(e=>e.x==piece.pos.x);
+          
           if(piece.isWhite){
-            white.push(...legalMoves)
+            white.push(...legalMoves.map(({x,y,isEmpty, isAlly})=>{
+              if(!(this.gameController.seeIfCheck(x,y, isEmpty, this, piece) || (isEmpty==false && isAlly==true)) ){
+                return {x,y,isEmpty, isAlly, piece}
+              }
+              return null;
+            }))
           }else{
-            black.push(...legalMoves)
+            black.push(...legalMoves.map(({x,y,isEmpty, isAlly})=>{
+              if(!(this.gameController.seeIfCheck(x,y, isEmpty, this, piece) || (isEmpty==false && isAlly==true)) ){
+                return {x,y,isEmpty, isAlly, piece}
+              }
+              return null;
+            }))
           }
         }
       }
     }
+   
+    white = white.filter(e=>e!==null);
+    black = black.filter(e=>e!==null);
     return {white, black}
   }
 

@@ -23,7 +23,8 @@ class Piece{
     this.isAlive = true;
     this.pieceDiv;
     this.pieceImage;
-    this.legalMoves = [];
+    this.allMoves = [];
+    this.controlledSquares = [];
     this.wasMoved = false;
     this.gameController = gameController;
     this.value = 0;
@@ -132,10 +133,10 @@ class Piece{
   move(posX, posY, board){
     let moveWasMade = false;
     board.getControlledSquares();
-    this.legalMoves = this.getLegalMoves(board);
+    this.allMoves = this.getLegalMoves(board);
 
     //check if a move is legal
-    this.legalMoves.forEach(({x,y,isEmpty, isAlly}) => {
+    this.allMoves.forEach(({x,y,isEmpty, isAlly}) => {
       if(posX==x && posY==y){
         if(isAlly) return;
         moveWasMade = this.gameController.moveValidation(x,y, isEmpty, board, this);
@@ -149,17 +150,17 @@ class Piece{
   showLegalMoves(board){
     board.getControlledSquares();
 
-    this.legalMoves = [];
-    this.legalMoves = this.getLegalMoves(board);
+    this.allMoves = [];
+    this.allMoves = this.getLegalMoves(board);
 
-    this.legalMoves = this.legalMoves.filter(e=>!this.gameController.seeIfCheck(e.x, e.y, e.isEmpty, board, this))
+    this.allMoves = this.allMoves.filter(e=>!this.gameController.seeIfCheck(e.x, e.y, e.isEmpty, board, this))
 
     //remove all previous dots from the DOM
     for (const e of document.querySelectorAll(".point")) {
       e.remove()
     }
 
-    this.legalMoves.forEach(({x,y, isEmpty, isAlly})=>{
+    this.allMoves.forEach(({x,y, isEmpty, isAlly})=>{
       if(isAlly) return;
       const point = document.createElement("div");
       point.setAttribute("class", "point")

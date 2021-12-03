@@ -8,7 +8,8 @@ import Queen from "./Queen";
 import Rook from "./Rook";
 
 class GameController{
-  constructor(){
+  constructor(userInterface){
+    this.userInterface = userInterface || {};
     this.inCheck = {
       white: false,
       black: false,
@@ -73,9 +74,11 @@ class GameController{
     return rooks;
   }
 
+  //return true if piece can be moved to x,y
   moveValidation(x,y, isEmpty, board, piece, castle){
     if(this.currentGameStatus !== this.gameStatus.active) return false;
     if(!((this.whiteToMove&& piece.isWhite) || (!this.whiteToMove&& !piece.isWhite))) return false;
+    
     //castling
     if(castle){
       if(!castle.long){
@@ -117,34 +120,19 @@ class GameController{
     if(this.inCheck.white || this.inCheck.black){
       let allLegalSquares = []
       if(this.inCheck.white){
-        board.getAllPieces().white.forEach(p => {
-          let legalM = p.getLegalMoves(board);
-          if(p.type.toLowerCase()=="p") legalM = legalM.filter(e=>e.x==p.pos.x);
-          allLegalSquares.push(...legalM.filter(({x,y,isEmpty, isAlly})=>{
-            return (this.seeIfCheck(x,y, isEmpty, board, p) || (isEmpty==false && isAlly==true)) ? false : true
-          }))
-        });
-
         //if is in check and has no legal moves its checkmate
-        if(allLegalSquares.length<=0){
+        if(board.getAllLegalMoves().white.length<=0){
           this.currentGameStatus = this.gameStatus.black_won;
           this.endGameHandler(board, 'b', "checkmate")
         }
 
       }else if(this.inCheck.black){
-        board.getAllPieces().black.forEach(p => {
-          let legalM = p.getLegalMoves(board);
-          if(p.type.toLowerCase()=="p") legalM = legalM.filter(e=>(e.x==p.pos.x || !(e.isEmpty && e.isAlly)));
-          allLegalSquares.push(...legalM.filter(({x,y,isEmpty, isAlly})=>{
-            return (this.seeIfCheck(x,y, isEmpty, board, p) || (isEmpty==false && isAlly==true)) ? false : true
-          }))
-        });
-        //if is in check and has no legal moves its checkmate
-        if(allLegalSquares.length<=0){
+        if(board.getAllLegalMoves().black.length<=0){
           this.currentGameStatus = this.gameStatus.white_won;
           this.endGameHandler(board, 'w', "checkmate")
         }
       }
+      
     }else{
       // see if stealmate
       this.allLegalMoves = board.getAllLegalMoves()
@@ -259,7 +247,10 @@ class GameController{
       // board: board.getFEN()
     })
 
-    console.log(this.moveHistory);
+    if(this.userInterface.showCs){
+      board.getControlledSquares();
+      board.showControlledSquares(this.userInterface.csWhite);
+    }
   }
 
   //return true if piece would be in check after moving to x,y
