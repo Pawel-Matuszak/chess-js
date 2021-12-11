@@ -63,9 +63,6 @@ class Pawn extends Piece{
       }
     });
     
-    //EN PASANT
-    //is possible when some enemy pawn is controlling board.enPassantTargetSquare
-
     //forward movement
     if(board.board[this.pos.y-offset][this.pos.x]=="-"){
       
