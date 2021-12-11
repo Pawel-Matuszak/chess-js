@@ -90,13 +90,13 @@ class UserInterface{
   }
 
   updateMoves(movesHistory){
-    this.movesList.innerHTML = "Normlanie lista ruchów tu będzie<br>";
+    this.movesList.innerHTML = "Normlanie lista ruchów tu będzie";
     
     let i=0;
     movesHistory.forEach((move) => {
       if(i%2==0) this.movesList.innerHTML += "<br>";
-      if(i%2==1) this.movesList.innerHTML += " |||| ";
-      this.movesList.innerHTML += move.board;
+      if(i%2==1) this.movesList.innerHTML += " | ";
+      this.movesList.innerHTML += move.move;
       i++;
     });
     

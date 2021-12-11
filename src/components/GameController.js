@@ -100,17 +100,28 @@ class GameController{
     if(castle){
       if(!castle.long){
         this.makeMove(piece.pos.x+1, piece.pos.y, true, board, castle.rook);
+        this.makeMove(x,y, isEmpty, board, piece);
         board.drawPieces();
         this.whiteToMove = !this.whiteToMove;
         piece.wasMoved = true;
+        this.historySave(x,y,piece, board, this.inCheckTemp, 0, "short");
         return true;
       }else{
         this.makeMove(piece.pos.x-1, piece.pos.y, true, board, castle.rook);
+        this.makeMove(x,y, isEmpty, board, piece);
         board.drawPieces();
         this.whiteToMove = !this.whiteToMove;
         piece.wasMoved = true;
+        this.historySave(x,y,piece, board, this.inCheckTemp, 0, "long");
         return true;
       }
+    }
+
+    let xBefore = -1;
+    this.isCapture = false;
+
+    if(piece.type.toLowerCase()=="p"){
+      xBefore = piece.pos.x
     }
 
 
@@ -173,6 +184,8 @@ class GameController{
       this.currentGameStatus = this.gameStatus.draw;
       this.endGameHandler(board, '', "fifty-move rule")
     }
+
+    this.historySave(x,y,piece, board, this.inCheckTemp, xBefore);
     
     return true;
 
@@ -186,6 +199,7 @@ class GameController{
       this.halfmoveCount=0;
       board.board[y][x].die();
       board.drawPieces();
+      this.isCapture  = true;
     }
     //if move is a en passant
     if(this.enPassantTargetSquare){
@@ -197,6 +211,7 @@ class GameController{
         board.board[y+offset][x].pieceDiv.remove();
         board.board[y+offset][x] = "-"
         board.drawPieces();
+        this.isCapture  = true;
       }
     }
 
@@ -256,9 +271,22 @@ class GameController{
     hilightBefore.style.left = x*100 + "px";
     hilightBefore.style.top = y*100 + "px";
     board.boardDiv.prepend(hilightAfter, hilightBefore);
+  }
 
+  historySave(x, y, piece, board, inCheck, xBefore, castle=false){
     //save move
+
+    let a = ["a", "b", "c", "d" ,"e" ,"f", "g", "h"];
+    let move = (piece.type.toLowerCase()=="p") ? "" : piece.type.toUpperCase();
+    move += (piece.type.toLowerCase()=="p" && this.isCapture ) ? a[xBefore]+"x" : (this.isCapture ) ? "x" : "";
+    move += a[x]+(8-y);
+    move += (this.currentGameStatus == this.gameStatus.white_won || this.currentGameStatus == this.gameStatus.black_won) ? "#" : (inCheck.white || inCheck.black) ? "+" : "";
+    if(castle){
+      move = (castle=="long") ? "0-0-0" : "0-0";
+    }
+
     this.movesHistory.push({
+      move: move,
       board: board.getFEN()
     })
 
