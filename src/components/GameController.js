@@ -291,7 +291,8 @@ class GameController{
     })
 
     this.userInterface.updateMoves(this.movesHistory)
-
+    this.userInterface.updateCurrentMove(1);
+    
     if(this.userInterface.showCsW || this.userInterface.showCsB){
       board.getControlledSquares();
       if(this.userInterface.showCsW){

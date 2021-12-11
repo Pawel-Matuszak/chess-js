@@ -1,3 +1,5 @@
+import { identity } from "lodash";
+
 class UserInterface{
   constructor(){
     this.buttons = {};
@@ -7,11 +9,13 @@ class UserInterface{
     this.board = null;
     this.histPos = 0;
     this.movesList = document.createElement("div");
+    this.currentMove = 0;
   }
 
   init(board, gameController){
     this.board = board;
     this.gameController = gameController;
+    this.currentMove = gameController.halfmoveCount;
     //create buttons for hilighting squares controlled by each color
     this.buttons["toggleWhiteCS"] = document.createElement("button");
     this.buttons["toggleWhiteCS"].innerText = "White controlled squares";
@@ -61,6 +65,8 @@ class UserInterface{
         board.getControlledSquares();
         board.showControlledSquares(false);
       }
+      this.updateCurrentMove(-1)
+
     })
 
     this.buttons["next"].addEventListener("click", ()=>{
@@ -72,7 +78,6 @@ class UserInterface{
       this.histPos++
       // if(this.histPos<0) this.histPos *=-1;
       this.board.readFEN(history[history.length+this.histPos-1].board)
-      console.log(history[history.length+this.histPos-1].board);
       
       if(this.showCsW){
         board.getControlledSquares();
@@ -81,6 +86,9 @@ class UserInterface{
         board.getControlledSquares();
         board.showControlledSquares(false);
       }
+
+      this.updateCurrentMove(1)
+
     })
 
     for (const btn of Object.keys(this.buttons)) {
@@ -93,15 +101,26 @@ class UserInterface{
     this.movesList.innerHTML = "Normlanie lista ruchów tu będzie";
     
     let i=0;
-    movesHistory.forEach((move) => {
-      if(i%2==0) this.movesList.innerHTML += "<br>";
-      if(i%2==1) this.movesList.innerHTML += " | ";
-      this.movesList.innerHTML += move.move;
+    // .style.color = "#f0f";
+    movesHistory.forEach(({move}) => {
+      this.movesList.innerHTML += "<div>"+move+"</div>";
       i++;
     });
-    
+
+    // this.updateCurrentMove(0)
+
   }
   
+  updateCurrentMove(d){
+    
+    if(d>0){
+      this.currentMove++;
+    }else if(d<0){
+      this.currentMove--;
+    }
+    
+      this.movesList.childNodes[this.currentMove].style.color = "#a5a"
+  }
 }
 
 export default UserInterface;
