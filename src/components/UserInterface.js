@@ -48,26 +48,39 @@ class UserInterface{
 
     this.buttons["previous"].addEventListener("click", ()=>{
       let history = this.gameController.movesHistory;
-      console.log(history);
       
       if(history.length+this.histPos-1<=0) return;
       this.board.removePieces();
       this.histPos--
-      console.log(this.histPos);
       this.board.readFEN(history[history.length+this.histPos-1].board)
+
+      if(this.showCsW){
+        board.getControlledSquares();
+        board.showControlledSquares(true);
+      }else if(this.showCsB){
+        board.getControlledSquares();
+        board.showControlledSquares(false);
+      }
     })
 
     this.buttons["next"].addEventListener("click", ()=>{
       
       let history = this.gameController.movesHistory;
-      console.log(history);
       
       if(this.histPos>=0) return;
       this.board.removePieces();
       this.histPos++
-      console.log(this.histPos);
       // if(this.histPos<0) this.histPos *=-1;
       this.board.readFEN(history[history.length+this.histPos-1].board)
+      console.log(history[history.length+this.histPos-1].board);
+      
+      if(this.showCsW){
+        board.getControlledSquares();
+        board.showControlledSquares(true);
+      }else if(this.showCsB){
+        board.getControlledSquares();
+        board.showControlledSquares(false);
+      }
     })
 
     for (const btn of Object.keys(this.buttons)) {

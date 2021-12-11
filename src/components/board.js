@@ -141,8 +141,6 @@ class Board{
       rowNum++;
     })
 
-    this.drawPieces();
-
     if(fenInfo.length<=0) return;
     // save fen info
     this.gameController.whiteToMove = (fenInfo[0]=='w') ? true : false;
@@ -195,7 +193,7 @@ class Board{
     //fullmove counter
     this.gameController.moveCount = fenInfo[4];
 
-    // console.log(this.board);
+    this.drawPieces();
   }
 
   getFEN(){
@@ -292,8 +290,6 @@ class Board{
         if(piece!=="-"){
           let legalMoves = piece.getLegalMoves(this);
           if(piece.type.toLowerCase()=="p"){
-            //to fix bug when moving forward is legal
-            //however that is not square controlled by the pawn
             legalMoves = legalMoves.filter(e=>e.x!==piece.pos.x);
           }
           if(piece.isWhite){

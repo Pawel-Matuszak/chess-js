@@ -266,7 +266,6 @@ class GameController{
 
     if(this.userInterface.showCsW || this.userInterface.showCsB){
       board.getControlledSquares();
-      console.log(this.userInterface.showCsW + " " + this.userInterface.showCsB)
       if(this.userInterface.showCsW){
         board.showControlledSquares(true);
       }

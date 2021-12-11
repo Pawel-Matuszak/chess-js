@@ -25,76 +25,44 @@ class Pawn extends Piece{
     }
 
     //captures
-    let square = board.board[this.pos.y-offset][this.pos.x-1]
-    if(square){
-      //if en passant is avaliable
-      if(board.gameController.enPassantTargetSquare && board.gameController.enPassantTargetSquare!=="-"){
-        //if this piece can capture en passant
-        let target = board.board[board.gameController.enPassantTargetSquare.y+offset][board.gameController.enPassantTargetSquare.x];
-        if(target!=="-" && target.isWhite!==this.isWhite){
-          if(board.gameController.enPassantTargetSquare.x === this.pos.x-1 && board.gameController.enPassantTargetSquare.y === this.pos.y-offset){
-            allMoves.push({
-              x: this.pos.x-1, 
-              y: this.pos.y-offset, 
-              isEmpty: true,
-              isAlly: false,
-              enPassant: true
-            })
+    let directions = [this.pos.x-1, this.pos.x+1];
+    directions.forEach(dir => {
+      if(board.board[this.pos.y-offset][dir]){
+        //if en passant is avaliable
+        if(board.gameController.enPassantTargetSquare && board.gameController.enPassantTargetSquare!=="-"){
+          //if this piece can capture en passant
+          if(board.gameController.enPassantTargetSquare.x === dir && board.gameController.enPassantTargetSquare.y === this.pos.y-offset){
+            let target = board.board[board.gameController.enPassantTargetSquare.y+offset][board.gameController.enPassantTargetSquare.x];
+            if(target!=="-" && target.isWhite!==this.isWhite){
+              allMoves.push({
+                x: dir, 
+                y: this.pos.y-offset, 
+                isEmpty: true,
+                isAlly: false,
+                enPassant: true
+              })
+            }
           }
         }
-      }
-      //else
-      if(square!=="-"){
-        allMoves.push({
-          x: this.pos.x-1, 
-          y: this.pos.y-offset, 
-          isEmpty: false,
-          isAlly: (square.isWhite==this.isWhite) ? true : false
-        })
-      }else{
-        allMoves.push({
-          x: this.pos.x-1, 
-          y: this.pos.y-offset, 
-          isEmpty: true,
-          isAlly: true
-        })
-      }
-    }
-    square = board.board[this.pos.y-offset][this.pos.x+1]
-    if(square){
-      if(board.gameController.enPassantTargetSquare && board.gameController.enPassantTargetSquare!=="-"){
-        //if this piece can capture en passant
-        let target = board.board[board.gameController.enPassantTargetSquare.y+offset][board.gameController.enPassantTargetSquare.x];
-        if(target!=="-" && target.isWhite!==this.isWhite){
-          if(board.gameController.enPassantTargetSquare.x === this.pos.x+1 && board.gameController.enPassantTargetSquare.y === this.pos.y-offset){
-            allMoves.push({
-              x: this.pos.x+1, 
-              y: this.pos.y-offset, 
-              isEmpty: true,
-              isAlly: false,
-              enPassant: true
-            })
-          }
+        //else
+        if(board.board[this.pos.y-offset][dir]!=="-"){
+          allMoves.push({
+            x: dir, 
+            y: this.pos.y-offset, 
+            isEmpty: false,
+            isAlly: (board.board[this.pos.y-offset][dir].isWhite==this.isWhite) ? true : false
+          })
+        }else{
+          allMoves.push({
+            x: dir, 
+            y: this.pos.y-offset, 
+            isEmpty: true,
+            isAlly: true
+          })
         }
       }
-      if(square!=="-"){
-        allMoves.push({
-          x: this.pos.x+1, 
-          y: this.pos.y-offset, 
-          isEmpty: false,
-          isAlly: (square.isWhite==this.isWhite) ? true : false
-        })
-      }else{
-        allMoves.push({
-          x: this.pos.x+1, 
-          y: this.pos.y-offset, 
-          isEmpty: true,
-          isAlly: true
-        })
-      }
-
-    }
-
+    });
+    
     //EN PASANT
     //is possible when some enemy pawn is controlling board.enPassantTargetSquare
 
