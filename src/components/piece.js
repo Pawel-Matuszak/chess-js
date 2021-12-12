@@ -92,7 +92,8 @@ class Piece{
       this.pieceDiv.style.zIndex = 999;
 
       //show moves to player that currenty has a turn
-      if((this.gameController.whiteToMove && this.isWhite) || (this.gameController.whiteToMove==false && this.isWhite==false)){
+      if(((this.gameController.whiteToMove && this.isWhite) || (this.gameController.whiteToMove==false && this.isWhite==false)) 
+        && this.gameController.userInterface.currentMove==this.gameController.movesHistory.length){
         this.showLegalMoves(board)
       }
 
@@ -133,7 +134,7 @@ class Piece{
   move(posX, posY, board){
     let moveWasMade = false;
     
-    if(this.gameController.userInterface.histPos!==0) {
+    if(this.gameController.userInterface.currentMove!==this.gameController.movesHistory.length) {
       board.drawPieces()
       return moveWasMade;
     }
