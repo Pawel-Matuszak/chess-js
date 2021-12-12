@@ -221,7 +221,7 @@ class Board{
     }   
 
     fenString += " "; 
-    fenString += (this.whiteToMove) ? "w": "b"; 
+    fenString += (this.gameController.whiteToMove) ? "w": "b"; 
     fenString += " "; 
    
     let castlingInfo = "";

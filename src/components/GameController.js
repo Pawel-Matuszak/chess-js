@@ -256,15 +256,18 @@ class GameController{
       }
     }
 
-    //hilight move 
-    for (const e of document.querySelectorAll(".move-hilight")) {
+    this.highlightMove(prevX, prevY, x, y, board);
+  }
+
+  highlightMove(prevX, prevY, x, y, board){
+    for (const e of document.querySelectorAll(".move-highlight")) {
       e.remove()
     }
 
     const hilightAfter = document.createElement("div");
     const hilightBefore = document.createElement("div");
-    hilightAfter.setAttribute("class", "move-hilight")
-    hilightBefore.setAttribute("class", "move-hilight")
+    hilightAfter.setAttribute("class", "move-highlight")
+    hilightBefore.setAttribute("class", "move-highlight")
     
     hilightAfter.style.left = prevX*100 + "px";
     hilightAfter.style.top = prevY*100 + "px";
@@ -290,8 +293,9 @@ class GameController{
       board: board.getFEN()
     })
 
-    this.userInterface.updateMoves(this.movesHistory)
-    this.userInterface.updateCurrentMove(1);
+    this.userInterface.updateMoves(this.movesHistory, this.board);
+    this.userInterface.currentMove++
+    this.userInterface.updateCurrentMove();
     
     if(this.userInterface.showCsW || this.userInterface.showCsB){
       board.getControlledSquares();

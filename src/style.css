@@ -11,13 +11,21 @@
 body{
   background: rgb(92, 146, 130);
   font-family: 'Libre Franklin', sans-serif;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.wrapper{
+  max-width: 350px;
+  margin-top: 50px;
 }
 
 .board{
   position: relative;
   width: fit-content;
-  margin: 20px auto;
   user-select: none;
+  margin-top: 25px;
 }
 
 .row{
@@ -55,7 +63,7 @@ body{
   background: rgba(199, 11, 11, 0.5);
 }
 
-.move-hilight{
+.move-highlight{
   position: absolute;
   width: 100px;
   height: 100px;
@@ -102,6 +110,36 @@ body{
 }
 
 .moves-list{
+  text-align: center;
   background: rgba(0, 0, 0, 0.486);
-  color: #fff
+  color: #fff;
+  height: 500px;
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  grid-auto-rows: 25px;
+  padding: 15px;
+  overflow-y: scroll;
 }
+
+.move-list-header{
+  grid-column: 1/3;
+}
+
+.button-wrapper{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 20px 0;
+}
+
+button{
+  outline: none;
+  border: 0;
+  background-color: #fff;
+  padding: 10px 20px;
+  margin: 5px 5px;
+}
+
+button:hover{
+  cursor: pointer;
+}
+
