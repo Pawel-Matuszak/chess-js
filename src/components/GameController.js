@@ -293,7 +293,7 @@ class GameController{
       board: board.getFEN()
     })
 
-    this.userInterface.updateMoves(this.movesHistory, this.board);
+    this.userInterface.updateMoves(this.movesHistory);
     this.userInterface.currentMove++
     this.userInterface.updateCurrentMove();
     

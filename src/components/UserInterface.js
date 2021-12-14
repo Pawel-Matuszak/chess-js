@@ -1,5 +1,3 @@
-import { create, identity } from "lodash";
-
 class UserInterface{
   constructor(){
     this.buttons = {};
@@ -12,7 +10,7 @@ class UserInterface{
     this.currentMove = 0;
   }
 
-  handlePrevious(movesHistory){
+  handlePrevious(movesHistory, board){
     let history = movesHistory;
     
     if(this.currentMove<=1) return;
@@ -20,21 +18,10 @@ class UserInterface{
     this.board.removePieces();
     this.board.readFEN(history[this.currentMove-1].board)
 
-    if(this.showCsW){
-      board.getControlledSquares();
-      board.showControlledSquares(true);
-    }else if(this.showCsB){
-      board.getControlledSquares();
-      board.showControlledSquares(false);
-    }
-
-    this.updateCurrentMove()
-    for (const e of document.querySelectorAll(".move-highlight")) {
-      e.remove()
-    }
+    this.handleHighlight(board);
   }
 
-  handleNext(movesHistory){
+  handleNext(movesHistory, board){
     let history = movesHistory;
     
     if(this.currentMove>movesHistory.length-1) return;
@@ -43,6 +30,10 @@ class UserInterface{
     // if(this.histPos<0) this.histPos *=-1;
     this.board.readFEN(history[this.currentMove-1].board)
     
+    this.handleHighlight(board);
+  }
+
+  handleHighlight(board){
     if(this.showCsW){
       board.getControlledSquares();
       board.showControlledSquares(true);
@@ -101,11 +92,11 @@ class UserInterface{
     })
 
     this.buttons["previous"].addEventListener("click", ()=>{
-      this.handlePrevious(this.gameController.movesHistory)
+      this.handlePrevious(this.gameController.movesHistory, board)
     });
 
     this.buttons["next"].addEventListener("click", ()=>{
-      this.handleNext(this.gameController.movesHistory)
+      this.handleNext(this.gameController.movesHistory, board)
     });
 
     for (const btn of Object.keys(this.buttons)) {
@@ -117,10 +108,10 @@ class UserInterface{
     
   }
 
-  updateMoves(movesHistory, board){
+  updateMoves(movesHistory){
     this.movesList.innerHTML = "<div class='move-list-header'> Normlanie lista ruchów tu będzie</div>";
     
-    let i=0;
+    let i=1;
     movesHistory.forEach((move) => {
       let divMove = document.createElement("div");
       divMove.setAttribute("class", "move");
@@ -131,14 +122,14 @@ class UserInterface{
         this.board.readFEN(move.board);
         this.currentMove = Array.prototype.indexOf.call(divMove.parentNode.children, divMove);
         this.updateCurrentMove()
+        this.handleHighlight(this.board);
       })
-      divMove.innerHTML = move.move;
+      divMove.innerHTML = (i%2==1) ? Math.ceil(Array.prototype.indexOf.call(divMove.parentNode.children, divMove)/2) +"."+ move.move : move.move;
       i++;
     });
   }
   
   updateCurrentMove(){
-    console.log(this.currentMove);
     this.movesList.childNodes.forEach(child=>{
       child.style.color = "#fff"
     })

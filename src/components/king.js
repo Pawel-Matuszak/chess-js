@@ -172,7 +172,6 @@ class King extends Piece{
     });
     board.drawPieces();
     return moveWasMade
-    // console.log(this.castle + " " + this.castleLong);
   }
 }
 
