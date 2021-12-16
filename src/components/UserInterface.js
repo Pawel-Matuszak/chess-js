@@ -131,9 +131,11 @@ class UserInterface{
   
   updateCurrentMove(){
     this.movesList.childNodes.forEach(child=>{
-      child.style.color = "#fff"
+      if(child.classList[0]=="move"){
+        child.style.background = "none"
+      };
     })
-    this.movesList.childNodes[this.currentMove].style.color = "#a5a"
+    this.movesList.childNodes[this.currentMove].style.background = "rgba(27, 83, 129, 0.4)"
   }
 }
 
