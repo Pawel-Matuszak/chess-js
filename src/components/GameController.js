@@ -6,6 +6,7 @@ import Pawn from "./Pawn";
 import Piece from "./Piece";
 import Queen from "./Queen";
 import Rook from "./Rook";
+import MovesHistory from "./MovesHistory";
 
 class GameController{
   constructor(userInterface){
@@ -34,7 +35,7 @@ class GameController{
     this.whiteToMove = true;
     this.halfmoveCount = 0;
     this.moveCount = 0;
-    this.movesHistory = [];
+    this.movesHistory = new MovesHistory();
     this.board = null;
   }
   

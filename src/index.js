@@ -42,5 +42,8 @@ function play(){
 //pawn.js 39: t][board.gameController.enPassantTargetSquare.x]
 
 //user interface visuals
-//draw by repetition
 
+
+//draw by repetition
+//znaleść pozycje w hashtable?
+//
