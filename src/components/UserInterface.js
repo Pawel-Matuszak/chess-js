@@ -11,24 +11,20 @@ class UserInterface{
   }
 
   handlePrevious(movesHistory, board){
-    let history = movesHistory;
-    
     if(this.currentMove<=1) return;
     this.currentMove--
     this.board.removePieces();
-    this.board.readFEN(history[this.currentMove-1].board)
+    this.board.readFEN(movesHistory.getById(this.currentMove-1).pos);
 
     this.handleHighlight(board);
   }
 
   handleNext(movesHistory, board){
-    let history = movesHistory;
-    
     if(this.currentMove>movesHistory.length-1) return;
     this.currentMove++
     this.board.removePieces();
     // if(this.histPos<0) this.histPos *=-1;
-    this.board.readFEN(history[this.currentMove-1].board)
+    this.board.readFEN(movesHistory.getById(this.currentMove-1).pos);
     
     this.handleHighlight(board);
   }
@@ -119,7 +115,7 @@ class UserInterface{
 
       divMove.addEventListener("click", ()=>{
         this.board.removePieces();
-        this.board.readFEN(move.board);
+        this.board.readFEN(move.pos);
         this.currentMove = Array.prototype.indexOf.call(divMove.parentNode.children, divMove);
         this.updateCurrentMove()
         this.handleHighlight(this.board);

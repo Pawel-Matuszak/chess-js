@@ -289,9 +289,9 @@ class GameController{
       move = (castle=="long") ? "0-0-0" : "0-0";
     }
 
-    this.movesHistory.push({
+    this.movesHistory.set({
       move: move,
-      board: board.getFEN()
+      pos: board.getFEN()
     })
 
     this.userInterface.updateMoves(this.movesHistory);

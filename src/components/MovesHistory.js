@@ -6,11 +6,19 @@ class MovesHistory{
 
   set(data){
     if(this.moves[data.pos]){
-      this.moves[data.pos].push(data);
+      this.moves[data.pos].push({
+        id: this.length,
+        move: data.move,
+        pos: data.pos
+      });
       this.length++;
       return;
     }
-    this.moves[data.pos] = [data];
+    this.moves[data.pos] = [{
+      id: this.length,
+      move: data.move,
+      pos: data.pos
+    }];
     this.length++;
   }
 
@@ -36,4 +44,18 @@ class MovesHistory{
   countRepeat(pos){
     return this.moves[pos].length;
   }
+
+  forEach(func){
+    for (const key in this.moves) {
+      if(this.moves[key].length>1){
+        for (let i = 0; i < this.moves[key].length; i++) {
+          func(this.moves[key][i]);
+        }
+      }else{
+        func(this.moves[key][0]);
+      }
+    }
+  }
 }
+
+export default MovesHistory;
