@@ -11,22 +11,26 @@ class UserInterface{
   }
 
   handlePrevious(movesHistory, board){
+
     if(this.currentMove<=1) return;
     this.currentMove--
     this.board.removePieces();
-    this.board.readFEN(movesHistory.getById(this.currentMove-1).pos);
+    this.board.readFEN(movesHistory.getById(this.currentMove).pos);
 
     this.handleHighlight(board);
+    console.log( this.gameController.enPassantTargetSquare);
   }
 
   handleNext(movesHistory, board){
-    if(this.currentMove>movesHistory.length-1) return;
+    if(this.currentMove>movesHistory.length-2) return;
     this.currentMove++
     this.board.removePieces();
     // if(this.histPos<0) this.histPos *=-1;
-    this.board.readFEN(movesHistory.getById(this.currentMove-1).pos);
+    this.board.readFEN(movesHistory.getById(this.currentMove).pos);
     
     this.handleHighlight(board);
+    console.log( this.gameController.enPassantTargetSquare);
+
   }
 
   handleHighlight(board){
@@ -109,6 +113,7 @@ class UserInterface{
     
     let i=1;
     movesHistory.forEach((move) => {
+      if(!move.move) return;
       let divMove = document.createElement("div");
       divMove.setAttribute("class", "move");
       this.movesList.appendChild(divMove);

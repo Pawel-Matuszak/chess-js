@@ -93,7 +93,7 @@ class Piece{
 
       //show moves to player that currenty has a turn
       if(((this.gameController.whiteToMove && this.isWhite) || (this.gameController.whiteToMove==false && this.isWhite==false)) 
-        && this.gameController.userInterface.currentMove==this.gameController.movesHistory.length){
+        && this.gameController.userInterface.currentMove==this.gameController.movesHistory.length-1){
         this.showLegalMoves(board)
       }
 
@@ -133,8 +133,7 @@ class Piece{
   //return false if move was not made
   move(posX, posY, board){
     let moveWasMade = false;
-    
-    if(this.gameController.userInterface.currentMove!==this.gameController.movesHistory.length) {
+    if(this.gameController.userInterface.currentMove!==this.gameController.movesHistory.length-1) {
       board.drawPieces()
       return moveWasMade;
     }

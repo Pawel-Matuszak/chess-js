@@ -156,7 +156,7 @@ class King extends Piece{
   move(posX, posY, board){
     let moveWasMade = false;
     
-    if(this.gameController.userInterface.currentMove!==this.gameController.movesHistory.length) {
+    if(this.gameController.userInterface.currentMove!==this.gameController.movesHistory.length-1) {
       board.drawPieces()
       return moveWasMade;
     }

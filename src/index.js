@@ -46,4 +46,5 @@ function play(){
 
 //draw by repetition
 //znaleść pozycje w hashtable?
-//
+
+//when enpassant is avaliable and we go back in history and come back enpassant is not longer avaliable

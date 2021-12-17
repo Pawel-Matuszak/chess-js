@@ -5,8 +5,9 @@ class MovesHistory{
   }
 
   set(data){
-    if(this.moves[data.pos]){
-      this.moves[data.pos].push({
+    let key = data.pos.split(" ")[0];
+    if(this.moves[key]){
+      this.moves[key].push({
         id: this.length,
         move: data.move,
         pos: data.pos
@@ -14,7 +15,7 @@ class MovesHistory{
       this.length++;
       return;
     }
-    this.moves[data.pos] = [{
+    this.moves[key] = [{
       id: this.length,
       move: data.move,
       pos: data.pos

@@ -50,6 +50,10 @@ class GameController{
     this.currentGameStatus = this.gameStatus.active;
 
     this.board.readFEN(fenStr)
+    this.movesHistory.set({
+      pos: fenStr,
+      move: "",
+    })
   }
 
   findKings(board){
@@ -129,6 +133,7 @@ class GameController{
     if(this.seeIfCheck(x,y, isEmpty, board, piece)) return false;
     this.makeMove(x,y, isEmpty, board, piece);
     board.drawPieces();
+    this.historySave(x,y,piece, board, this.inCheckTemp, xBefore);
 
     this.findKings(board);
     board.getControlledSquares();
@@ -186,10 +191,20 @@ class GameController{
       this.endGameHandler(board, '', "fifty-move rule")
     }
 
-    this.historySave(x,y,piece, board, this.inCheckTemp, xBefore);
+    
+    //repetition
+    this.drawByRepetition(board, this.movesHistory);
     
     return true;
 
+  }
+
+  //set game status to draw if the position was repeated three times
+  drawByRepetition(board, history){
+    if(history.countRepeat(board.getFEN().split(" ")[0])>=3){
+      this.currentGameStatus = this.gameStatus.draw;
+      this.endGameHandler(board, '', "repetition")
+    }
   }
   
   makeMove(x,y, isEmpty, board, piece){
@@ -239,6 +254,7 @@ class GameController{
       e.remove()
     }
 
+    console.log(":A");
     //handle en passant
     this.enPassantTargetSquare = undefined;
     if(piece.isWhite){
