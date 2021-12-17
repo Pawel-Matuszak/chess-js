@@ -51,7 +51,7 @@ class MovesHistory{
         for (let i = 0; i < this.moves[key].length; i++) {
           func(this.moves[key][i]);
         }
-      }else{
+      }else if(this.moves[key].length==1){
         func(this.moves[key][0]);
       }
     }

@@ -163,23 +163,31 @@ class Piece{
     this.allMoves = this.allMoves.filter(e=>!this.gameController.seeIfCheck(e.x, e.y, e.isEmpty, board, this))
 
     //remove all previous dots from the DOM
-    for (const e of document.querySelectorAll(".point")) {
+    for (const e of document.querySelectorAll(".square-move")) {
       e.remove()
     }
 
     this.allMoves.forEach(({x,y, isEmpty, isAlly})=>{
       if(isAlly) return;
+      const square = document.createElement("div");
       const point = document.createElement("div");
-      point.setAttribute("class", "point")
-      board.boardDiv.prepend(point);
+      square.setAttribute("class", "square-move");
+      point.setAttribute("class", "point");
+      square.appendChild(point);
+      board.boardDiv.prepend(square);
       if(!isEmpty){
-        point.style.width = 100 + "px"
-        point.style.height = 100 + "px"
-        point.style.border = "7px solid rgba(150, 150, 150, 0.5)"
-        point.style.background = "none"
-      };
-      point.style.left = x*100+50-point.offsetWidth/2 + "px";
-      point.style.top = y*100+50-point.offsetHeight/2 + "px";
+        point.style.border = "7px solid rgba(150, 150, 150, 0.5)";
+        point.style.background = "none";
+        square.style.zIndex = 999;
+        point.style.width = "100px";
+        point.style.height = "100px";
+      }
+      square.style.left = x*100 + "px";
+      square.style.top = y*100 + "px";
+      square.onclick = () =>{
+        this.move(x,y,board);
+        square.onclick = null;
+      }
     })
   }
 

@@ -42,7 +42,7 @@ class GameController{
   init(fenStr, board){
     //clear move hilights
     window.addEventListener('click', function(e){   
-      for (const e of document.querySelectorAll(".point")) {
+      for (const e of document.querySelectorAll(".square-move")) {
         e.remove()
       }
     });
@@ -235,7 +235,7 @@ class GameController{
     }
     
     this.whiteToMove = !this.whiteToMove;
-    for (const e of document.querySelectorAll(".point")) {
+    for (const e of document.querySelectorAll(".square-move")) {
       e.remove()
     }
 
