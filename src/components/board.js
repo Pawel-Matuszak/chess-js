@@ -187,14 +187,12 @@ class Board{
         y: 8-parseInt(fenInfo[2][1])
       };
     }
-    console.log( this.gameController.enPassantTargetSquare);
 
     //halfmove clock
     this.gameController.halfmoveCount = fenInfo[3];
 
     //fullmove counter
     this.gameController.moveCount = fenInfo[4];
-
     this.drawPieces();
   }
 
@@ -360,7 +358,8 @@ class Board{
         const piece = this.board[i][j];
         if(piece!=="-"){
           let legalMoves = piece.getLegalMoves(this);
-          if(piece.type.toLowerCase()=="p") legalMoves = legalMoves.filter(e=>e.x==piece.pos.x);
+          //
+          // if(piece.type.toLowerCase()=="p") legalMoves = legalMoves.filter(e=>e.x==piece.pos.x);
           
           if(piece.isWhite){
             white.push(...legalMoves.map(({x,y,isEmpty, isAlly})=>{

@@ -120,13 +120,16 @@ class King extends Piece{
       }else{
         this.rooks = this.gameController.findRooks(board).black
       }
+      this.castle = false;
+      this.castleLong = false;
+
       this.rooks.forEach(rook=>{
-        if(rook.wasMoved){
-          if(rook.pos.x>this.pos.x){
-            this.castle = false;
+        if(!rook.wasMoved){
+          if(rook.pos.x==7 && rook.pos.y==7){
+            this.castle = true;
           }
-          if(rook.pos.x<this.pos.x){
-            this.castleLong = false;
+          if(rook.pos.x==0 && rook.pos.y==7){
+            this.castleLong = true;
           }
         }
       })

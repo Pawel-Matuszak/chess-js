@@ -254,7 +254,6 @@ class GameController{
       e.remove()
     }
 
-    console.log(":A");
     //handle en passant
     this.enPassantTargetSquare = undefined;
     if(piece.isWhite){
