@@ -274,7 +274,41 @@ class Board{
 
     return fenString;
   }
-  
+
+  getPGN(){
+    let pgn = "";
+    let gameResult = "";
+    let movesHistory = this.gameController.movesHistory;
+    if(!movesHistory) return;
+
+    //map moves to ids
+    this.gameController.movesHistory.mapToId();
+    //add moves to pgn string
+    for (let i = 1; i < movesHistory.length; i++) {
+      let move = movesHistory.movesMap[i];
+      pgn += (i%2==1) ? Math.ceil(i/2)+"."+move.move+" " : move.move+" ";
+    }
+
+    switch (this.gameController.currentGameStatus) {
+      case this.gameController.gameStatus.draw:
+        gameResult = "1/2-1/2";
+        break;
+      case this.gameController.gameStatus.white_won:
+        gameResult = "1-0";
+        break;
+      case this.gameController.gameStatus.black_won:
+        gameResult = "0-1";
+        break;
+      case this.gameController.gameStatus.active:
+        gameResult = "*";
+        break;
+      default:
+        break;
+    }
+
+    pgn += gameResult;
+    return pgn;
+  }
 
   getControlledSquares(){
     //init

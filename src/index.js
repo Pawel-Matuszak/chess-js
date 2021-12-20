@@ -13,7 +13,7 @@ userInterface.init(board, gameController);
 // board.readFEN("8/R2r3k/2p5/1P1P4/8/8/8/4K1R1 w KQkq - 0 1")
 // board.readFEN("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1")
 // "8/2N5/3P2k1/8/8/8/2p1K3/2B5"
-gameController.init("8/2N5/3P1k2/8/8/8/2p1K3/2B5 w - - 0 1", board);
+gameController.init("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", board);
 
 //opening
 // board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
@@ -28,24 +28,11 @@ function play(){
     moveGeneratorW.playRandomMove(board, gameController);
     setTimeout(() => {
       moveGeneratorB.playRandomMove(board, gameController);
-    }, 100);
+    }, 10);
     // console.log(Date.now()-start + "ms")
     
-  }, 200);
+  }, 20);
   
 }
 
-// play()
-
-
-//TODO
-
-//pawn.js 39: t][board.gameController.enPassantTargetSquare.x]
-
-//user interface visuals
-
-
-//draw by repetition
-//znaleść pozycje w hashtable?
-
-//castling squares include to threat map>?
+play()

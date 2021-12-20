@@ -27,7 +27,8 @@ class GameController{
       active: 0,
       black_won: 1,
       white_won: 2,
-      draw: 3
+      draw: 3,
+      paused: 4
     }
     this.enPassantTargetSquare = undefined
     this.allPiecesValue = {};
@@ -133,7 +134,6 @@ class GameController{
     if(this.seeIfCheck(x,y, isEmpty, board, piece)) return false;
     this.makeMove(x,y, isEmpty, board, piece);
     board.drawPieces();
-    this.historySave(x,y,piece, board, this.inCheckTemp, xBefore);
 
     this.findKings(board);
     board.getControlledSquares();
@@ -191,12 +191,11 @@ class GameController{
       this.endGameHandler(board, '', "fifty-move rule")
     }
 
+    this.historySave(x,y,piece, board, this.inCheck, xBefore);
     
     //repetition
     this.drawByRepetition(board, this.movesHistory);
-    
     return true;
-
   }
 
   //set game status to draw if the position was repeated three times

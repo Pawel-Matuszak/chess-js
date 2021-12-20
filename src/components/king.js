@@ -10,18 +10,6 @@ class King extends Piece{
     this.value = 0;
   }
 
-    //danger
-    //save the squares attacked by enemy* pieces in the array**
-    //*white if king is black and black if white
-    //**like getLegalMoves
-    //////////////////////////////////////////////
-    //funciton calculateSquaresControlledByEnemy in Piece class returning array of [x,y] squares
-    //here we have to check if the square king is trying to go is one of the returned by calculateSquaresControlledByEnemy
-    //if true we return and draw board as it was;
-    //////////////////////////////////////////////
-    //king is forced to move if is in check
-    //this.inCheck
-
   getLegalMoves(board){
     let legalMoves = []
     //save valid squares 

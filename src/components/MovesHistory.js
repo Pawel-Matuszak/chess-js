@@ -1,6 +1,7 @@
 class MovesHistory{
   constructor(){
     this.moves = {};
+    this.movesMap = {};
     this.length = 0;
   }
 
@@ -28,24 +29,10 @@ class MovesHistory{
     return this.moves[pos];
   }
 
-  getById(id){
-    for (const key in this.moves) {
-      if(this.moves[key].length>1){
-        for (let i = 0; i < this.moves[key].length; i++) {
-          const e = this.moves[key][i];
-          if(e.id==id) return e;
-        }
-      }else{
-        if(this.moves[key][0].id==id) return this.moves[key][0];
-      }
-    }
-    return null;
-  }
-
   countRepeat(pos){
     return this.moves[pos].length;
   }
-
+  
   forEach(func){
     for (const key in this.moves) {
       if(this.moves[key].length>1){
@@ -54,6 +41,20 @@ class MovesHistory{
         }
       }else if(this.moves[key].length==1){
         func(this.moves[key][0]);
+      }
+    }
+  }
+
+  mapToId(){
+    for (const key in this.moves) {
+      if(this.moves[key].length>1){
+        for (let i = 0; i < this.moves[key].length; i++) {
+          const e = this.moves[key][i];
+          this.movesMap[e.id] = e;
+        }
+      }else{
+        const e = this.moves[key][0];
+        this.movesMap[e.id] = e;
       }
     }
   }
