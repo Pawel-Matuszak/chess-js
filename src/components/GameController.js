@@ -7,6 +7,7 @@ import Piece from "./Piece";
 import Queen from "./Queen";
 import Rook from "./Rook";
 import MovesHistory from "./MovesHistory";
+import MoveGenerator from "./MoveGenerator";
 
 class GameController{
   constructor(userInterface){
@@ -36,8 +37,9 @@ class GameController{
     this.whiteToMove = true;
     this.halfmoveCount = 0;
     this.moveCount = 0;
-    this.movesHistory = new MovesHistory();
+    this.movesHistory = "";
     this.board = null;
+    this.computerActive = false;
   }
   
   init(fenStr, board){
@@ -50,7 +52,16 @@ class GameController{
     this.board = board;
     this.currentGameStatus = this.gameStatus.active;
 
-    this.board.readFEN(fenStr)
+    this.board.removePieces();
+    this.board.readFEN(fenStr);
+
+    this.movesHistory = new MovesHistory();
+    this.userInterface.updateMoves(this.movesHistory);
+    this.userInterface.currentMove = 0;
+    for (const e of document.querySelectorAll(".move-highlight")) {
+      e.remove()
+    }
+
     this.movesHistory.set({
       pos: fenStr,
       move: "",
@@ -437,6 +448,19 @@ class GameController{
       board.title.innerHTML = "DRAW";
       board.subtitle.innerHTML = "by "+type;
     }
+  }
+
+  play(){
+    let moveGeneratorW = new MoveGenerator(true, this);
+    let moveGeneratorB = new MoveGenerator(false, this);
+
+    setInterval(()=>{
+      if(!this.computerActive) return;
+      moveGeneratorW.playRandomMove(this.board, this);
+      setTimeout(() => {
+        moveGeneratorB.playRandomMove(this.board, this);
+      }, 100);
+    }, 200);
   }
 }
 

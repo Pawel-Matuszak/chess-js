@@ -23,6 +23,8 @@ class MoveGenerator{
       }
     }
   }
+
+  
 }
 
 export default MoveGenerator;

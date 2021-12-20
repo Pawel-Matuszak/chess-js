@@ -13,7 +13,7 @@ userInterface.init(board, gameController);
 // board.readFEN("8/R2r3k/2p5/1P1P4/8/8/8/4K1R1 w KQkq - 0 1")
 // board.readFEN("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1")
 // "8/2N5/3P2k1/8/8/8/2p1K3/2B5"
-gameController.init("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1", board);
+gameController.init("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", board);
 
 //opening
 // board.readFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
@@ -29,10 +29,8 @@ function play(){
     setTimeout(() => {
       moveGeneratorB.playRandomMove(board, gameController);
     }, 10);
-    // console.log(Date.now()-start + "ms")
-    
   }, 20);
   
 }
 
-play()
+// play()

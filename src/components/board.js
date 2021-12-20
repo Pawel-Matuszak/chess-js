@@ -78,6 +78,7 @@ class Board{
   removePieces(){
     this.board.forEach(arr=>{
       arr.forEach(e=>{
+        if(!e.pieceDiv) return;
         if(e!=="-") e.pieceDiv.remove();
       })
     })
@@ -179,7 +180,6 @@ class Board{
     })
 
     //en passant square
-    console.log(fenInfo[2])
     if(fenInfo[2]!=="-"){
       let letterToNum = ["a", "b", "c", "d" ,"e" ,"f", "g", "h"]
       this.gameController.enPassantTargetSquare = {

@@ -90,6 +90,13 @@ class UserInterface{
     this.buttons["next"] = document.createElement("button");
     this.buttons["next"].innerText = "Next move";
     this.buttons["next"].setAttribute("class", "history-btn");
+    this.buttons["restart"] = document.createElement("button");
+    this.buttons["restart"].innerText = "Restart";
+    this.buttons["restart"].setAttribute("class", "restart-btn");
+    this.buttons["cvsc"] = document.createElement("button");
+    this.buttons["cvsc"].innerText = "Computer vs Computer";
+    this.buttons["cvsc"].setAttribute("class", "cvsc-btn");
+
     this.movesList.setAttribute("class", "moves-list");
     this.movesList.innerHTML = "<div class='move-list-header'>Normlanie lista ruchów tu będzie</div>";
 
@@ -119,6 +126,15 @@ class UserInterface{
 
     this.buttons["next"].addEventListener("click", ()=>{
       this.handleNext(this.gameController.movesHistory, board)
+    });
+
+    this.buttons["restart"].addEventListener("click", ()=>{
+      this.gameController.init("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", this.board);
+    });
+
+    this.buttons["cvsc"].addEventListener("click", ()=>{
+      this.gameController.computerActive = !this.gameController.computerActive;
+      this.gameController.play();
     });
 
     this.pgnBtn.addEventListener("click", ()=>{
@@ -152,7 +168,6 @@ class UserInterface{
     //display moves
     for (let i = 1; i < movesHistory.length; i++) {
       let move = movesHistory.movesMap[i];
-
       if(!move.move) return;
       let divMove = document.createElement("div");
       divMove.setAttribute("class", "move");
@@ -162,31 +177,16 @@ class UserInterface{
         this.board.removePieces();
         this.board.readFEN(move.pos);
         this.currentMove = Array.prototype.indexOf.call(divMove.parentNode.children, divMove);
-        this.updateCurrentMove()
+        this.updateCurrentMove();
         this.handleHighlight(this.board);
       })
       divMove.innerHTML = (i%2==1) ? Math.ceil(i/2) +"."+ move.move : move.move;
 
     }
-    if(this.gameController.currentGameStatus !== this.gameController.gameStatus.active || this.gameController.currentGameStatus !== this.gameController.gameStatus.paused){
-      switch (this.gameController.currentGameStatus) {
-        case this.gameController.gameStatus.draw:
-           this.movesList.innerHTML += "<div class='move'>1/2-1/2</div>";
-          break;
-        case this.gameController.gameStatus.white_won:
-           this.movesList.innerHTML += "<div class='move'>1-0</div>";
-          break;
-        case this.gameController.gameStatus.black_won:
-           this.movesList.innerHTML += "<div class='move'>0-1</div>";
-          break;
-        default:
-          break;
-      }
-    }
   }
   
   updateCurrentMove(){
-    this.movesList.childNodes.forEach(child=>{
+    this.movesList.childNodes.forEach((child, i)=>{
       if(child.classList[0]=="move"){
         child.style.background = "none"
       };
