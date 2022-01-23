@@ -98,13 +98,17 @@ class UserInterface{
     this.buttons["cvsc"].setAttribute("class", "cvsc-btn");
 
     this.movesList.setAttribute("class", "moves-list");
-    this.movesList.innerHTML = "<div class='move-list-header'>Normlanie lista ruchów tu będzie</div>";
+    this.movesList.innerHTML = "<div class='move-list-header'></div>";
 
     this.buttons["toggleWhiteCS"].addEventListener("click", ()=>{
       board.removeControlledSquares();
       this.showCsW = !this.showCsW;
       this.showCsB = false;
+      this.buttons["toggleWhiteCS"].style.background = "rgba(24, 99, 161, 0.9)";
+      this.buttons["toggleBlackCS"].style.background = "rgba(24, 99, 161, 0.9)";
+
       if(this.showCsW){
+        this.buttons["toggleWhiteCS"].style.background = "rgba(15, 67, 109, 0.9)";
         board.getControlledSquares();
         board.showControlledSquares(true);
       }
@@ -114,7 +118,11 @@ class UserInterface{
       board.removeControlledSquares();
       this.showCsB = !this.showCsB;
       this.showCsW = false;
+      this.buttons["toggleWhiteCS"].style.background = "rgba(24, 99, 161, 0.9)";
+      this.buttons["toggleBlackCS"].style.background = "rgba(24, 99, 161, 0.9)";
+
       if(this.showCsB){
+        this.buttons["toggleBlackCS"].style.background = "rgba(15, 67, 109, 0.9)";
         board.getControlledSquares();
         board.showControlledSquares(false);
       }
@@ -135,6 +143,7 @@ class UserInterface{
     this.buttons["cvsc"].addEventListener("click", ()=>{
       this.gameController.computerActive = !this.gameController.computerActive;
       this.gameController.play();
+      this.buttons["cvsc"].style.background = (this.gameController.computerActive) ? "rgba(15, 67, 109, 0.9)" : "rgba(24, 99, 161, 0.9)";
     });
 
     this.pgnBtn.addEventListener("click", ()=>{
@@ -161,7 +170,7 @@ class UserInterface{
   }
 
   updateMoves(movesHistory){
-    this.movesList.innerHTML = "<div class='move-list-header'> Normlanie lista ruchów tu będzie</div>";
+    this.movesList.innerHTML = "<div class='move-list-header'></div>";
     
     //map moves to ids
     this.gameController.movesHistory.mapToId();

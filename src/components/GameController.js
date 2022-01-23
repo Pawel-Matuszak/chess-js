@@ -336,21 +336,6 @@ class GameController{
 
   //return true if piece would be in check after moving to x,y
   seeIfCheck(x,y, isEmpty, board, piece){
-    // this.findKings(board);
-    // board.getControlledSquares();
-    // this.inCheck.white = false;
-    // this.inCheck.black = false;
-    // board.controlledSquares.black.forEach(({x: sX, y: sY}) => {
-    //   if(sX==this.king.white.pos.x && sY==this.king.white.pos.y){
-    //     this.inCheck.white = true;
-    //   }
-    // });
-    // board.controlledSquares.white.forEach(({x: sX, y: sY}) => {
-    //   if(sX==this.king.black.pos.x && sY==this.king.black.pos.y){
-    //     this.inCheck.black = true;
-    //   }
-    // });
-
     this.temp = new Board(this)
     this.temp.board = [[],[],[],[],[],[],[],[]]
     this.temp.boardDiv = board.boardDiv
@@ -459,8 +444,8 @@ class GameController{
       moveGeneratorW.playRandomMove(this.board, this);
       setTimeout(() => {
         moveGeneratorB.playRandomMove(this.board, this);
-      }, 100);
-    }, 200);
+      }, 300);
+    }, 600);
   }
 }
 
