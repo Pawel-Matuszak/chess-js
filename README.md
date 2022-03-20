@@ -16,4 +16,3 @@ Website: https://pawel-matuszak.github.io/JSchess/
 
 ## Gallery
 >![chess board](/src/images/s.PNG)
-//////////////////////////////
