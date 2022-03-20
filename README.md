@@ -14,6 +14,6 @@ Website: https://pawel-matuszak.github.io/JSchess/
 * __ moves history__ - displays all the moves that where played in the current game. Selecting a move will set the board to a position when this move was played
 * __get PGN__ - show a string of all moves played in the game 
 
-##Gallery
+## Gallery
 >![chess board](/src/images/s.PNG)
 //////////////////////////////
