@@ -137,7 +137,7 @@ body{
   background: rgba(0, 0, 0, 0.5);
   /* rgb(18, 18, 18); */
   color: rgb(228, 228, 228);
-
+  margin: 15px;
   height: 500px;
   min-width: 300px;
   display: grid;
@@ -315,15 +315,9 @@ button:hover{
 
 }
 
-@media screen and (max-width: 300px){
-
+@media screen and (max-width: 400px){
   .moves-list{
-    min-width: 200px;
-  }
-
-  .point{
-    width: 10px;
-    height: 10px;
+    min-width: unset;
   }
 
   .board{
