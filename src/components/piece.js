@@ -91,12 +91,8 @@ class Piece{
       pos4 = e.clientY;
       this.pieceDiv.style.zIndex = 999;
 
-      //show moves to player that currenty has a turn
-      if(((this.gameController.whiteToMove && this.isWhite) || (this.gameController.whiteToMove==false && this.isWhite==false)) 
-        && this.gameController.userInterface.currentMove==this.gameController.movesHistory.length-1){
-        this.showLegalMoves(board)
-      }
-
+      this.showLegalMoves(board);
+      
       //set piece position and remove listeners on mouse button up
       document.onmouseup = () => {
         document.onmouseup = null;
@@ -124,20 +120,36 @@ class Piece{
     }
 
     this.pieceDiv.addEventListener("mousedown", mousedown);
-    
-    this.pieceDiv.addEventListener("touchmove", (e)=>{
-      // get the mouse cursor position at startup:
+
+    const touchmove = (e)=>{
+      // get the touch position:
       let touchLocation = e.targetTouches[0];
-      console.log(this.pieceDiv.offsetTop);
       let boardRect = this.gameController.board.boardDiv.getBoundingClientRect();
-      let thisRect = this.pieceDiv.getBoundingClientRect()
-      this.pieceDiv.style.top = (touchLocation.pageY-boardRect.y-thisRect.height/2) + "px";
-      this.pieceDiv.style.left = (touchLocation.pageX-boardRect.x-thisRect.width/2) + "px";
+      let thisRect = this.pieceDiv.getBoundingClientRect();
+      let piecePosition = {
+        x: touchLocation.pageX-boardRect.x-thisRect.width/2,
+        y: touchLocation.pageY-boardRect.y-thisRect.height/2
+      }
+      this.pieceDiv.style.top = (piecePosition.y) + "px";
+      this.pieceDiv.style.left = (piecePosition.x) + "px";
+
+      document.ontouchend = () =>{
+        this.move(
+          Math.round((piecePosition.x - pos1)/100),
+          Math.round((piecePosition.y - pos2)/100),
+          board
+        )
+      }
+    }
+
+    this.pieceDiv.addEventListener("touchstart", ()=>{
+      this.showLegalMoves(board)
     })
+    this.pieceDiv.addEventListener("touchmove", touchmove)
 
-
-    board.board[this.pos.y][this.pos.x] = this;
     // board.drawPieces();
+    
+    board.board[this.pos.y][this.pos.x] = this;
   }
 
   //changes position on the screen
@@ -165,6 +177,11 @@ class Piece{
   }
 
   showLegalMoves(board){
+
+    //show moves to player that currenty has a turn
+    if(!(((this.gameController.whiteToMove && this.isWhite) || (this.gameController.whiteToMove==false && this.isWhite==false)) 
+    && this.gameController.userInterface.currentMove==this.gameController.movesHistory.length-1)) return;
+
     board.getControlledSquares();
 
     this.allMoves = [];
