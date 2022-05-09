@@ -36,6 +36,12 @@ class Board{
     this.gameMessage.append(this.times, this.title, this.subtitle)
     this.boardDiv.appendChild(this.gameMessage)
     
+    this.drawBoard();
+
+    document.querySelector(".container").append(this.boardDiv);
+  }
+
+  drawBoard(){
     //draw board in html
     for (let i = 0; i <= 7; i++) {
       const row = document.createElement("div");
@@ -51,11 +57,9 @@ class Board{
         this.board[i].push("");
         row.appendChild(square);
       }
-  
+
       this.boardDiv.appendChild(row);
     }
-
-    document.body.appendChild(this.boardDiv);
   }
 
   drawPieces(){

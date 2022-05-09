@@ -166,7 +166,8 @@ class UserInterface{
     this.pgnModal.append(this.pgnText, this.pgnExit, this.pgnCopy);
     this.pgnModalWrapper.append(this.pgnModal);
     this.wrapper.append(this.buttonWrapper, this.movesList, this.pgnBtn, this.pgnModalWrapper);
-    document.body.appendChild(this.wrapper);
+    document.querySelector(".container").append(this.wrapper)
+    
   }
 
   updateMoves(movesHistory){

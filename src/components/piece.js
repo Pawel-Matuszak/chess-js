@@ -123,7 +123,18 @@ class Piece{
       };
     }
 
-    this.pieceDiv.addEventListener("mousedown", mousedown)
+    this.pieceDiv.addEventListener("mousedown", mousedown);
+    
+    this.pieceDiv.addEventListener("touchmove", (e)=>{
+      // get the mouse cursor position at startup:
+      let touchLocation = e.targetTouches[0];
+      console.log(this.pieceDiv.offsetTop);
+      let boardRect = this.gameController.board.boardDiv.getBoundingClientRect();
+      let thisRect = this.pieceDiv.getBoundingClientRect()
+      this.pieceDiv.style.top = (touchLocation.pageY-boardRect.y-thisRect.height/2) + "px";
+      this.pieceDiv.style.left = (touchLocation.pageX-boardRect.x-thisRect.width/2) + "px";
+    })
+
 
     board.board[this.pos.y][this.pos.x] = this;
     // board.drawPieces();
