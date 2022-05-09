@@ -134,9 +134,11 @@ class Piece{
       this.pieceDiv.style.top = (piecePosition.y) + "px";
       this.pieceDiv.style.left = (piecePosition.x) + "px";
 
+
       document.ontouchend = () =>{
         document.ontouchend = null;
         this.pieceDiv.style.zIndex = 10;
+        document.body.style.overflow = "auto";
 
         this.move(
           Math.round((piecePosition.x - pos1)/(this.board.boardRect.width/8)),
@@ -147,6 +149,7 @@ class Piece{
     }
 
     this.pieceDiv.addEventListener("touchstart", ()=>{
+      document.body.style.overflow = "hidden";
       this.showLegalMoves(board)
     })
     this.pieceDiv.addEventListener("touchmove", touchmove)
