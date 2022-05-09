@@ -54,6 +54,8 @@ body{
   align-items: center;
   font-size: 50px;
   z-index: 10;
+  
+  
 }
 
 .square-move{
@@ -74,7 +76,7 @@ body{
 }
 
 
-.hilight{
+.highlight{
   position: absolute;
   width: 100px;
   height: 100px;
@@ -257,5 +259,15 @@ button:hover{
   .button-wrapper{
     display: block;
     width: fit-content;
+  }
+
+  .point{
+    width: 15px;
+    height: 15px;
+  }
+
+  .piece, .square-move, .square, .highlight, .move-highlight {
+    width: 50px;
+    height: 50px;
   }
 }

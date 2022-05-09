@@ -27,6 +27,7 @@ class Piece{
     this.controlledSquares = [];
     this.wasMoved = false;
     this.gameController = gameController;
+    this.board;
     this.value = 0;
   }
 
@@ -34,12 +35,12 @@ class Piece{
   //and set style and visual position on the board
   createPiece(board){
     this.gameController = board.gameController;
+    this.board = board;
 
     this.pieceDiv = document.createElement("div");
     let className = (this.type) ? " "+this.type : "";
 
     this.pieceDiv.setAttribute("class", "piece" + className);
-
     //set image for the piece
     switch (this.type) {
       case "r":
@@ -82,7 +83,7 @@ class Piece{
         break;
     }
     this.pieceDiv.style.background = "url("+ this.pieceImage +")";
-
+    this.pieceDiv.style.backgroundSize = "cover";
     //Make thie piece draggable
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     const mousedown = (e)=>{
@@ -99,8 +100,8 @@ class Piece{
         document.onmousemove = null;
         this.pieceDiv.style.zIndex = 10;
         this.move(
-          Math.round((this.pieceDiv.offsetLeft - pos1)/100),
-          Math.round((this.pieceDiv.offsetTop - pos2)/100),
+          Math.round((this.pieceDiv.offsetLeft - pos1)/(this.board.boardRect.width/8)),
+          Math.round((this.pieceDiv.offsetTop - pos2)/(this.board.boardRect.height/8)),
           board
         )
       };
@@ -138,8 +139,8 @@ class Piece{
         this.pieceDiv.style.zIndex = 10;
 
         this.move(
-          Math.round((piecePosition.x - pos1)/100),
-          Math.round((piecePosition.y - pos2)/100),
+          Math.round((piecePosition.x - pos1)/(this.board.boardRect.width/8)),
+          Math.round((piecePosition.y - pos2)/(this.board.boardRect.height/8)),
           board
         )
       }
@@ -209,11 +210,11 @@ class Piece{
         point.style.border = "7px solid rgba(150, 150, 150, 0.5)";
         point.style.background = "none";
         square.style.zIndex = 999;
-        point.style.width = "100px";
-        point.style.height = "100px";
+        point.style.width = (this.board.boardRect.width/8)+"px";
+        point.style.height = (this.board.boardRect.height/8)+"px";
       }
-      square.style.left = x*100 + "px";
-      square.style.top = y*100 + "px";
+      square.style.left = x*(this.board.boardRect.width/8) + "px";
+      square.style.top = y*(this.board.boardRect.height/8) + "px";
       square.onclick = () =>{
         this.move(x,y,board);
         square.onclick = null;

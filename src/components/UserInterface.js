@@ -79,7 +79,7 @@ class UserInterface{
     this.board = board;
     this.gameController = gameController;
     this.currentMove = gameController.halfmoveCount;
-    //create buttons for hilighting squares controlled by each color
+    //create buttons for highlighting squares controlled by each color
     this.buttons["toggleWhiteCS"] = document.createElement("button");
     this.buttons["toggleWhiteCS"].innerText = "White threat map";
     this.buttons["toggleBlackCS"] = document.createElement("button");

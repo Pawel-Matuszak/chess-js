@@ -43,7 +43,7 @@ class GameController{
   }
   
   init(fenStr, board){
-    //clear move hilights
+    //clear move highlights
     window.addEventListener('click', function(e){   
       for (const e of document.querySelectorAll(".square-move")) {
         e.remove()
@@ -61,7 +61,6 @@ class GameController{
     for (const e of document.querySelectorAll(".move-highlight")) {
       e.remove()
     }
-
     this.movesHistory.set({
       pos: fenStr,
       move: "",
@@ -290,16 +289,16 @@ class GameController{
       e.remove()
     }
 
-    const hilightAfter = document.createElement("div");
-    const hilightBefore = document.createElement("div");
-    hilightAfter.setAttribute("class", "move-highlight")
-    hilightBefore.setAttribute("class", "move-highlight")
+    const highlightAfter = document.createElement("div");
+    const highlightBefore = document.createElement("div");
+    highlightAfter.setAttribute("class", "move-highlight")
+    highlightBefore.setAttribute("class", "move-highlight")
     
-    hilightAfter.style.left = prevX*100 + "px";
-    hilightAfter.style.top = prevY*100 + "px";
-    hilightBefore.style.left = x*100 + "px";
-    hilightBefore.style.top = y*100 + "px";
-    board.boardDiv.prepend(hilightAfter, hilightBefore);
+    highlightAfter.style.left = prevX*(this.board.boardRect.width/8) + "px";
+    highlightAfter.style.top = prevY*(this.board.boardRect.height/8) + "px";
+    highlightBefore.style.left = x*(this.board.boardRect.width/8) + "px";
+    highlightBefore.style.top = y*(this.board.boardRect.height/8) + "px";
+    board.boardDiv.prepend(highlightAfter, highlightBefore);
   }
 
   historySave(x, y, piece, board, inCheck, xBefore, castle=false){
