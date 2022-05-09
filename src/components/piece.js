@@ -106,7 +106,6 @@ class Piece{
       };
       
       document.onmousemove = (e)=>{
-        e = e || window.event;
         e.preventDefault();
         // calculate the new cursor position:
         pos1 = pos3 - e.clientX;
@@ -123,6 +122,7 @@ class Piece{
 
     const touchmove = (e)=>{
       // get the touch position:
+      this.pieceDiv.style.zIndex = 999;
       let touchLocation = e.targetTouches[0];
       let boardRect = this.gameController.board.boardDiv.getBoundingClientRect();
       let thisRect = this.pieceDiv.getBoundingClientRect();
@@ -134,6 +134,9 @@ class Piece{
       this.pieceDiv.style.left = (piecePosition.x) + "px";
 
       document.ontouchend = () =>{
+        document.ontouchend = null;
+        this.pieceDiv.style.zIndex = 10;
+
         this.move(
           Math.round((piecePosition.x - pos1)/100),
           Math.round((piecePosition.y - pos2)/100),

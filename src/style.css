@@ -250,7 +250,7 @@ button:hover{
 
 }
 
-/* @media screen and (max-width: 1165px){
+@media screen and (max-width: 1165px){
   .wrapper{
     max-width: unset;
   }
@@ -258,4 +258,4 @@ button:hover{
     display: block;
     width: fit-content;
   }
-} */
+}
