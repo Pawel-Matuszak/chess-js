@@ -79,7 +79,7 @@ class UserInterface{
     this.board = board;
     this.gameController = gameController;
     this.currentMove = gameController.halfmoveCount;
-    //create buttons for hilighting squares controlled by each color
+    //create buttons for highlighting squares controlled by each color
     this.buttons["toggleWhiteCS"] = document.createElement("button");
     this.buttons["toggleWhiteCS"].innerText = "White threat map";
     this.buttons["toggleBlackCS"] = document.createElement("button");
@@ -166,7 +166,8 @@ class UserInterface{
     this.pgnModal.append(this.pgnText, this.pgnExit, this.pgnCopy);
     this.pgnModalWrapper.append(this.pgnModal);
     this.wrapper.append(this.buttonWrapper, this.movesList, this.pgnBtn, this.pgnModalWrapper);
-    document.body.appendChild(this.wrapper);
+    document.querySelector(".container").append(this.wrapper)
+    
   }
 
   updateMoves(movesHistory){

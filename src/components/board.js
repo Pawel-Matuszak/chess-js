@@ -12,12 +12,24 @@ class Board{
     this.controlledSquares = {white: [], black: []};
     this.boardDiv;
     this.gameController = gameController;
+    this.boardRect;
   }
 
   createBoard(){
     this.boardDiv = document.createElement("div");
     this.boardDiv.setAttribute("class", "board");
 
+    window.addEventListener("resize", ()=>{
+      this.boardRect = this.boardDiv.getBoundingClientRect();
+      this.drawPieces();
+      for (const e of document.querySelectorAll(".square-move")) {
+        e.remove()
+      }
+      
+      for (const e of document.querySelectorAll(".move-highlight")) {
+        e.remove()
+      }
+    })
     //used at the end of the game for displaying who won
     this.gameMessage = document.createElement("div");
     this.gameMessage.setAttribute("class", "gameMessage");
@@ -36,6 +48,13 @@ class Board{
     this.gameMessage.append(this.times, this.title, this.subtitle)
     this.boardDiv.appendChild(this.gameMessage)
     
+    this.drawBoard();
+
+    document.querySelector(".container").append(this.boardDiv);
+    this.boardRect = this.boardDiv.getBoundingClientRect();
+  }
+
+  drawBoard(){
     //draw board in html
     for (let i = 0; i <= 7; i++) {
       const row = document.createElement("div");
@@ -51,11 +70,9 @@ class Board{
         this.board[i].push("");
         row.appendChild(square);
       }
-  
+
       this.boardDiv.appendChild(row);
     }
-
-    document.body.appendChild(this.boardDiv);
   }
 
   drawPieces(){
@@ -63,8 +80,8 @@ class Board{
       arr.forEach(e=>{
         if(e.type==="r" || e.type==="R" || e.type==="n" || e.type==="N" || e.type==="b" || e.type==="B" 
         || e.type==="k" || e.type==="K" || e.type==="k" || e.type==="q" || e.type==="Q" || e.type==="p" || e.type==="P"){
-          e.pieceDiv.style.left = e.pos.x*100 + "px";
-          e.pieceDiv.style.top = e.pos.y*100 + "px";
+          e.pieceDiv.style.left = e.pos.x*(this.boardRect.width/8) + "px";
+          e.pieceDiv.style.top = e.pos.y*(this.boardRect.height/8) + "px";
           this.boardDiv.appendChild(e.pieceDiv);
           if(!e.isAlive){
             e.pieceDiv.remove()
@@ -350,7 +367,7 @@ class Board{
 
   removeControlledSquares(){
     //remove previous
-    for (const e of document.querySelectorAll(".hilight")) {
+    for (const e of document.querySelectorAll(".highlight")) {
       e.remove()
     }
   }
@@ -362,22 +379,22 @@ class Board{
     if(isWhite){
       this.controlledSquares.white.forEach(({x,y, isEmpty, isAlly})=>{
         const point = document.createElement("div");
-        point.setAttribute("class", "hilight")
+        point.setAttribute("class", "highlight")
         this.boardDiv.prepend(point);
-        point.style.width = 100 + "px"
-        point.style.height = 100 + "px"
-        point.style.left = x*100+50-point.offsetWidth/2 + "px";
-        point.style.top = y*100+50-point.offsetHeight/2 + "px";
+        point.style.width = (this.boardRect.width/8) + "px"
+        point.style.height = (this.boardRect.height/8) + "px"
+        point.style.left = x*(this.boardRect.width/8)+ "px";
+        point.style.top = y*(this.boardRect.height/8) + "px";
       })
     }else{
       this.controlledSquares.black.forEach(({x,y, isEmpty, isAlly})=>{
         const point = document.createElement("div");
-        point.setAttribute("class", "hilight")
+        point.setAttribute("class", "highlight")
         this.boardDiv.prepend(point);
-        point.style.width = 100 + "px"
-        point.style.height = 100 + "px"
-        point.style.left = x*100+50-point.offsetWidth/2 + "px";
-        point.style.top = y*100+50-point.offsetHeight/2 + "px";
+        point.style.width = (this.boardRect.width/8) + "px"
+        point.style.height = (this.boardRect.height/8) + "px"
+        point.style.left = x*(this.boardRect.width/8) + "px";
+        point.style.top = y*(this.boardRect.height/8) + "px";
       })
     }
     

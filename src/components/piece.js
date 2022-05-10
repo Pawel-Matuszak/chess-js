@@ -27,6 +27,7 @@ class Piece{
     this.controlledSquares = [];
     this.wasMoved = false;
     this.gameController = gameController;
+    this.board;
     this.value = 0;
   }
 
@@ -34,12 +35,12 @@ class Piece{
   //and set style and visual position on the board
   createPiece(board){
     this.gameController = board.gameController;
+    this.board = board;
 
     this.pieceDiv = document.createElement("div");
     let className = (this.type) ? " "+this.type : "";
 
     this.pieceDiv.setAttribute("class", "piece" + className);
-
     //set image for the piece
     switch (this.type) {
       case "r":
@@ -82,7 +83,7 @@ class Piece{
         break;
     }
     this.pieceDiv.style.background = "url("+ this.pieceImage +")";
-
+    this.pieceDiv.style.backgroundSize = "cover";
     //Make thie piece draggable
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     const mousedown = (e)=>{
@@ -91,26 +92,21 @@ class Piece{
       pos4 = e.clientY;
       this.pieceDiv.style.zIndex = 999;
 
-      //show moves to player that currenty has a turn
-      if(((this.gameController.whiteToMove && this.isWhite) || (this.gameController.whiteToMove==false && this.isWhite==false)) 
-        && this.gameController.userInterface.currentMove==this.gameController.movesHistory.length-1){
-        this.showLegalMoves(board)
-      }
-
+      this.showLegalMoves(board);
+      
       //set piece position and remove listeners on mouse button up
       document.onmouseup = () => {
         document.onmouseup = null;
         document.onmousemove = null;
         this.pieceDiv.style.zIndex = 10;
         this.move(
-          Math.round((this.pieceDiv.offsetLeft - pos1)/100),
-          Math.round((this.pieceDiv.offsetTop - pos2)/100),
+          Math.round((this.pieceDiv.offsetLeft - pos1)/(this.board.boardRect.width/8)),
+          Math.round((this.pieceDiv.offsetTop - pos2)/(this.board.boardRect.height/8)),
           board
         )
       };
       
       document.onmousemove = (e)=>{
-        e = e || window.event;
         e.preventDefault();
         // calculate the new cursor position:
         pos1 = pos3 - e.clientX;
@@ -123,10 +119,44 @@ class Piece{
       };
     }
 
-    this.pieceDiv.addEventListener("mousedown", mousedown)
+    this.pieceDiv.addEventListener("mousedown", mousedown);
 
-    board.board[this.pos.y][this.pos.x] = this;
+    const touchmove = (e)=>{
+      // get the touch position:
+      this.pieceDiv.style.zIndex = 999;
+      let touchLocation = e.targetTouches[0];
+      let boardRect = this.gameController.board.boardDiv.getBoundingClientRect();
+      let thisRect = this.pieceDiv.getBoundingClientRect();
+      let piecePosition = {
+        x: touchLocation.pageX-boardRect.x-thisRect.width/2,
+        y: touchLocation.pageY-boardRect.y-thisRect.height/2
+      }
+      this.pieceDiv.style.top = (piecePosition.y) + "px";
+      this.pieceDiv.style.left = (piecePosition.x) + "px";
+
+
+      document.ontouchend = () =>{
+        document.ontouchend = null;
+        this.pieceDiv.style.zIndex = 10;
+        document.body.style.overflow = "auto";
+
+        this.move(
+          Math.round((piecePosition.x - pos1)/(this.board.boardRect.width/8)),
+          Math.round((piecePosition.y - pos2)/(this.board.boardRect.height/8)),
+          board
+        )
+      }
+    }
+
+    this.pieceDiv.addEventListener("touchstart", ()=>{
+      document.body.style.overflow = "hidden";
+      this.showLegalMoves(board)
+    })
+    this.pieceDiv.addEventListener("touchmove", touchmove)
+
     // board.drawPieces();
+    
+    board.board[this.pos.y][this.pos.x] = this;
   }
 
   //changes position on the screen
@@ -154,6 +184,11 @@ class Piece{
   }
 
   showLegalMoves(board){
+
+    //show moves to player that currenty has a turn
+    if(!(((this.gameController.whiteToMove && this.isWhite) || (this.gameController.whiteToMove==false && this.isWhite==false)) 
+    && this.gameController.userInterface.currentMove==this.gameController.movesHistory.length-1)) return;
+
     board.getControlledSquares();
 
     this.allMoves = [];
@@ -178,11 +213,11 @@ class Piece{
         point.style.border = "7px solid rgba(150, 150, 150, 0.5)";
         point.style.background = "none";
         square.style.zIndex = 999;
-        point.style.width = "100px";
-        point.style.height = "100px";
+        point.style.width = (this.board.boardRect.width/8)+"px";
+        point.style.height = (this.board.boardRect.height/8)+"px";
       }
-      square.style.left = x*100 + "px";
-      square.style.top = y*100 + "px";
+      square.style.left = x*(this.board.boardRect.width/8) + "px";
+      square.style.top = y*(this.board.boardRect.height/8) + "px";
       square.onclick = () =>{
         this.move(x,y,board);
         square.onclick = null;
