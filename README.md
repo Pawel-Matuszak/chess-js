@@ -1,4 +1,4 @@
-# JSchess
+# chess-js
 
 ## Description
 Website where you can play chess on a JavaScript chessboard. All moves are validated before they are played which means that user cannot play a move that would be illegal in normal chess game. 
