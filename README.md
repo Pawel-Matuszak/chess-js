@@ -4,7 +4,7 @@
 Website where you can play chess on a JavaScript chessboard. All moves are validated before they are played which means that user cannot play a move that would be illegal in normal chess game. 
 Goal of this project was to write vanilla JavaScript (ES6) application.
 
-Website: https://pawel-matuszak.github.io/jschess/
+Website: https://pawel-matuszak.github.io/chess-js
 
 ## Features
 * __castling__ - both sides can castle kingside or queenside only if it is legal
