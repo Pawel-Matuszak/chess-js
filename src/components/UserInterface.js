@@ -46,56 +46,51 @@ class UserInterface{
     }
   }
 
+  //used for creating user interface
+  //type sould be valid tag name
+  //returns html element
+  createHTMLElement({type, className, textContent}){
+    let element = document.createElement(type);
+    element.innerHTML = textContent;
+    element.setAttribute("class", className);
+    return element;
+  }
+
+
   init(board, gameController){
     this.wrapper = document.createElement("div");
     this.wrapper.setAttribute("class", "wrapper");
     this.buttonWrapper = document.createElement("div");
     this.buttonWrapper.setAttribute("class", "button-wrapper");
 
-    this.pgnBtn = document.createElement("button");
-    this.pgnBtn.setAttribute("class", "pgnBtn");
-    this.pgnBtn.innerText = "Download PGN";
+    this.pgnBtn = this.createHTMLElement({type:"button", className: "pgnBtn", textContent: "Download PGN"})
 
-    this.pgnModalWrapper = document.createElement("div");
-    this.pgnModalWrapper.setAttribute("class", "pgnModalWrapper");
+    this.pgnModalWrapper = this.createHTMLElement({type: "div", className: "pgnModalWrapper", textContent: "White threat map"})
     this.pgnModalWrapper.style.display = "none";
 
-    this.pgnModal = document.createElement("div");
-    this.pgnModal.setAttribute("class", "pgnModal");
-    this.pgnModal.innerHTML = "<p>PGN</p>";
+    this.pgnModal = this.createHTMLElement({type: "div", className: "pgnModal", textContent: "PGN"})
 
-    this.pgnExit = document.createElement("div");
-    this.pgnExit.setAttribute("class", "pgnExit");
-    this.pgnExit.innerHTML = "<i class='fas fa-times'></i>";
+    this.pgnExit = this.createHTMLElement({type: "div", className: "pgnExit", textContent: "<i class='fas fa-times'></i>"})
 
-    this.pgnText = document.createElement("textarea");
-    this.pgnText.setAttribute("class", "pgnText");
+    this.pgnText = this.createHTMLElement({type: "textarea", className: "pgnText", textContent: ""})
     this.pgnText.disabled = true;
 
-    this.pgnCopy = document.createElement("button");
-    this.pgnCopy.setAttribute("class", "pgnCopy");
-    this.pgnCopy.innerHTML = "Copy";
+    this.pgnCopy = this.createHTMLElement({type: "button", className: "pgnCopy", textContent: "Copy"})
 
     this.board = board;
     this.gameController = gameController;
     this.currentMove = gameController.halfmoveCount;
-    //create buttons for highlighting squares controlled by each color
-    this.buttons["toggleWhiteCS"] = document.createElement("button");
-    this.buttons["toggleWhiteCS"].innerText = "White threat map";
-    this.buttons["toggleBlackCS"] = document.createElement("button");
-    this.buttons["toggleBlackCS"].innerText = "Black threat map";
-    this.buttons["previous"] = document.createElement("button");
-    this.buttons["previous"].innerText = "Previous move";
-    this.buttons["previous"].setAttribute("class", "history-btn");
-    this.buttons["next"] = document.createElement("button");
-    this.buttons["next"].innerText = "Next move";
-    this.buttons["next"].setAttribute("class", "history-btn");
-    this.buttons["restart"] = document.createElement("button");
-    this.buttons["restart"].innerText = "Restart";
-    this.buttons["restart"].setAttribute("class", "restart-btn");
-    this.buttons["cvsc"] = document.createElement("button");
-    this.buttons["cvsc"].innerText = "Computer vs Computer";
-    this.buttons["cvsc"].setAttribute("class", "cvsc-btn");
+
+    this.buttons["toggleWhiteCS"] = this.createHTMLElement({type: "button", className: "", textContent: "White threat map"})
+    this.buttons["toggleBlackCS"] = this.createHTMLElement({type: "button", className: "", textContent: "Black threat map"})
+
+    this.buttons["previous"] = this.createHTMLElement({type: "button", className: "history-btn", textContent: "Previous move"})
+    this.buttons["next"] = this.createHTMLElement({type: "button", className: "history-btn", textContent: "Next move"})
+
+    this.buttons["restart"] = this.createHTMLElement({type: "button", className: "restart-btn", textContent: "Restart"})
+    this.buttons["cvsc"] = this.createHTMLElement({type: "button", className: "cvsc-btn", textContent: "AI vs AI"})
+
+    this.buttons["ai"] = this.createHTMLElement({type: "button", className: "ai-btn", textContent: "Play vs AI"})
 
     this.movesList.setAttribute("class", "moves-list");
     this.movesList.innerHTML = "<div class='move-list-header'></div>";
@@ -140,11 +135,47 @@ class UserInterface{
       this.gameController.init("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", this.board);
     });
 
+    //activates or disactivates AI vs AI game
+    //when activated it will restart the game
     this.buttons["cvsc"].addEventListener("click", ()=>{
       this.gameController.computerActive = !this.gameController.computerActive;
-      this.gameController.play();
+      if(this.gameController.computerActive) this.buttons["restart"].click();
+
+      if(this.gameController.computerActive) {
+        //if playvsai was active before turn it off
+        if(this.gameController.playVsAiActive){
+          this.gameController.playVsAiActive = false;
+          this.buttons["ai"].style.background = "rgba(24, 99, 161, 0.9)";
+          this.gameController.endVsAI();  
+        }
+        this.gameController.playAIvsAI()
+      }else{
+        this.gameController.endAIvsAI();  
+      };
+      
       this.buttons["cvsc"].style.background = (this.gameController.computerActive) ? "rgba(15, 67, 109, 0.9)" : "rgba(24, 99, 161, 0.9)";
     });
+
+    //activates or disactivates Play vs AI game
+    //when activated it will restart the game
+    this.buttons["ai"].addEventListener("click", ()=>{
+      this.gameController.playVsAiActive = !this.gameController.playVsAiActive;
+      if(this.gameController.playVsAiActive) this.buttons["restart"].click();
+
+      
+      if(this.gameController.playVsAiActive) {
+        //if aivsai was active before turn it off
+        if(this.gameController.computerActive){
+          this.gameController.computerActive = false;
+          this.buttons["cvsc"].style.background = "rgba(24, 99, 161, 0.9)";
+          this.gameController.endAIvsAI();
+        }
+        this.gameController.playVsAI()
+      }else{
+        this.gameController.endVsAI();  
+      };
+      this.buttons["ai"].style.background = (this.gameController.playVsAiActive) ? "rgba(15, 67, 109, 0.9)" : "rgba(24, 99, 161, 0.9)";
+    })
 
     this.pgnBtn.addEventListener("click", ()=>{
       this.pgnText.value = board.getPGN();

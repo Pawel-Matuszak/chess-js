@@ -40,6 +40,7 @@ class GameController{
     this.movesHistory = "";
     this.board = null;
     this.computerActive = false;
+    this.playVsAiActive = false;
   }
   
   init(fenStr, board){
@@ -434,17 +435,31 @@ class GameController{
     }
   }
 
-  play(){
+  playAIvsAI(){
     let moveGeneratorW = new MoveGenerator(true, this);
     let moveGeneratorB = new MoveGenerator(false, this);
+    
 
-    setInterval(()=>{
-      if(!this.computerActive) return;
+    this.playTimer = setInterval(()=>{
       moveGeneratorW.playRandomMove(this.board, this);
       setTimeout(() => {
         moveGeneratorB.playRandomMove(this.board, this);
       }, 300);
     }, 600);
+  }
+
+  endAIvsAI(){
+    clearInterval(this.playTimer)
+  }
+
+  playVsAI(){
+    if(!this.playVsAiActive) return;
+    // let moveGeneratorB = new MoveGenerator(false, this);
+    console.log("dupa");
+  }
+
+  endVsAI(){
+    console.log("end");
   }
 }
 
