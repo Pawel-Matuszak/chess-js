@@ -449,17 +449,21 @@ class GameController{
   }
 
   endAIvsAI(){
-    clearInterval(this.playTimer)
+    clearInterval(this.playTimer);
   }
 
   playVsAI(){
     if(!this.playVsAiActive) return;
-    // let moveGeneratorB = new MoveGenerator(false, this);
-    console.log("dupa");
+    let moveGeneratorB = new MoveGenerator(false, this);
+
+    this.playVsAiTimer = setInterval(()=>{
+      if(this.whiteToMove) return;
+      moveGeneratorB.playRandomMove(this.board, this);
+    }, 500);
   }
 
   endVsAI(){
-    console.log("end");
+    clearInterval(this.playVsAiTimer);
   }
 }
 
