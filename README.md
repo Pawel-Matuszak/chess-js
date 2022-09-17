@@ -7,13 +7,14 @@ Goal of this project was to write vanilla JavaScript (ES6) application.
 Website: https://pawel-matuszak.github.io/chess-js
 
 ## Features
-* __castling__ - both sides can castle kingside or queenside only if it is legal
-* __threat map for both colors__ - highlights squares controlled by player’s pieces
-* __previous and next move navigation__ - used to navigate moves history
-* __restart__ - restart the game by putting pieces on their initial squares and clearing moves history
-* __computer vs computer__ - both sides are making random legal moves
-* __moves history__ - displays all the moves that where played in the current game. Selecting a move will set the board to a position when this move was played
-* __get PGN__ - show a string of all moves played in the game 
+* __Castling__ - both sides can castle kingside or queenside only if it is legal
+* __Threat map for both colors__ - highlights squares controlled by player’s pieces
+* __Previous and next move navigation__ - used to navigate moves history
+* __Restart__ - restart the game by putting pieces on their initial squares and clearing moves history
+* __Player vs AI__ - play as white vs AI making random moves
+* __AI vs AI__ - both sides are making random legal moves
+* __Moves history panel__ - displays all the moves that where played in the current game. Selecting a move will set the board to a position when this move was played
+* __Get PGN__ - show and copy PGN (format which records moves of the game) 
 
 ## Gallery
 >![chess board](/src/images/s.PNG)
