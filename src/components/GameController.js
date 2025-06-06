@@ -7,7 +7,8 @@ import Piece from "./pieces/Piece";
 import Queen from "./pieces/Queen";
 import Rook from "./pieces/Rook";
 import MovesHistory from "./MovesHistory";
-import MoveGenerator from "./MoveGenerator";
+import UserInterface from "./UserInterface";
+import AI from "./ai/AI";
 
 class GameController{
   constructor(userInterface){
@@ -55,6 +56,7 @@ class GameController{
 
     this.board.removePieces();
     this.board.readFEN(fenStr);
+    this.findKings(this.board);
 
     this.movesHistory = new MovesHistory();
     this.userInterface.updateMoves(this.movesHistory);
@@ -436,16 +438,15 @@ class GameController{
   }
 
   playAIvsAI(){
-    let moveGeneratorW = new MoveGenerator(true, this);
-    let moveGeneratorB = new MoveGenerator(false, this);
+    let moveGeneratorW = new AI(2, this);
+    let moveGeneratorB = new AI(2, this);
     
-
     this.playTimer = setInterval(()=>{
-      moveGeneratorW.playRandomMove(this.board, this);
+      moveGeneratorW.play(this.board);
       setTimeout(() => {
-        moveGeneratorB.playRandomMove(this.board, this);
-      }, 300);
-    }, 600);
+        moveGeneratorB.play(this.board);
+      }, 1000);
+    }, 2000);
   }
 
   endAIvsAI(){
@@ -454,11 +455,11 @@ class GameController{
 
   playVsAI(){
     if(!this.playVsAiActive) return;
-    let moveGeneratorB = new MoveGenerator(false, this);
+    let moveGeneratorB = new AI(2, this);
 
     this.playVsAiTimer = setInterval(()=>{
       if(this.whiteToMove) return;
-      moveGeneratorB.playRandomMove(this.board, this);
+      moveGeneratorB.play(this.board);
     }, 500);
   }
 
