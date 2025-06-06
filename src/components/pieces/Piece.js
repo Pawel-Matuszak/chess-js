@@ -162,6 +162,7 @@ class Piece{
   //changes position on the screen
   //return false if move was not made
   move(posX, posY, board){
+    console.log("Move is called");
     let moveWasMade = false;
     if(this.gameController.userInterface.currentMove!==this.gameController.movesHistory.length-1) {
       board.drawPieces()
@@ -179,6 +180,7 @@ class Piece{
       }
     });
     board.drawPieces();
+    console.log("MoveWasMade:", moveWasMade);
     return moveWasMade;
     // board.showControlledSquares(true);
   }

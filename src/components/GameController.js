@@ -9,6 +9,7 @@ import Rook from "./pieces/Rook";
 import MovesHistory from "./MovesHistory";
 import UserInterface from "./UserInterface";
 import AI from "./ai/AI";
+import { status } from 'js-chess-engine';
 
 class GameController{
   constructor(userInterface){
@@ -148,66 +149,22 @@ class GameController{
     this.makeMove(x,y, isEmpty, board, piece);
     board.drawPieces();
 
-    this.findKings(board);
-    board.getControlledSquares();
+    const fen = board.getFEN();
+    const gameStatus = status(fen);
+
     this.inCheck.white = false;
     this.inCheck.black = false;
-    board.controlledSquares.black.forEach(({x: sX, y: sY}) => {
-      if(sX==this.king.white.pos.x && sY==this.king.white.pos.y){
+    if (gameStatus.check) {
+      if (gameStatus.turn === 'white') {
         this.inCheck.white = true;
-      }
-    });
-    board.controlledSquares.white.forEach(({x: sX, y: sY}) => {
-      if(sX==this.king.black.pos.x && sY==this.king.black.pos.y){
+      } else {
         this.inCheck.black = true;
       }
-    });
-
-    //checkmate or stealmate
-    if(this.inCheck.white || this.inCheck.black){
-      let allLegalSquares = []
-      if(this.inCheck.white){
-        //if is in check and has no legal moves its checkmate
-        if(board.getAllLegalMoves().white.length<=0){
-          this.currentGameStatus = this.gameStatus.black_won;
-          this.endGameHandler(board, 'b', "checkmate")
-        }
-
-      }else if(this.inCheck.black){
-        if(board.getAllLegalMoves().black.length<=0){
-          this.currentGameStatus = this.gameStatus.white_won;
-          this.endGameHandler(board, 'w', "checkmate")
-        }
-      }
-      
-    }else{
-      // see if stealmate
-      this.allLegalMoves = board.getAllLegalMoves()
-      if((this.allLegalMoves.white.length<=0 && this.whiteToMove) || (this.allLegalMoves.black.length<=0 && !this.whiteToMove)){
-        this.currentGameStatus = this.gameStatus.draw;
-        this.endGameHandler(board, '', "stealmate")
-      }
-    }
-
-    //draw by insufficient material
-    if(this.findPawns(board).length<=0){
-      this.allPiecesValue = board.sumAllPiecesValue();
-      if(this.allPiecesValue.white<=3 && this.allPiecesValue.black<=3){
-        this.currentGameStatus = this.gameStatus.draw;
-        this.endGameHandler(board, '', "insufficient material")
-      }
-    }
-
-    //50 move rule
-    if(this.halfmoveCount>=100){
-      this.currentGameStatus = this.gameStatus.draw;
-      this.endGameHandler(board, '', "fifty-move rule")
     }
 
     this.historySave(x,y,piece, board, this.inCheck, xBefore);
-    
-    //repetition
-    this.drawByRepetition(board, this.movesHistory);
+    this.endGameCheck();
+
     return true;
   }
 
@@ -442,11 +399,16 @@ class GameController{
     let moveGeneratorB = new AI(2, this);
     
     this.playTimer = setInterval(()=>{
-      moveGeneratorW.play(this.board);
-      setTimeout(() => {
+      if (this.currentGameStatus !== this.gameStatus.active) {
+        clearInterval(this.playTimer);
+        return;
+      }
+      if (this.whiteToMove) {
+        moveGeneratorW.play(this.board);
+      } else {
         moveGeneratorB.play(this.board);
-      }, 1000);
-    }, 2000);
+      }
+    }, 900);
   }
 
   endAIvsAI(){
@@ -465,6 +427,54 @@ class GameController{
 
   endVsAI(){
     clearInterval(this.playVsAiTimer);
+  }
+
+  endGameCheck(){
+    if(this.currentGameStatus !== this.gameStatus.active) return;
+    const board = this.board;
+    const fen = board.getFEN();
+    const gameStatus = status(fen);
+
+    // Check for checkmate/stalemate using the engine
+    if (gameStatus.isFinished) {
+        if (gameStatus.checkMate) {
+            if (gameStatus.turn === 'white') { // White is to move and is in checkmate
+                this.currentGameStatus = this.gameStatus.black_won;
+                this.endGameHandler(board, 'b', "checkmate");
+            } else { // Black is to move and is in checkmate
+                this.currentGameStatus = this.gameStatus.white_won;
+                this.endGameHandler(board, 'w', "checkmate");
+            }
+        } else {
+            this.currentGameStatus = this.gameStatus.draw;
+            this.endGameHandler(board, '', "stalemate");
+        }
+        return; // Game ended
+    }
+    
+    // Draw by insufficient material
+    if(this.findPawns(board).length<=0){
+      this.allPiecesValue = board.sumAllPiecesValue();
+      if(this.allPiecesValue.white<=3 && this.allPiecesValue.black<=3){
+        this.currentGameStatus = this.gameStatus.draw;
+        this.endGameHandler(board, '', "insufficient material")
+        return;
+      }
+    }
+
+    // 50-move rule
+    if(this.halfmoveCount>=100){
+      this.currentGameStatus = this.gameStatus.draw;
+      this.endGameHandler(board, '', "fifty-move rule")
+      return;
+    }
+
+    // Draw by repetition
+    if(this.movesHistory && this.movesHistory.countRepeat(board.getFEN().split(" ")[0])>=3){
+      this.currentGameStatus = this.gameStatus.draw;
+      this.endGameHandler(board, '', "repetition")
+      return;
+    }
   }
 }
 

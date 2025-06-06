@@ -82,13 +82,11 @@ class King extends Piece{
       this.castleLong = false;
       return;
     }
-
     if(this.wasMoved){
       this.castle = false;
       this.castleLong = false;
       return;
     }
-
     //when pieces are in the way
     if(board.board[this.pos.y][this.pos.x+1]!=="-" ||
       board.board[this.pos.y][this.pos.x+2]!=="-"){
@@ -110,13 +108,14 @@ class King extends Piece{
       }
       this.castle = false;
       this.castleLong = false;
+      const kingRow = this.isWhite ? 7 : 0;
 
       this.rooks.forEach(rook=>{
         if(!rook.wasMoved){
-          if(rook.pos.x==7 && rook.pos.y==7){
+          if(rook.pos.x==7 && rook.pos.y==kingRow){
             this.castle = true;
           }
-          if(rook.pos.x==0 && rook.pos.y==7){
+          if(rook.pos.x==0 && rook.pos.y==kingRow){
             this.castleLong = true;
           }
         }

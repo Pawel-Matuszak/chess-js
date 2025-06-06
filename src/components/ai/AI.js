@@ -11,6 +11,14 @@ class AI{
     
     const game = new Game(board.getFEN());
     const aiMove = game.aiMove(this.level);
+
+    if (!aiMove || Object.keys(aiMove).length === 0) {
+      this.gameController.endGameCheck();
+      return false;
+    }
+
+    console.log(aiMove);
+    
     const from = Object.keys(aiMove)[0];
     const to = Object.values(aiMove)[0];
 
@@ -22,7 +30,10 @@ class AI{
 
     const piece = board.board[fromY][fromX];
     if(piece !== "-"){
+      console.log("Piece is called");
+      console.log(piece);
       piece.move(toX, toY, board);
+      console.log(toX, toY);
     }
   }
 }
