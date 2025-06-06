@@ -1,16 +1,16 @@
 //https://commons.wikimedia.org/wiki/File:Chess_Pieces_Sprite.svg
-import rImg from "../images/r.png"
-import RImg from "../images/wr.png"
-import bImg from "../images/b.png"
-import BImg from "../images/wb.png"
-import nImg from "../images/n.png"
-import NImg from "../images/wn.png"
-import qImg from "../images/q.png"
-import QImg from "../images/wq.png"
-import kImg from "../images/k.png"
-import KImg from "../images/wk.png"
-import pImg from "../images/p.png"
-import PImg from "../images/wp.png"
+import rImg from "../../images/r.png"
+import RImg from "../../images/wr.png"
+import bImg from "../../images/b.png"
+import BImg from "../../images/wb.png"
+import nImg from "../../images/n.png"
+import NImg from "../../images/wn.png"
+import qImg from "../../images/q.png"
+import QImg from "../../images/wq.png"
+import kImg from "../../images/k.png"
+import KImg from "../../images/wk.png"
+import pImg from "../../images/p.png"
+import PImg from "../../images/wp.png"
 
 class Piece{
   constructor(type, posX, posY, isWhite, gameController=null){

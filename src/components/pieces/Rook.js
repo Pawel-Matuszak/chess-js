@@ -1,5 +1,5 @@
 import Piece from "./Piece";
-import checkDiagonalAndStraigt from "./checkDiagonalAndStraigt";
+import checkDiagonalAndStraigt from "../helpers/checkDiagonalAndStraigt";
 
 class Rook extends Piece{
   constructor(type, posX, posY, isWhite){

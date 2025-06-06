@@ -1,10 +1,10 @@
-import King from "./King";
-import Pawn from "./Pawn";
-import Knight from "./Knight"
-import Piece from "./Piece";
-import Rook from "./Rook";
-import Queen from "./Queen"
-import Bishop from "./Bishop"
+import King from "./pieces/king";
+import Pawn from "./pieces/Pawn";
+import Knight from "./pieces/Knight"
+import Piece from "./pieces/Piece";
+import Rook from "./pieces/Rook";
+import Queen from "./pieces/Queen"
+import Bishop from "./pieces/Bishop"
 
 class Board{
   constructor(gameController){
