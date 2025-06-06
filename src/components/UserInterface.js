@@ -10,6 +10,13 @@ class UserInterface{
     this.currentMove = 0;
   }
 
+  // SVG icons for buttons
+  static ICONS = {
+    PREV: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>`,
+    NEXT: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>`,
+    THREAT_MAP: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><path d="M3 14h7v7H3z"/></svg>`,
+  }
+
   handlePrevious(movesHistory, board){
     if(this.currentMove<=1) return;
     movesHistory.mapToId();
@@ -49,51 +56,103 @@ class UserInterface{
   //used for creating user interface
   //type sould be valid tag name
   //returns html element
-  createHTMLElement({type, className, textContent}){
+  createHTMLElement({type, className, textContent = ""}){
     let element = document.createElement(type);
     element.innerHTML = textContent;
     element.setAttribute("class", className);
     return element;
   }
 
+  showInGameUI(show){
+    if(show){
+      this.inGameWrapper.style.display = "block";
+      this.preGameWrapper.style.display = "none";
+    }else{
+      this.inGameWrapper.style.display = "none";
+      this.preGameWrapper.style.display = "block";
+    }
+  }
 
   init(board, gameController){
     this.wrapper = document.createElement("div");
     this.wrapper.setAttribute("class", "wrapper");
-    this.buttonWrapper = document.createElement("div");
-    this.buttonWrapper.setAttribute("class", "button-wrapper");
-
-    this.pgnBtn = this.createHTMLElement({type:"button", className: "pgnBtn", textContent: "Download PGN"})
-
-    this.pgnModalWrapper = this.createHTMLElement({type: "div", className: "pgnModalWrapper", textContent: "White threat map"})
-    this.pgnModalWrapper.style.display = "none";
-
-    this.pgnModal = this.createHTMLElement({type: "div", className: "pgnModal", textContent: "PGN"})
-
-    this.pgnExit = this.createHTMLElement({type: "div", className: "pgnExit", textContent: "<i class='fas fa-times'></i>"})
-
-    this.pgnText = this.createHTMLElement({type: "textarea", className: "pgnText", textContent: ""})
-    this.pgnText.disabled = true;
-
-    this.pgnCopy = this.createHTMLElement({type: "button", className: "pgnCopy", textContent: "Copy"})
-
+    
+    
     this.board = board;
     this.gameController = gameController;
     this.currentMove = gameController.halfmoveCount;
 
-    this.buttons["toggleWhiteCS"] = this.createHTMLElement({type: "button", className: "", textContent: "White threat map"})
-    this.buttons["toggleBlackCS"] = this.createHTMLElement({type: "button", className: "", textContent: "Black threat map"})
+    // --- PRE-GAME CONTROLS ---
+    this.preGameWrapper = this.createHTMLElement({type: "div", className: "pre-game-wrapper"});
+    const preGameTitle = this.createHTMLElement({type: "h2", className: "pre-game-title", textContent: "Choose a game mode"});
+    this.buttons["play"] = this.createHTMLElement({type: "button", className: "play-btn", textContent: "Play"});
+    this.buttons["ai"] = this.createHTMLElement({type: "button", className: "ai-btn", textContent: "Play vs AI"});
+    this.buttons["cvsc"] = this.createHTMLElement({type: "button", className: "cvsc-btn", textContent: "AI vs AI"});
+    this.preGameWrapper.append(preGameTitle, this.buttons["play"], this.buttons["ai"], this.buttons["cvsc"]);
 
-    this.buttons["previous"] = this.createHTMLElement({type: "button", className: "history-btn", textContent: "Previous move"})
-    this.buttons["next"] = this.createHTMLElement({type: "button", className: "history-btn", textContent: "Next move"})
+    // --- IN-GAME CONTROLS ---
+    this.inGameWrapper = this.createHTMLElement({type: "div", className: "in-game-wrapper"});
+    this.inGameWrapper.style.display = "none"; // Hidden by default
 
-    this.buttons["restart"] = this.createHTMLElement({type: "button", className: "restart-btn", textContent: "Restart"})
-    this.buttons["cvsc"] = this.createHTMLElement({type: "button", className: "cvsc-btn", textContent: "AI vs AI"})
+    // Create button groups
+    this.buttonWrapper = this.createHTMLElement({type: "div", className: "button-wrapper"});
+    this.navGroup = this.createHTMLElement({type: "div", className: "button-group nav-group"});
+    this.threatGroup = this.createHTMLElement({type: "div", className: "button-group threat-group"});
+    const gameGroup = this.createHTMLElement({type: "div", className: "button-group game-group"});
+    
+    // PGN Button
+    this.pgnBtn = this.createHTMLElement({type:"button", className: "pgnBtn", textContent: "Download PGN"})
 
-    this.buttons["ai"] = this.createHTMLElement({type: "button", className: "ai-btn", textContent: "Play vs AI"})
+    this.pgnModalWrapper = this.createHTMLElement({type: "div", className: "pgnModalWrapper"})
+    this.pgnModalWrapper.style.display = "none";
 
+    this.pgnModal = this.createHTMLElement({type: "div", className: "pgnModal", textContent: "PGN"})
+    this.pgnExit = this.createHTMLElement({type: "div", className: "pgnExit", textContent: "<i class='fas fa-times'></i>"})
+    this.pgnText = this.createHTMLElement({type: "textarea", className: "pgnText", textContent: ""})
+    this.pgnText.disabled = true;
+    this.pgnCopy = this.createHTMLElement({type: "button", className: "pgnCopy", textContent: "Copy"})
+
+    // Create buttons with icons
+    this.buttons["toggleWhiteCS"] = this.createHTMLElement({type: "button", className: "icon-button", textContent: UserInterface.ICONS.THREAT_MAP + " White"})
+    this.buttons["toggleBlackCS"] = this.createHTMLElement({type: "button", className: "icon-button", textContent: UserInterface.ICONS.THREAT_MAP + " Black"})
+    this.buttons["previous"] = this.createHTMLElement({type: "button", className: "icon-button history-btn", textContent: UserInterface.ICONS.PREV})
+    this.buttons["next"] = this.createHTMLElement({type: "button", className: "icon-button history-btn", textContent: UserInterface.ICONS.NEXT})
+    this.buttons["mainMenu"] = this.createHTMLElement({type: "button", className: "main-menu-btn", textContent: "Main Menu"});
+    
     this.movesList.setAttribute("class", "moves-list");
     this.movesList.innerHTML = "<div class='move-list-header'></div>";
+
+    const startGame = (mode) => {
+        this.gameController.computerActive = false;
+        this.gameController.playVsAiActive = false;
+
+        if (mode === 'vsAI') {
+            this.gameController.playVsAiActive = true;
+        } else if (mode === 'AIvsAI') {
+            this.gameController.computerActive = true;
+        }
+
+        this.showInGameUI(true);
+        this.gameController.init("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", this.board);
+        
+        if (mode === 'vsAI') this.gameController.playVsAI();
+        if (mode === 'AIvsAI') this.gameController.playAIvsAI();
+    };
+
+    // --- EVENT LISTENERS ---
+    this.buttons["play"].addEventListener("click", () => startGame('human'));
+    this.buttons["ai"].addEventListener("click", () => startGame('vsAI'));
+    this.buttons["cvsc"].addEventListener("click", () => startGame('AIvsAI'));
+
+    this.buttons["mainMenu"].addEventListener("click", () => {
+        this.showInGameUI(false);
+        this.gameController.currentGameStatus = this.gameController.gameStatus.paused;
+        this.gameController.movesHistory = [];
+        this.gameController.movesHistory.length = 0;
+        this.gameController.endAIvsAI();
+        this.gameController.endVsAI();
+        this.movesList.innerHTML = "<div class='move-list-header'></div>";
+    });
 
     this.buttons["toggleWhiteCS"].addEventListener("click", ()=>{
       board.removeControlledSquares();
@@ -131,52 +190,6 @@ class UserInterface{
       this.handleNext(this.gameController.movesHistory, board)
     });
 
-    this.buttons["restart"].addEventListener("click", ()=>{
-      this.gameController.init("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", this.board);
-    });
-
-    //activates or disactivates AI vs AI game
-    //when activated it will restart the game
-    this.buttons["cvsc"].addEventListener("click", ()=>{
-      this.gameController.computerActive = !this.gameController.computerActive;
-      if(this.gameController.computerActive) this.buttons["restart"].click();
-
-      if(this.gameController.computerActive) {
-        //if playvsai was active before turn it off
-        if(this.gameController.playVsAiActive){
-          this.gameController.playVsAiActive = false;
-          this.buttons["ai"].style.background = "rgba(24, 99, 161, 0.9)";
-          this.gameController.endVsAI();  
-        }
-        this.gameController.playAIvsAI()
-      }else{
-        this.gameController.endAIvsAI();  
-      };
-      
-      this.buttons["cvsc"].style.background = (this.gameController.computerActive) ? "rgba(15, 67, 109, 0.9)" : "rgba(24, 99, 161, 0.9)";
-    });
-
-    //activates or disactivates Play vs AI game
-    //when activated it will restart the game
-    this.buttons["ai"].addEventListener("click", ()=>{
-      this.gameController.playVsAiActive = !this.gameController.playVsAiActive;
-      if(this.gameController.playVsAiActive) this.buttons["restart"].click();
-
-      
-      if(this.gameController.playVsAiActive) {
-        //if aivsai was active before turn it off
-        if(this.gameController.computerActive){
-          this.gameController.computerActive = false;
-          this.buttons["cvsc"].style.background = "rgba(24, 99, 161, 0.9)";
-          this.gameController.endAIvsAI();
-        }
-        this.gameController.playVsAI()
-      }else{
-        this.gameController.endVsAI();  
-      };
-      this.buttons["ai"].style.background = (this.gameController.playVsAiActive) ? "rgba(15, 67, 109, 0.9)" : "rgba(24, 99, 161, 0.9)";
-    })
-
     this.pgnBtn.addEventListener("click", ()=>{
       this.pgnText.value = board.getPGN();
       this.pgnModalWrapper.style.display = "inline-block";
@@ -190,13 +203,18 @@ class UserInterface{
       navigator.clipboard.writeText(this.pgnText.value);
     })
 
-    for (const btn of Object.keys(this.buttons)) {
-      this.buttonWrapper.append(this.buttons[btn])
-    }
+    // Group buttons
+    this.navGroup.append(this.buttons["previous"], this.buttons["next"]);
+    this.threatGroup.append(this.buttons["toggleWhiteCS"], this.buttons["toggleBlackCS"]);
+    gameGroup.append(this.buttons["mainMenu"]);
+    
+    this.buttonWrapper.append(this.navGroup, this.threatGroup, gameGroup);
 
     this.pgnModal.append(this.pgnText, this.pgnExit, this.pgnCopy);
     this.pgnModalWrapper.append(this.pgnModal);
-    this.wrapper.append(this.buttonWrapper, this.movesList, this.pgnBtn, this.pgnModalWrapper);
+
+    this.inGameWrapper.append(this.buttonWrapper, this.movesList, this.pgnBtn, this.pgnModalWrapper);
+    this.wrapper.append(this.preGameWrapper, this.inGameWrapper);
     document.querySelector(".container").append(this.wrapper)
     
   }
