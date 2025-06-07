@@ -96,7 +96,7 @@ class UserInterface{
     this.buttons["cvsc"] = this.createHTMLElement({type: "button", className: "cvsc-btn", textContent: UserInterface.ICONS.ROBOT + " vs " + UserInterface.ICONS.ROBOT});
     
     const difficultyWrapper = this.createHTMLElement({type: "div", className: "difficulty-wrapper"});
-    const difficultyLabel = this.createHTMLElement({type: "label", className: "difficulty-label", textContent: `Difficulty: ${Number(this.difficulty) + 1}`});
+    const difficultyLabel = this.createHTMLElement({type: "label", className: "difficulty-label", textContent: `AI difficulty: ${Number(this.difficulty) + 1}`});
     const difficultySlider = this.createHTMLElement({type: "input", className: "difficulty-slider"});
     difficultySlider.type = "range";
     difficultySlider.min = 0;
@@ -104,11 +104,11 @@ class UserInterface{
     difficultySlider.value = this.difficulty;
     difficultySlider.addEventListener("input", (e) => {
       this.difficulty = e.target.value;
-      difficultyLabel.textContent = `Difficulty: ${Number(this.difficulty) + 1}`;
+      difficultyLabel.textContent = `AI difficulty: ${Number(this.difficulty) + 1}`;
     });
 
     difficultyWrapper.append(difficultyLabel, difficultySlider);
-    this.preGameWrapper.append(preGameTitle, this.buttons["ai"], this.buttons["cvsc"], difficultyWrapper);
+    this.preGameWrapper.append(preGameTitle, difficultyWrapper, this.buttons["ai"], this.buttons["cvsc"]);
 
     // --- IN-GAME CONTROLS ---
     this.inGameWrapper = this.createHTMLElement({type: "div", className: "in-game-wrapper"});
