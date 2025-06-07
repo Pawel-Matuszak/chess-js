@@ -427,6 +427,7 @@ class GameController{
       if(!this.whiteToMove){
         this.ai.play(this.board);
       }
+      setTimeout(play, 500);
     }
     play();
   }
