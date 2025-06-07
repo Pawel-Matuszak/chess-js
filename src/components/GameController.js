@@ -43,6 +43,8 @@ class GameController{
     this.board = null;
     this.computerActive = false;
     this.playVsAiActive = false;
+    this.ai = null;
+    this.ai2 = null;
   }
   
   init(fenStr, board){
@@ -394,39 +396,43 @@ class GameController{
     }
   }
 
-  playAIvsAI(){
-    let moveGeneratorW = new AI(2, this);
-    let moveGeneratorB = new AI(2, this);
-    
-    this.playTimer = setInterval(()=>{
-      if (this.currentGameStatus !== this.gameStatus.active) {
-        clearInterval(this.playTimer);
-        return;
+  playAIvsAI(difficulty){
+    this.computerActive = true;
+    this.ai = new AI(difficulty, this);
+    this.ai2 = new AI(difficulty, this);
+    const play = ()=>{
+      if(!this.computerActive) return;
+
+      if(this.whiteToMove){
+        this.ai.play(this.board)
+      }else{
+        this.ai2.play(this.board)
       }
-      if (this.whiteToMove) {
-        moveGeneratorW.play(this.board);
-      } else {
-        moveGeneratorB.play(this.board);
-      }
-    }, 900);
+      setTimeout(play, 500)
+    }
+    play();
   }
 
   endAIvsAI(){
-    clearInterval(this.playTimer);
+    this.computerActive = false;
   }
 
-  playVsAI(){
-    if(!this.playVsAiActive) return;
-    let moveGeneratorB = new AI(2, this);
+  playVsAI(difficulty){
+    this.playVsAiActive = true;
+    this.ai = new AI(difficulty, this);
 
-    this.playVsAiTimer = setInterval(()=>{
-      if(this.whiteToMove) return;
-      moveGeneratorB.play(this.board);
-    }, 500);
+    const play = ()=>{
+      if(!this.playVsAiActive) return;
+
+      if(!this.whiteToMove){
+        this.ai.play(this.board);
+      }
+    }
+    play();
   }
 
   endVsAI(){
-    clearInterval(this.playVsAiTimer);
+    this.playVsAiActive = false;
   }
 
   endGameCheck(){

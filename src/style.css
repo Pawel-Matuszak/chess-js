@@ -339,12 +339,26 @@ textarea{
 .main-menu-btn{
   align-self: flex-start;
   background: none;
-  padding: 16px 8px
+  padding: 16px 0;
 }
 
 .main-menu-btn:hover{
   cursor: pointer;
   background: none;
+}
+
+.inGameTopWrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+}
+
+.in-game-difficulty{
+  font-size: .9rem;
+  font-weight: 400;
+  padding: 8px 12px;
 }
 
 

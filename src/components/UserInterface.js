@@ -8,6 +8,7 @@ class UserInterface{
     this.histPos = 0;
     this.movesList = document.createElement("div");
     this.currentMove = 0;
+    this.difficulty = 2;
   }
 
   // SVG icons for buttons
@@ -93,7 +94,21 @@ class UserInterface{
     // this.buttons["play"] = this.createHTMLElement({type: "button", className: "play-btn", textContent: UserInterface.ICONS.PLAY + "Solo"});
     this.buttons["ai"] = this.createHTMLElement({type: "button", className: "ai-btn", textContent: UserInterface.ICONS.USER + " vs " + UserInterface.ICONS.ROBOT});
     this.buttons["cvsc"] = this.createHTMLElement({type: "button", className: "cvsc-btn", textContent: UserInterface.ICONS.ROBOT + " vs " + UserInterface.ICONS.ROBOT});
-    this.preGameWrapper.append(preGameTitle, this.buttons["ai"], this.buttons["cvsc"]);
+    
+    const difficultyWrapper = this.createHTMLElement({type: "div", className: "difficulty-wrapper"});
+    const difficultyLabel = this.createHTMLElement({type: "label", className: "difficulty-label", textContent: `Difficulty: ${Number(this.difficulty) + 1}`});
+    const difficultySlider = this.createHTMLElement({type: "input", className: "difficulty-slider"});
+    difficultySlider.type = "range";
+    difficultySlider.min = 0;
+    difficultySlider.max = 3;
+    difficultySlider.value = this.difficulty;
+    difficultySlider.addEventListener("input", (e) => {
+      this.difficulty = e.target.value;
+      difficultyLabel.textContent = `Difficulty: ${Number(this.difficulty) + 1}`;
+    });
+
+    difficultyWrapper.append(difficultyLabel, difficultySlider);
+    this.preGameWrapper.append(preGameTitle, this.buttons["ai"], this.buttons["cvsc"], difficultyWrapper);
 
     // --- IN-GAME CONTROLS ---
     this.inGameWrapper = this.createHTMLElement({type: "div", className: "in-game-wrapper"});
@@ -123,6 +138,8 @@ class UserInterface{
     this.buttons["next"] = this.createHTMLElement({type: "button", className: "icon-button history-btn", textContent: UserInterface.ICONS.NEXT})
     this.buttons["mainMenu"] = this.createHTMLElement({type: "button", className: "main-menu-btn", textContent: UserInterface.ICONS.BACK + "Main Menu"});
     
+    this.inGameDifficulty = this.createHTMLElement({type: "div", className: "in-game-difficulty"});
+    
     this.movesList.setAttribute("class", "moves-list");
     this.movesList.innerHTML = "<div class='move-list-header'></div>";
 
@@ -139,8 +156,9 @@ class UserInterface{
         this.showInGameUI(true);
         this.gameController.init("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", this.board);
         
-        if (mode === 'vsAI') this.gameController.playVsAI();
-        if (mode === 'AIvsAI') this.gameController.playAIvsAI();
+        if (mode === 'vsAI') this.gameController.playVsAI(this.difficulty);
+        if (mode === 'AIvsAI') this.gameController.playAIvsAI(this.difficulty);
+        this.inGameDifficulty.textContent = `Difficulty: ${Number(this.difficulty) + 1}`;
     };
 
     // --- EVENT LISTENERS ---
@@ -216,7 +234,10 @@ class UserInterface{
     this.pgnModal.append(this.pgnText, this.pgnExit, this.pgnCopy);
     this.pgnModalWrapper.append(this.pgnModal);
 
-    this.inGameWrapper.append(this.buttons["mainMenu"], this.movesList,this.navGroup, this.buttonWrapper, this.pgnBtn, this.pgnModalWrapper);
+    this.inGameTopWrapper = this.createHTMLElement({type: "div", className: "inGameTopWrapper"})
+    this.inGameTopWrapper.append(this.buttons["mainMenu"], this.inGameDifficulty)
+
+    this.inGameWrapper.append(this.inGameTopWrapper, this.movesList,this.navGroup, this.buttonWrapper, this.pgnBtn, this.pgnModalWrapper);
     this.wrapper.append(this.preGameWrapper, this.inGameWrapper);
     document.querySelector(".container").append(this.wrapper)
   }
