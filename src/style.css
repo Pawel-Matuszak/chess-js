@@ -11,6 +11,10 @@
 
 body{
   background: rgb(18,18,18);
+  height: 95vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container{
@@ -23,7 +27,6 @@ body{
 
 .wrapper{
   max-width: 350px;
-  margin-top: 25px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -33,7 +36,6 @@ body{
   position: relative;
   width: fit-content;
   user-select: none;
-  margin-top: 25px;
 }
 
 .row{
@@ -137,7 +139,7 @@ body{
   background: rgba(0, 0, 0, 0.5);
   /* rgb(18, 18, 18); */
   color: rgb(228, 228, 228);
-  margin: 15px;
+  margin: 8px;
   height: 500px;
   min-width: 300px;
   display: grid;
@@ -168,9 +170,11 @@ body{
 
 .button-wrapper{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   gap: 1rem;
-  margin: 20px 0;
+  margin: 10px 0;
   width: 100%;
 }
 
@@ -180,15 +184,19 @@ body{
   justify-content: center;
 }
 
+.button-wrapper button, .button-group button, .pgnBtn{
+  background: none;
+}
+
 .nav-group {
   justify-content: center;
 }
 
-.threat-group {
-  justify-content: space-between;
+.nav-group button svg {
+  stroke-width: 4;
 }
 
-.game-group {
+.threat-group {
   justify-content: space-between;
 }
 
@@ -198,7 +206,7 @@ button{
   background-color: rgba(27, 113, 184, 0.9);
   color: rgb(228, 228, 228);
   font-size: .9rem;
-  padding: 10px 15px;
+  padding: 8px 12px;
   margin: 0;
   border-radius: 6px;
   display: flex;
@@ -279,7 +287,9 @@ textarea{
 }
 
 .pgnBtn{
-  width: 100%;
+  width: 50%;
+  display: flex;
+  justify-content: center;
 }
 
 .play-btn, .ai-btn, .cvsc-btn{
@@ -295,6 +305,8 @@ textarea{
   stroke: currentColor;
 }
 
+
+
 .pre-game-wrapper{
   display: flex;
   flex-direction: column;
@@ -309,6 +321,32 @@ textarea{
   padding: 15px 25px;
   box-shadow: 1px 0px 5px rgba(43, 43, 43, 0.5);
 }
+
+.in-game-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: rgb(38, 38, 38);
+  color: rgb(228, 228, 228);
+  font-weight: 500;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  box-shadow: 1px 0px 5px rgba(43, 43, 43, 0.5);
+}
+
+.main-menu-btn{
+  align-self: flex-start;
+  background: none;
+  padding: 16px 8px
+}
+
+.main-menu-btn:hover{
+  cursor: pointer;
+  background: none;
+}
+
 
 @media screen and (max-width: 1165px){
   .point{
@@ -336,9 +374,9 @@ textarea{
     
   }
 
-  .pgnBtn{
+  .pgnBtn {
     grid-column: 1/3;
-    width: 75%;
+    width: 100%;
     margin: 15px auto;
   }
 

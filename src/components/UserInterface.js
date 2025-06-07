@@ -14,6 +14,8 @@ class UserInterface{
   static ICONS = {
     PREV: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>`,
     NEXT: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>`,
+    BACK: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>`,
+    DOWNLOAD: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`,
     THREAT_MAP: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><path d="M3 14h7v7H3z"/></svg>`,
     PLAY: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`,
     USER: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`,
@@ -68,7 +70,7 @@ class UserInterface{
 
   showInGameUI(show){
     if(show){
-      this.inGameWrapper.style.display = "block";
+      this.inGameWrapper.style.display = "flex";
       this.preGameWrapper.style.display = "none";
     }else{
       this.inGameWrapper.style.display = "none";
@@ -101,10 +103,9 @@ class UserInterface{
     this.buttonWrapper = this.createHTMLElement({type: "div", className: "button-wrapper"});
     this.navGroup = this.createHTMLElement({type: "div", className: "button-group nav-group"});
     this.threatGroup = this.createHTMLElement({type: "div", className: "button-group threat-group"});
-    const gameGroup = this.createHTMLElement({type: "div", className: "button-group game-group"});
     
     // PGN Button
-    this.pgnBtn = this.createHTMLElement({type:"button", className: "pgnBtn", textContent: "Download PGN"})
+    this.pgnBtn = this.createHTMLElement({type:"button", className: "pgnBtn", textContent: UserInterface.ICONS.DOWNLOAD + " PGN"})
 
     this.pgnModalWrapper = this.createHTMLElement({type: "div", className: "pgnModalWrapper"})
     this.pgnModalWrapper.style.display = "none";
@@ -120,7 +121,7 @@ class UserInterface{
     this.buttons["toggleBlackCS"] = this.createHTMLElement({type: "button", className: "icon-button", textContent: UserInterface.ICONS.THREAT_MAP + " Black"})
     this.buttons["previous"] = this.createHTMLElement({type: "button", className: "icon-button history-btn", textContent: UserInterface.ICONS.PREV})
     this.buttons["next"] = this.createHTMLElement({type: "button", className: "icon-button history-btn", textContent: UserInterface.ICONS.NEXT})
-    this.buttons["mainMenu"] = this.createHTMLElement({type: "button", className: "main-menu-btn", textContent: "Main Menu"});
+    this.buttons["mainMenu"] = this.createHTMLElement({type: "button", className: "main-menu-btn", textContent: UserInterface.ICONS.BACK + "Main Menu"});
     
     this.movesList.setAttribute("class", "moves-list");
     this.movesList.innerHTML = "<div class='move-list-header'></div>";
@@ -161,8 +162,8 @@ class UserInterface{
       board.removeControlledSquares();
       this.showCsW = !this.showCsW;
       this.showCsB = false;
-      this.buttons["toggleWhiteCS"].style.background = "rgba(24, 99, 161, 0.9)";
-      this.buttons["toggleBlackCS"].style.background = "rgba(24, 99, 161, 0.9)";
+      this.buttons["toggleWhiteCS"].style.background = "none";
+      this.buttons["toggleBlackCS"].style.background = "none";
 
       if(this.showCsW){
         this.buttons["toggleWhiteCS"].style.background = "rgba(15, 67, 109, 0.9)";
@@ -175,8 +176,8 @@ class UserInterface{
       board.removeControlledSquares();
       this.showCsB = !this.showCsB;
       this.showCsW = false;
-      this.buttons["toggleWhiteCS"].style.background = "rgba(24, 99, 161, 0.9)";
-      this.buttons["toggleBlackCS"].style.background = "rgba(24, 99, 161, 0.9)";
+      this.buttons["toggleWhiteCS"].style.background = "none";
+      this.buttons["toggleBlackCS"].style.background = "none";
 
       if(this.showCsB){
         this.buttons["toggleBlackCS"].style.background = "rgba(15, 67, 109, 0.9)";
@@ -209,17 +210,15 @@ class UserInterface{
     // Group buttons
     this.navGroup.append(this.buttons["previous"], this.buttons["next"]);
     this.threatGroup.append(this.buttons["toggleWhiteCS"], this.buttons["toggleBlackCS"]);
-    gameGroup.append(this.buttons["mainMenu"]);
     
-    this.buttonWrapper.append(this.navGroup, this.threatGroup, gameGroup);
+    this.buttonWrapper.append(this.threatGroup);
 
     this.pgnModal.append(this.pgnText, this.pgnExit, this.pgnCopy);
     this.pgnModalWrapper.append(this.pgnModal);
 
-    this.inGameWrapper.append(this.buttonWrapper, this.movesList, this.pgnBtn, this.pgnModalWrapper);
+    this.inGameWrapper.append(this.buttons["mainMenu"], this.movesList,this.navGroup, this.buttonWrapper, this.pgnBtn, this.pgnModalWrapper);
     this.wrapper.append(this.preGameWrapper, this.inGameWrapper);
     document.querySelector(".container").append(this.wrapper)
-    
   }
 
   updateMoves(movesHistory){
