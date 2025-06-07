@@ -15,6 +15,9 @@ class UserInterface{
     PREV: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>`,
     NEXT: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>`,
     THREAT_MAP: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><path d="M3 14h7v7H3z"/></svg>`,
+    PLAY: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`,
+    USER: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`,
+    ROBOT: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`
   }
 
   handlePrevious(movesHistory, board){
@@ -69,7 +72,7 @@ class UserInterface{
       this.preGameWrapper.style.display = "none";
     }else{
       this.inGameWrapper.style.display = "none";
-      this.preGameWrapper.style.display = "block";
+      this.preGameWrapper.style.display = "flex";
     }
   }
 
@@ -85,10 +88,10 @@ class UserInterface{
     // --- PRE-GAME CONTROLS ---
     this.preGameWrapper = this.createHTMLElement({type: "div", className: "pre-game-wrapper"});
     const preGameTitle = this.createHTMLElement({type: "h2", className: "pre-game-title", textContent: "Choose a game mode"});
-    this.buttons["play"] = this.createHTMLElement({type: "button", className: "play-btn", textContent: "Play"});
-    this.buttons["ai"] = this.createHTMLElement({type: "button", className: "ai-btn", textContent: "Play vs AI"});
-    this.buttons["cvsc"] = this.createHTMLElement({type: "button", className: "cvsc-btn", textContent: "AI vs AI"});
-    this.preGameWrapper.append(preGameTitle, this.buttons["play"], this.buttons["ai"], this.buttons["cvsc"]);
+    // this.buttons["play"] = this.createHTMLElement({type: "button", className: "play-btn", textContent: UserInterface.ICONS.PLAY + "Solo"});
+    this.buttons["ai"] = this.createHTMLElement({type: "button", className: "ai-btn", textContent: UserInterface.ICONS.USER + " vs " + UserInterface.ICONS.ROBOT});
+    this.buttons["cvsc"] = this.createHTMLElement({type: "button", className: "cvsc-btn", textContent: UserInterface.ICONS.ROBOT + " vs " + UserInterface.ICONS.ROBOT});
+    this.preGameWrapper.append(preGameTitle, this.buttons["ai"], this.buttons["cvsc"]);
 
     // --- IN-GAME CONTROLS ---
     this.inGameWrapper = this.createHTMLElement({type: "div", className: "in-game-wrapper"});
@@ -140,7 +143,7 @@ class UserInterface{
     };
 
     // --- EVENT LISTENERS ---
-    this.buttons["play"].addEventListener("click", () => startGame('human'));
+    // this.buttons["play"].addEventListener("click", () => startGame('human'));
     this.buttons["ai"].addEventListener("click", () => startGame('vsAI'));
     this.buttons["cvsc"].addEventListener("click", () => startGame('AIvsAI'));
 
