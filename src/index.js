@@ -9,3 +9,5 @@ const board = new Board(gameController);
 board.createBoard();
 userInterface.init(board, gameController);
 gameController.init("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", board);
+
+window.addEventListener("contextmenu", (e) => e.preventDefault());

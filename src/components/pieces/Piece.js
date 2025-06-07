@@ -84,8 +84,31 @@ class Piece{
     }
     this.pieceDiv.style.background = "url("+ this.pieceImage +")";
     this.pieceDiv.style.backgroundSize = "cover";
-    //Make thie piece draggable
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+    const dropPiece = (e) => {
+      if(e.button === 2){
+        //return piece to its original position
+        this.pieceDiv.style.left = this.pos.x * (this.board.boardRect.width / 8) + "px";
+        this.pieceDiv.style.top = this.pos.y * (this.board.boardRect.height / 8) + "px";
+        this.pieceDiv.style.zIndex = 10;
+        this.removeLegalMovesHighlights();
+        document.onmouseup = null;
+        document.onmousemove = null;
+        this.board.drawPieces();
+        return;
+      }
+      document.onmouseup = null;
+      document.onmousemove = null;
+      this.pieceDiv.style.zIndex = 10;
+      this.removeLegalMovesHighlights();
+      this.move(
+        Math.round((this.pieceDiv.offsetLeft - pos1) / (this.board.boardRect.width / 8)),
+        Math.round((this.pieceDiv.offsetTop - pos2) / (this.board.boardRect.height / 8)),
+        board
+      );
+    };
+
     const mousedown = (e)=>{
       // get the mouse cursor position at startup:
       pos3 = e.clientX;
@@ -95,16 +118,7 @@ class Piece{
       this.showLegalMoves(board);
       
       //set piece position and remove listeners on mouse button up
-      document.onmouseup = () => {
-        document.onmouseup = null;
-        document.onmousemove = null;
-        this.pieceDiv.style.zIndex = 10;
-        this.move(
-          Math.round((this.pieceDiv.offsetLeft - pos1)/(this.board.boardRect.width/8)),
-          Math.round((this.pieceDiv.offsetTop - pos2)/(this.board.boardRect.height/8)),
-          board
-        )
-      };
+      document.onmouseup = dropPiece;
       
       document.onmousemove = (e)=>{
         e.preventDefault();
@@ -120,7 +134,7 @@ class Piece{
     }
 
     this.pieceDiv.addEventListener("mousedown", mousedown);
-
+    
     const touchmove = (e)=>{
       // get the touch position:
       this.pieceDiv.style.zIndex = 999;
@@ -199,9 +213,7 @@ class Piece{
     this.allMoves = this.allMoves.filter(e=>!this.gameController.seeIfCheck(e.x, e.y, e.isEmpty, board, this))
 
     //remove all previous dots from the DOM
-    for (const e of document.querySelectorAll(".square-move")) {
-      e.remove()
-    }
+    this.removeLegalMovesHighlights();
 
     this.allMoves.forEach(({x,y, isEmpty, isAlly})=>{
       if(isAlly) return;
@@ -225,6 +237,12 @@ class Piece{
         square.onclick = null;
       }
     })
+  }
+
+  removeLegalMovesHighlights() {
+    for (const e of document.querySelectorAll(".square-move")) {
+      e.remove();
+    }
   }
 
   die(){
