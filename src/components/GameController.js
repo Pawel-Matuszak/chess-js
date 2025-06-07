@@ -408,7 +408,7 @@ class GameController{
       }else{
         this.ai2.play(this.board)
       }
-      setTimeout(play, 500)
+      setTimeout(play, 1000)
     }
     play();
   }
