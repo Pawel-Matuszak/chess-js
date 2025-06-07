@@ -215,6 +215,11 @@ button{
   transition: background-color 0.2s;
 }
 
+button:hover{
+  cursor: pointer;
+  background: rgb(60, 60, 60) !important;
+}
+
 .icon-button {
   padding: 8px 12px;
 }
@@ -222,11 +227,6 @@ button{
 .icon-button svg {
   width: 20px;
   height: 20px;
-}
-
-button:hover{
-  cursor: pointer;
-  background-color: rgba(15, 67, 109, 0.9);
 }
 
 .pgnModalWrapper{
@@ -297,6 +297,16 @@ textarea{
   padding: 12px 0;
   font-size: 1.1rem;
   justify-content: center;
+}
+
+.ai-btn, .cvsc-btn {
+  background-color: rgb(44, 44, 44);
+  border: 1px solid rgb(88, 88, 88);
+}
+
+.ai-btn:hover, .cvsc-btn:hover {
+  background-color: rgb(60, 60, 60);
+  border-color: rgb(120, 120, 120);
 }
 
 .play-btn svg, .ai-btn svg, .cvsc-btn svg {
